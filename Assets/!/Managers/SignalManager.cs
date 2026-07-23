@@ -20,5 +20,10 @@ namespace _.Managers
         {
         
         }
+
+        public void SendSignal(Signal s)
+        {
+            foreach (var r in _receivers[s]) r.Receive(s);
+        }
     }
 }

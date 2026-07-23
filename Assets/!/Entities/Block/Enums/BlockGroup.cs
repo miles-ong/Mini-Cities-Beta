@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace _.Enums
+namespace _.Entities.Block.Enums
 {
     public enum BlockGroup
     {

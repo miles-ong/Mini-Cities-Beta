@@ -1,4 +1,4 @@
-﻿namespace _.Enums
+﻿namespace _.Entities.Map.Enums
 {
     public enum MapSize
     {

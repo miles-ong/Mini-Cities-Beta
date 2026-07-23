@@ -1,5 +1,7 @@
 using System;
-using _.Enums;
+using _.Entities.Block;
+using _.Entities.Block.Enums;
+using _.Entities.Map;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
@@ -20,7 +22,6 @@ public class MapDataEditor : Editor
     private void OnEnable()
     {
         _data = (MapData)target;
-        EnsureLayout();
         FindRegistry();
     }
 
@@ -153,7 +154,10 @@ public class MapDataEditor : Editor
         
         var newDimensions = new Vector3Int(newWidth, newHeight, newLength);
 
-        if (newDimensions != _data.dimensions) AdjustLayout(newDimensions);
+        if (newDimensions == _data.grid.Dimensions) return;
+        
+        _data.grid.Resize(newDimensions);
+        MarkDirty();
     }
 
     private void DrawModifiers()
@@ -199,41 +203,6 @@ public class MapDataEditor : Editor
                 }
                 break;
         }
-    }
-
-    private void AdjustLayout(Vector3Int newDimensions)
-    {
-        var newWidth = newDimensions.x;
-        var newHeight = newDimensions.y;
-        var newLength = newDimensions.z;
-        var newLayout = new BlockData[newWidth * newHeight * newLength];
-
-        for (var y = 0; y < Mathf.Min(newHeight, _data.Height); y++)
-        {
-            for (var z = 0; z < Mathf.Min(newLength, _data.Length); z++)
-            {
-                for (var x = 0; x < Mathf.Min(newWidth, _data.Width); x++)
-                {
-                    var oldIndex = x + (z * _data.Width) + (y * _data.Width * _data.Length);
-                    var newIndex = x + (z * newWidth) + (y * newWidth * newLength);
-                    
-                    if (oldIndex < _data.layout.Length && newIndex < newLayout.Length)
-                        newLayout[newIndex] = _data.layout[oldIndex];
-                }
-            }
-        }
-
-        _data.dimensions = newDimensions;
-        _data.layout = newLayout;
-        MarkDirty();
-    }
-
-    private void EnsureLayout()
-    {
-        if (_data.layout is not null) return;
-
-        _data.layout = new BlockData[_data.Width * _data.Height * _data.Length];
-        MarkDirty();
     }
 
     private void FindRegistry()
