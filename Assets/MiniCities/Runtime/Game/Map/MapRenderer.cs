@@ -11,7 +11,7 @@ namespace MiniCities.Runtime.Game
     {
         private readonly Dictionary<Vector3Int, GameObject> _views = new();
 
-        public void Render(MapInstance map, BlockDataGrid grid)
+        public void Render(MapInstance map, BlockDefinitionGrid grid)
         {
             Clear();
             
@@ -49,7 +49,7 @@ namespace MiniCities.Runtime.Game
         {
             if (block is null) return;
             
-            var gameObj = Instantiate(block.Data.prefab, coord, Quaternion.identity, transform);
+            var gameObj = Instantiate(block.Definition.prefab, coord, Quaternion.identity, transform);
             _views[coord] = gameObj;
         }
     }

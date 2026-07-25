@@ -1,7 +1,9 @@
-﻿namespace _.Core.Data.Ability.Enums
+﻿namespace MiniCities.Core.Data.Ability.Enums
 {
     public enum AbilityTrigger
     {
-        WhenBuildingPlaced
+        WhenPlaced,
+        Whenever,
+        While,
     }
 }

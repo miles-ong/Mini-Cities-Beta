@@ -8,7 +8,7 @@ namespace MiniCities.Core.Data.Block
         public int Culture;
         public int Pollution;
         
-        public BuildingInstance(BlockData data, Vector3Int position) : base(data, position)
+        public BuildingInstance(BlockDefinition definition, Vector3Int position) : base(definition, position)
         {
             
         }

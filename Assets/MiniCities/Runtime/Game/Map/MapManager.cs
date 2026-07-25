@@ -16,10 +16,10 @@ namespace MiniCities.Runtime.Game
         
         private MapInstance _currentMap;
 
-        public void LoadMap(MapData data)
+        public void LoadMap(MapDefinition definition)
         {
-            _currentMap = new MapInstance(data);
-            renderer.Render(_currentMap, data.grid);
+            _currentMap = new MapInstance(definition);
+            renderer.Render(_currentMap, definition.grid);
             cameraController.SetAnchor(_currentMap.GetWorldCenter());
         }
 

@@ -22,11 +22,11 @@ namespace MiniCities.Core.Data.Map
             set => Grid[coord] = value;
         }
         
-        public MapInstance(MapData data)
+        public MapInstance(MapDefinition definition)
         {
-            Size = data.size;
-            TerrainFactor = data.terrainFactor;
-            Grid = new BlockInstanceGrid(data.Dimensions);
+            Size = definition.size;
+            TerrainFactor = definition.terrainFactor;
+            Grid = new BlockInstanceGrid(definition.Dimensions);
         }
 
         public Vector3 GetWorldCenter()

@@ -10,9 +10,9 @@ namespace MiniCities.Core.Event
     public sealed class BlockPlacedEvent : IEvent // swap with building placed soon? // proof of concept
     {
         public Vector3Int Cell { get; }
-        public BlockData Block { get; }
+        public BlockDefinition Block { get; }
 
-        public BlockPlacedEvent(Vector3Int cell, BlockData block)
+        public BlockPlacedEvent(Vector3Int cell, BlockDefinition block)
         {
             Cell = cell;
             Block = block;

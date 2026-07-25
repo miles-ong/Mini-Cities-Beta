@@ -5,13 +5,13 @@ using UnityEngine;
 namespace MiniCities.Core.Data.Block.Collections
 {
     [Serializable]
-    public class BlockDataGrid : Grid3D<BlockData>
+    public class BlockDefinitionGrid : Grid3D<BlockDefinition>
     {
         [SerializeField] private Vector3Int dimensions;
-        [SerializeField] private BlockData[] items = Array.Empty<BlockData>();
+        [SerializeField] private BlockDefinition[] items = Array.Empty<BlockDefinition>();
 
         public Vector3Int Dimensions => dimensions;
-        public BlockData[] Items => items;
+        public BlockDefinition[] Items => items;
 
         protected override Vector3Int GridDimensions
         {
@@ -19,7 +19,7 @@ namespace MiniCities.Core.Data.Block.Collections
             set => dimensions = value;
         }
 
-        protected override BlockData[] GridItems
+        protected override BlockDefinition[] GridItems
         {
             get => items;
             set => items = value;

@@ -4,12 +4,12 @@ namespace MiniCities.Core.Data.Block
 {
     public class BlockInstance
     {
-        public BlockData Data { get; }
+        public BlockDefinition Definition { get; }
         public Vector3Int Position { get; }
 
-        public BlockInstance(BlockData data, Vector3Int position)
+        public BlockInstance(BlockDefinition definition, Vector3Int position)
         {
-            Data = data;
+            Definition = definition;
             Position = position;
         }
     }

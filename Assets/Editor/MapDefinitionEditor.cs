@@ -7,22 +7,22 @@ using MiniCities.Core.Data.Map;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(MapData))]
-public class MapDataEditor : Editor
+[CustomEditor(typeof(MapDefinition))]
+public class MapDefinitionEditor : Editor
 {
-    private MapData _data;
+    private MapDefinition _definition;
     private BlockRegistry _registry;
 
     private const float Spacing = 10f;
     private const float ViewPadding = 50f;
     
-    [CanBeNull] private BlockData _selectedBlock;
+    [CanBeNull] private BlockDefinition _selectedBlock;
     private int _selectedLayer;
     private float _viewWidth;
     
     private void OnEnable()
     {
-        _data = (MapData)target;
+        _definition = (MapDefinition)target;
         FindRegistry();
     }
 
@@ -68,14 +68,14 @@ public class MapDataEditor : Editor
 
     private void DrawLayer()
     {
-        EditorGUILayout.LabelField($"Layer {_selectedLayer + 1} out of {_data.Height}", EditorStylesUtility.SubHeader);
+        EditorGUILayout.LabelField($"Layer {_selectedLayer + 1} out of {_definition.Height}", EditorStylesUtility.SubHeader);
         EditorGUILayout.Space(Spacing);
         
-        for (var z = 0; z < _data.Length; z++)
+        for (var z = 0; z < _definition.Length; z++)
         {
             EditorGUILayout.BeginHorizontal();
 
-            for (var x = 0; x < _data.Width; x++) DrawTile(new Vector3Int(x, _selectedLayer, z));
+            for (var x = 0; x < _definition.Width; x++) DrawTile(new Vector3Int(x, _selectedLayer, z));
             
             EditorGUILayout.EndHorizontal();
         }
@@ -83,9 +83,9 @@ public class MapDataEditor : Editor
 
     private void DrawTile(Vector3Int coord)
     {
-        var block = _data[coord];
+        var block = _definition[coord];
         var label = block is not null ? block.name : "Empty";
-        var buttonSize = _viewWidth / _data.Width;
+        var buttonSize = _viewWidth / _definition.Width;
         var rect = GUILayoutUtility.GetRect(buttonSize, buttonSize);
 
         EditorGUI.DrawRect(rect, block?.group.ToColor() ?? Color.gray);
@@ -96,7 +96,7 @@ public class MapDataEditor : Editor
 
     private void DrawLayerControls()
     {
-        if (_data.Height <= 1) return;
+        if (_definition.Height <= 1) return;
 
         EditorGUILayout.Space(Spacing);
         
@@ -109,7 +109,7 @@ public class MapDataEditor : Editor
             _selectedLayer = Math.Max(_selectedLayer - 1, 0);
 
         if (GUILayout.Button("Next Layer", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
-            _selectedLayer = Math.Min(_selectedLayer + 1, _data.Height - 1);
+            _selectedLayer = Math.Min(_selectedLayer + 1, _definition.Height - 1);
             
         EditorGUILayout.EndHorizontal();
     }
@@ -149,15 +149,15 @@ public class MapDataEditor : Editor
         EditorGUILayout.LabelField("Dimensions", EditorStylesUtility.SubHeader);
         EditorGUILayout.Space(Spacing);
         
-        var newLength = EditorGUILayout.IntSlider("Length", _data.Length, 1, 10);
-        var newWidth = EditorGUILayout.IntSlider("Width", _data.Width, 1, 10);
-        var newHeight = EditorGUILayout.IntSlider("Height", _data.Height, 1, 5);
+        var newLength = EditorGUILayout.IntSlider("Length", _definition.Length, 1, 10);
+        var newWidth = EditorGUILayout.IntSlider("Width", _definition.Width, 1, 10);
+        var newHeight = EditorGUILayout.IntSlider("Height", _definition.Height, 1, 5);
         
         var newDimensions = new Vector3Int(newWidth, newHeight, newLength);
 
-        if (newDimensions == _data.grid.Dimensions) return;
+        if (newDimensions == _definition.grid.Dimensions) return;
         
-        _data.grid.Resize(newDimensions);
+        _definition.grid.Resize(newDimensions);
         MarkDirty();
     }
 
@@ -166,10 +166,10 @@ public class MapDataEditor : Editor
         EditorGUILayout.LabelField("Modifiers", EditorStylesUtility.SubHeader);
         EditorGUILayout.Space(Spacing);
 
-        _data.terrainFactor = EditorGUILayout.IntSlider("Terrain Factor", _data.terrainFactor, 1, 5);
+        _definition.terrainFactor = EditorGUILayout.IntSlider("Terrain Factor", _definition.terrainFactor, 1, 5);
     }
 
-    private void HandleTileInput(Rect rect, Vector3Int coord, BlockData block)
+    private void HandleTileInput(Rect rect, Vector3Int coord, BlockDefinition block)
     {
         var e = Event.current;
 
@@ -181,7 +181,7 @@ public class MapDataEditor : Editor
                 switch (e.button)
                 {
                     case <= 1: // Left Click & Right Click
-                        _data[coord] = e.button == 0 ?  _selectedBlock : null;
+                        _definition[coord] = e.button == 0 ?  _selectedBlock : null;
                         MarkDirty();
                         e.Use();
                         break;
@@ -198,7 +198,7 @@ public class MapDataEditor : Editor
             case EventType.MouseDrag:
                 if (e.button <= 1)
                 {
-                    _data[coord] = e.button == 0 ? _selectedBlock : null;
+                    _definition[coord] = e.button == 0 ? _selectedBlock : null;
                     MarkDirty();
                     e.Use();
                 }
@@ -225,5 +225,5 @@ public class MapDataEditor : Editor
         _registry = registry;
     }
 
-    private void MarkDirty() => EditorUtility.SetDirty(_data);
+    private void MarkDirty() => EditorUtility.SetDirty(_definition);
 }

@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace MiniCities.Core.Data.Block
 {
-    [CreateAssetMenu(fileName = "NewBlockData", menuName = "Mini Cities/Block")]
-    public class BlockData : ScriptableObject
+    [CreateAssetMenu(fileName = "NewBlockDefinition", menuName = "Mini Cities/Block")]
+    public class BlockDefinition : ScriptableObject
     {
         public BlockGroup group;
         public GameObject prefab;

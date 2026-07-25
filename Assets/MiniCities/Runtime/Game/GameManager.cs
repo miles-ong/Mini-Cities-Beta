@@ -6,7 +6,7 @@ namespace MiniCities.Runtime.Game
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private MapManager mapManager;
-        [SerializeField] private MapData testMap;
+        [SerializeField] private MapDefinition testMap;
         
         private void Start()
         {
