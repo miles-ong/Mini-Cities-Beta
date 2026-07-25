@@ -9,25 +9,24 @@ namespace MiniCities.Core.Data.Map
     {
         public MapSize Size;
         public int TerrainFactor;
-        
-        private readonly BlockInstanceGrid _grid;
+        public readonly BlockInstanceGrid Grid;
 
-        public Vector3Int Dimensions => _grid.Dimensions;
-        public int Width => _grid.Width;
-        public int Height => _grid.Height;
-        public int Length => _grid.Length;
+        public Vector3Int Dimensions => Grid.Dimensions;
+        public int Width => Grid.Width;
+        public int Height => Grid.Height;
+        public int Length => Grid.Length;
 
         public BlockInstance this[Vector3Int coord]
         {
-            get => _grid[coord];
-            set => _grid[coord] = value;
+            get => Grid[coord];
+            set => Grid[coord] = value;
         }
         
         public MapInstance(MapData data)
         {
             Size = data.size;
             TerrainFactor = data.terrainFactor;
-            _grid = new BlockInstanceGrid(data.Dimensions);
+            Grid = new BlockInstanceGrid(data.Dimensions);
         }
 
         public Vector3 GetWorldCenter()
