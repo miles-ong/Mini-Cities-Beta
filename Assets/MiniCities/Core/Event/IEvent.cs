@@ -1,0 +1,21 @@
+﻿using MiniCities.Core.Data.Block;
+using UnityEngine;
+
+namespace MiniCities.Core.Event
+{
+    public interface IEvent
+    {
+    }
+
+    public sealed class BlockPlacedEvent : IEvent // swap with building placed soon? // proof of concept
+    {
+        public Vector3Int Cell { get; }
+        public BlockData Block { get; }
+
+        public BlockPlacedEvent(Vector3Int cell, BlockData block)
+        {
+            Cell = cell;
+            Block = block;
+        }
+    }
+}

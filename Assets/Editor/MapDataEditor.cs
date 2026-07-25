@@ -1,8 +1,9 @@
 using System;
-using _.Entities.Block;
-using _.Entities.Block.Enums;
-using _.Entities.Map;
 using JetBrains.Annotations;
+using MiniCities.Core.Data.Block;
+using MiniCities.Core.Data.Block.Collections;
+using MiniCities.Core.Data.Block.Enums;
+using MiniCities.Core.Data.Map;
 using UnityEditor;
 using UnityEngine;
 
