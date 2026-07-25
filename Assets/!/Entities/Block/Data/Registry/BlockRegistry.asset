@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 828d7a95e0a5472ebefc95cee889adde, type: 3}
   m_Name: BlockRegistry
   m_EditorClassIdentifier: Assembly-CSharp::_.Entities.Block.BlockRegistry
-  blocks: []
+  blocks:
+  - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+  - {fileID: 11400000, guid: 8b7ed99f054f56444884f330cb7db175, type: 2}

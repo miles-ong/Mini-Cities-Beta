@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Grass
   m_EditorClassIdentifier: Assembly-CSharp::_.Entities.Block.BlockData
   group: 0
-  prefab: {fileID: 0}
+  prefab: {fileID: 7406353032374362041, guid: 2bb4234cafbc8b64b95d9089e9762ff8, type: 3}

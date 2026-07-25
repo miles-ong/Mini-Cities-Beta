@@ -10,7 +10,7 @@ namespace _.Entities.Map
     {
         public MapSize size;
         public int terrainFactor;
-        public BlockGrid grid = new();
+        public BlockDataGrid grid = new();
 
         public int Width => grid.Width;
         public int Height => grid.Height;
@@ -21,5 +21,7 @@ namespace _.Entities.Map
             get => grid[coord];
             set => grid[coord] = value;
         }
+
+        public MapInstance ToInstance() => new(this);
     }
 }

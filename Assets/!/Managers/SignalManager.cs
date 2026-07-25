@@ -7,7 +7,7 @@ namespace _.Managers
 {
     public class SignalManager : MonoBehaviour
     {
-        private Dictionary<Signal, IEnumerable<IReceiver>> _receivers = new();
+        private Dictionary<Signal, List<IReceiver>> _receivers = new();
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -15,15 +15,14 @@ namespace _.Managers
             
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
+        public void RegisterReceiver(IReceiver r, Signal s) => _receivers[s].Add(r);
+        public void UnregisterReceiver(IReceiver r, Signal s) => _receivers[s].Remove(r);
 
         public void SendSignal(Signal s)
         {
             foreach (var r in _receivers[s]) r.Receive(s);
         }
+
+        public void ClearReceivers() => _receivers.Clear();
     }
 }

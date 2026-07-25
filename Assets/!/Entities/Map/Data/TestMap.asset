@@ -15,6 +15,21 @@ MonoBehaviour:
   size: 0
   terrainFactor: 1
   grid:
-    dimensions: {x: 1, y: 1, z: 1}
+    dimensions: {x: 4, y: 1, z: 4}
     blocks:
-    - {fileID: 0}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 8b7ed99f054f56444884f330cb7db175, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
