@@ -1,4 +1,5 @@
-﻿using MiniCities.Core.Data.Map;
+﻿using MiniCities.Core.Definitions.Map;
+using MiniCities.Runtime.Game.MapSystem;
 using UnityEngine;
 
 namespace MiniCities.Runtime.Game

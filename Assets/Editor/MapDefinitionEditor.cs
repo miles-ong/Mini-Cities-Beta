@@ -1,9 +1,7 @@
 using System;
 using JetBrains.Annotations;
-using MiniCities.Core.Data.Block;
-using MiniCities.Core.Data.Block.Collections;
-using MiniCities.Core.Data.Block.Enums;
-using MiniCities.Core.Data.Map;
+using MiniCities.Core.Definitions.Block;
+using MiniCities.Core.Definitions.Map;
 using UnityEditor;
 using UnityEngine;
 

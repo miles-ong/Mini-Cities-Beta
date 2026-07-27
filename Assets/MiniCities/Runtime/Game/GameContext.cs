@@ -1,16 +1,20 @@
-﻿using MiniCities.Runtime.Game.Score;
+﻿using MiniCities.Runtime.Game.BuffSystem;
+using MiniCities.Runtime.Game.CitySystem;
+using MiniCities.Runtime.Game.MapSystem;
 
 namespace MiniCities.Runtime.Game
 {
     public class GameContext
     {
         public readonly MapManager Map;
-        public readonly ScoreManager Score;
+        public readonly CityManager City;
+        public readonly BuffManager Buff;
         
-        public GameContext(MapManager mapManager, ScoreManager scoreManager)
+        public GameContext(MapManager map, CityManager city, BuffManager buff)
         {
-            Map = mapManager;
-            Score = scoreManager;
+            Map = map;
+            City = city;
+            Buff = buff;
         }
     }
 }
