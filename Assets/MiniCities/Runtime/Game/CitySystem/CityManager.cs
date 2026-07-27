@@ -18,7 +18,7 @@ namespace MiniCities.Runtime.Game.CitySystem
             _buffManager = buffManager;
         }
 
-        public BuildingStats GetStats(BuildingInstance building)
+        public BuildingStats GetStats(BuildingRuntime building)
         {
             if (building.CachedVersion == building.CurrentVersion) return building.TotalStats;
 
@@ -28,14 +28,14 @@ namespace MiniCities.Runtime.Game.CitySystem
             return building.TotalStats;
         }
 
-        private void Recalculate(BuildingInstance building)
+        private void Recalculate(BuildingRuntime building)
         {
             building.TotalStats = building.BaseStats;
 
             foreach (var b in GetOrderedBuffs(building)) building.TotalStats.ModifyStat(b.Stat, b.Operation, b.Amount);
         }
 
-        private List<Buff> GetOrderedBuffs(BuildingInstance building)
+        private List<Buff> GetOrderedBuffs(BuildingRuntime building)
         {
             return _buffManager
                 .GetReceiverBuffs(building)

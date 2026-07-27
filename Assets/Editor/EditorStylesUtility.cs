@@ -1,28 +1,12 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
-public class EditorStylesUtility
+public static class EditorStylesUtility
 {
-    public static GUIStyle Header { get; private set; }
-    public static GUIStyle SubHeader { get; private set; }
-    public static GUIStyle TileLabel { get; private set; }
-
-    static EditorStylesUtility()
-    {
-        Header = new GUIStyle(EditorStyles.boldLabel)
-        {
-            fontSize = 24
-        };
-
-        SubHeader = new GUIStyle(EditorStyles.boldLabel)
-        {
-            fontSize = 16
-        };
-
-        TileLabel = new GUIStyle(EditorStyles.label)
-        {
-            alignment = TextAnchor.MiddleCenter,
-            wordWrap = true
-        };
-    }
+    public const float LargeSpacing = 10f;
+    public const float MediumSpacing = 5f;
+    public const float SmallSpacing = 3f;
+        
+    public static readonly GUIStyle Header = new(EditorStyles.boldLabel) { fontSize = 24 };
+    public static readonly GUIStyle Subheader = new(EditorStyles.boldLabel) { fontSize = 16 };
 }

@@ -8,9 +8,9 @@ namespace MiniCities.Core.Definitions.Ability
     {
         public GameContext Game { get; }
         public IEvent Evt { get; }
-        public BuildingInstance Building { get; }
+        public BuildingRuntime Building { get; }
 
-        public AbilityContext(GameContext game, IEvent evt, BuildingInstance building)
+        public AbilityContext(GameContext game, IEvent evt, BuildingRuntime building)
         {
             Game = game;
             Evt = evt;

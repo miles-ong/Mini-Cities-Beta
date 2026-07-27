@@ -6,6 +6,7 @@ namespace MiniCities.Core.Definitions.Map
     [CreateAssetMenu(fileName = "NewMapDefinition", menuName = "Mini Cities/Map")]
     public class MapDefinition : ScriptableObject
     {
+        public string displayName;
         public MapSize size;
         public int terrainFactor;
         public BlockDefinitionGrid grid = new();

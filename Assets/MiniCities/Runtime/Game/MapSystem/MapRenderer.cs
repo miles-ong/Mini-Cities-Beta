@@ -10,7 +10,7 @@ namespace MiniCities.Runtime.Game.MapSystem
     {
         private readonly Dictionary<Vector3Int, GameObject> _views = new();
 
-        public void Render(MapInstance map, BlockDefinitionGrid grid)
+        public void Render(MapRuntime map, BlockDefinitionGrid grid)
         {
             Clear();
             
@@ -20,13 +20,13 @@ namespace MiniCities.Runtime.Game.MapSystem
             {
                 var coord = new Vector3Int(x, y, z);
                 var data = grid[coord];
-                var inst = new BlockInstance(data, coord);
+                var inst = new BlockRuntime(data, coord);
 
                 RenderBlock(coord, inst);
             }
         }
 
-        public void UpdateBlock(Vector3Int coord, [CanBeNull] BlockInstance block)
+        public void UpdateBlock(Vector3Int coord, [CanBeNull] BlockRuntime block)
         {
             if (_views.TryGetValue(coord, out var existing))
             {
@@ -44,7 +44,7 @@ namespace MiniCities.Runtime.Game.MapSystem
             _views.Clear();
         }
 
-        private void RenderBlock(Vector3Int coord, [CanBeNull] BlockInstance block)
+        private void RenderBlock(Vector3Int coord, [CanBeNull] BlockRuntime block)
         {
             if (block is null) return;
             

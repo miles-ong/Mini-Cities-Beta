@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MiniCities.Runtime.Game.MapSystem
 {
-    public class MapInstance
+    public class MapRuntime
     {
         public MapSize Size;
         public int TerrainFactor;
@@ -15,13 +15,13 @@ namespace MiniCities.Runtime.Game.MapSystem
         public int Height => Grid.Height;
         public int Length => Grid.Length;
 
-        public BlockInstance this[Vector3Int coord]
+        public BlockRuntime this[Vector3Int coord]
         {
             get => Grid[coord];
             set => Grid[coord] = value;
         }
         
-        public MapInstance(MapDefinition definition)
+        public MapRuntime(MapDefinition definition)
         {
             Size = definition.size;
             TerrainFactor = definition.terrainFactor;

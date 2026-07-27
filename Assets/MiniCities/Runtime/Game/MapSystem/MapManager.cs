@@ -14,11 +14,11 @@ namespace MiniCities.Runtime.Game.MapSystem
         
         [SerializeField] private MapRenderer renderer;
         
-        private MapInstance _currentMap;
+        private MapRuntime _currentMap;
 
         public void LoadMap(MapDefinition definition)
         {
-            _currentMap = new MapInstance(definition);
+            _currentMap = new MapRuntime(definition);
             renderer.Render(_currentMap, definition.grid);
             cameraController.SetAnchor(_currentMap.GetWorldCenter());
         }
@@ -29,13 +29,13 @@ namespace MiniCities.Runtime.Game.MapSystem
             _currentMap = null;
         }
 
-        public void SetBlock(Vector3Int coord, [CanBeNull] BlockInstance block)
+        public void SetBlock(Vector3Int coord, [CanBeNull] BlockRuntime block)
         {
             _currentMap[coord] = block;
             renderer.UpdateBlock(coord, block);
         }
 
-        public HashSet<BlockInstance> GetBlocksInScope(Vector3Int coord, GridScope scope) =>
+        public HashSet<BlockRuntime> GetBlocksInScope(Vector3Int coord, GridScope scope) =>
             _currentMap.Grid.GetItemsInScope(coord, scope);
     }
 }

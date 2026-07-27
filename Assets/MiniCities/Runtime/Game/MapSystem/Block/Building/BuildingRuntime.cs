@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MiniCities.Runtime.Game.MapSystem.Block.Building
 {
-    public class BuildingInstance : BlockInstance, IBuffReceiver
+    public class BuildingRuntime : BlockRuntime, IBuffReceiver
     {
         public BuildingStats BaseStats;
         public BuildingStats TotalStats = new();
@@ -12,7 +12,7 @@ namespace MiniCities.Runtime.Game.MapSystem.Block.Building
         public int CurrentVersion { get; private set; }
         public int CachedVersion { get; private set; } = -1;
         
-        public BuildingInstance(BlockDefinition definition, Vector3Int location, BuildingStats baseStats) : base(definition, location)
+        public BuildingRuntime(BlockDefinition definition, Vector3Int location, BuildingStats baseStats) : base(definition, location)
         {
             BaseStats = baseStats;
         }

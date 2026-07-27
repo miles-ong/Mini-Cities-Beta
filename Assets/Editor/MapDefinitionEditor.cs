@@ -6,33 +6,36 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(MapDefinition))]
-public class MapDefinitionEditor : Editor
+public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
 {
-    private MapDefinition _definition;
-    private BlockRegistry _registry;
-
-    private const float Spacing = 10f;
     private const float ViewPadding = 50f;
+
+    private GUIStyle _tileLabel;
     
     [CanBeNull] private BlockDefinition _selectedBlock;
     private int _selectedLayer;
     private float _viewWidth;
-    
-    private void OnEnable()
+
+    protected override void OnEnable()
     {
-        _definition = (MapDefinition)target;
-        FindRegistry();
+        base.OnEnable();
+        
+        _tileLabel = new GUIStyle(EditorStyles.label)
+        {
+            alignment = TextAnchor.MiddleCenter,
+            wordWrap = true
+        };
     }
 
     public override void OnInspectorGUI()
     {
-        if (_registry is null) return;
+        if (Registry is null) return;
 
         _viewWidth = EditorGUIUtility.currentViewWidth - ViewPadding;
 
         DrawMap();
 
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
 
         DrawTools();
     }
@@ -40,7 +43,11 @@ public class MapDefinitionEditor : Editor
     private void DrawMap()
     {
         EditorGUILayout.LabelField("Map", EditorStylesUtility.Header);
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.Space(EditorStylesUtility.LargeSpacing);
+
+        Target.displayName = EditorGUILayout.TextField("Name", Target.displayName);
+
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
         DrawLayer();
         DrawLayerControls();
@@ -49,31 +56,31 @@ public class MapDefinitionEditor : Editor
     private void DrawTools()
     {
         EditorGUILayout.LabelField("Tools", EditorStylesUtility.Header);
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
         DrawBrushes();
 
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
         
         DrawDimensions();
         
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
         
         DrawModifiers();
 
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
     }
 
     private void DrawLayer()
     {
-        EditorGUILayout.LabelField($"Layer {_selectedLayer + 1} out of {_definition.Height}", EditorStylesUtility.SubHeader);
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.LabelField($"Layer {_selectedLayer + 1} out of {Target.Height}", EditorStylesUtility.Subheader);
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
-        for (var z = 0; z < _definition.Length; z++)
+        for (var z = 0; z < Target.Length; z++)
         {
             EditorGUILayout.BeginHorizontal();
 
-            for (var x = 0; x < _definition.Width; x++) DrawTile(new Vector3Int(x, _selectedLayer, z));
+            for (var x = 0; x < Target.Width; x++) DrawTile(new Vector3Int(x, _selectedLayer, z));
             
             EditorGUILayout.EndHorizontal();
         }
@@ -81,22 +88,23 @@ public class MapDefinitionEditor : Editor
 
     private void DrawTile(Vector3Int coord)
     {
-        var block = _definition[coord];
+        var block = Target[coord];
         var label = block is not null ? block.name : "Empty";
-        var buttonSize = _viewWidth / _definition.Width;
+        var buttonSize = _viewWidth / Target.Width;
         var rect = GUILayoutUtility.GetRect(buttonSize, buttonSize);
 
         EditorGUI.DrawRect(rect, block?.group.ToColor() ?? Color.gray);
-        GUI.Label(rect, label, EditorStylesUtility.TileLabel);
+        
+        if (_tileLabel is not null) GUI.Label(rect, label, _tileLabel);
 
         HandleTileInput(rect, coord, block);
     }
 
     private void DrawLayerControls()
     {
-        if (_definition.Height <= 1) return;
+        if (Target.Height <= 1) return;
 
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
         var buttonWidth = _viewWidth / 2;
         const float buttonHeight = 30f;
@@ -107,17 +115,17 @@ public class MapDefinitionEditor : Editor
             _selectedLayer = Math.Max(_selectedLayer - 1, 0);
 
         if (GUILayout.Button("Next Layer", GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
-            _selectedLayer = Math.Min(_selectedLayer + 1, _definition.Height - 1);
+            _selectedLayer = Math.Min(_selectedLayer + 1, Target.Height - 1);
             
         EditorGUILayout.EndHorizontal();
     }
 
     private void DrawBrushes()
     {
-        EditorGUILayout.LabelField("Brushes", EditorStylesUtility.SubHeader);
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.LabelField("Brushes", EditorStylesUtility.Subheader);
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
-        var blocks = _registry.blocks;
+        var blocks = Registry.blocks;
         const int cols = 5;
         var buttonSize = _viewWidth / cols;
         var rowCount = 0;
@@ -144,27 +152,31 @@ public class MapDefinitionEditor : Editor
 
     private void DrawDimensions()
     {
-        EditorGUILayout.LabelField("Dimensions", EditorStylesUtility.SubHeader);
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.LabelField("Dimensions", EditorStylesUtility.Subheader);
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
+
+        Target.size = (MapSize)EditorGUILayout.EnumPopup("Size", Target.size);
         
-        var newLength = EditorGUILayout.IntSlider("Length", _definition.Length, 1, 10);
-        var newWidth = EditorGUILayout.IntSlider("Width", _definition.Width, 1, 10);
-        var newHeight = EditorGUILayout.IntSlider("Height", _definition.Height, 1, 5);
+        EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
+        
+        var newLength = EditorGUILayout.IntSlider("Length", Target.Length, 1, 10);
+        var newWidth = EditorGUILayout.IntSlider("Width", Target.Width, 1, 10);
+        var newHeight = EditorGUILayout.IntSlider("Height", Target.Height, 1, 5);
         
         var newDimensions = new Vector3Int(newWidth, newHeight, newLength);
 
-        if (newDimensions == _definition.grid.Dimensions) return;
+        if (newDimensions == Target.grid.Dimensions) return;
         
-        _definition.grid.Resize(newDimensions);
+        Target.grid.Resize(newDimensions);
         MarkDirty();
     }
 
     private void DrawModifiers()
     {
-        EditorGUILayout.LabelField("Modifiers", EditorStylesUtility.SubHeader);
-        EditorGUILayout.Space(Spacing);
+        EditorGUILayout.LabelField("Modifiers", EditorStylesUtility.Subheader);
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
 
-        _definition.terrainFactor = EditorGUILayout.IntSlider("Terrain Factor", _definition.terrainFactor, 1, 5);
+        Target.terrainFactor = EditorGUILayout.IntSlider("Terrain Factor", Target.terrainFactor, 1, 5);
     }
 
     private void HandleTileInput(Rect rect, Vector3Int coord, BlockDefinition block)
@@ -179,7 +191,7 @@ public class MapDefinitionEditor : Editor
                 switch (e.button)
                 {
                     case <= 1: // Left Click & Right Click
-                        _definition[coord] = e.button == 0 ?  _selectedBlock : null;
+                        Target[coord] = e.button == 0 ?  _selectedBlock : null;
                         MarkDirty();
                         e.Use();
                         break;
@@ -196,32 +208,11 @@ public class MapDefinitionEditor : Editor
             case EventType.MouseDrag:
                 if (e.button <= 1)
                 {
-                    _definition[coord] = e.button == 0 ? _selectedBlock : null;
+                    Target[coord] = e.button == 0 ? _selectedBlock : null;
                     MarkDirty();
                     e.Use();
                 }
                 break;
         }
     }
-
-    private void FindRegistry()
-    {
-        var guids = AssetDatabase.FindAssets("t:BlockRegistry");
-
-        switch (guids.Length)
-        {
-            case 0: Debug.LogError("No BlockRegistry found"); return;
-            case 1: Debug.Log("BlockRegistry found"); break;
-            case > 1: Debug.LogWarning("Multiple BlockRegistry found. Using the first one"); break;
-        }
-        
-        var path = AssetDatabase.GUIDToAssetPath(guids[0]);
-        var registry = AssetDatabase.LoadAssetAtPath<BlockRegistry>(path);
-        
-        if (registry is null) Debug.LogError($"Failed to load BlockRegistry at '{path}'");
-
-        _registry = registry;
-    }
-
-    private void MarkDirty() => EditorUtility.SetDirty(_definition);
 }

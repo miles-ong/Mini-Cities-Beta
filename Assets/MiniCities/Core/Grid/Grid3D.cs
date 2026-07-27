@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace MiniCities.Core.Grid
 {
+    [Serializable]
     public abstract class Grid3D<T>
     {
         protected abstract Vector3Int GridDimensions { get; set; }

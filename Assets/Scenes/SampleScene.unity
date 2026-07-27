@@ -509,7 +509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Runtime.Game.GameManager
   mapManager: {fileID: 1036732723}
-  testMap: {fileID: 0}
+  testMap: {fileID: 11400000, guid: bf395a780c3e63c41a403676e85ca9e1, type: 2}
 --- !u!1 &946828735
 GameObject:
   m_ObjectHideFlags: 0

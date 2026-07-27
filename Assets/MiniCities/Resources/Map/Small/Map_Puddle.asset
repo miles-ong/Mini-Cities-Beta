@@ -10,13 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6f7944d5c0c4399a3400e1158393384, type: 3}
-  m_Name: TestMap
-  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Data.Map.MapData
+  m_Name: Map_Puddle
+  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Map.MapDefinition
+  displayName: Puddle
   size: 0
   terrainFactor: 1
   grid:
     dimensions: {x: 4, y: 1, z: 4}
     items:
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
+    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
     - {fileID: 11400000, guid: 8b7ed99f054f56444884f330cb7db175, type: 2}
     - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
     - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
@@ -27,9 +34,3 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
     - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
     - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
-    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
-    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
-    - {fileID: 11400000, guid: 8b7ed99f054f56444884f330cb7db175, type: 2}
-    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
-    - {fileID: 11400000, guid: 6e884a4f7297739448c961939e84043f, type: 2}
-    - {fileID: 11400000, guid: 8b7ed99f054f56444884f330cb7db175, type: 2}
