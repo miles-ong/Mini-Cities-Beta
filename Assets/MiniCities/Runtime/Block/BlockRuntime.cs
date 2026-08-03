@@ -1,4 +1,5 @@
 ﻿using MiniCities.Definitions.Block;
+using MiniCities.Definitions.Blueprint;
 using UnityEngine;
 
 namespace MiniCities.Runtime.Block

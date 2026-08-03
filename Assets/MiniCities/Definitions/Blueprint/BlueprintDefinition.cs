@@ -10,6 +10,9 @@ namespace MiniCities.Definitions.Blueprint
         public string displayName = "Unnamed";
         public BlueprintFile file;
         public BlueprintCategory category;
+        public int population;
+        public int culture;
+        public int pollution;
         [SerializeReference] public IPlacementRule[] placementRules;
         public AbilityDefinition[] abilities;
         public BlockDefinition building;

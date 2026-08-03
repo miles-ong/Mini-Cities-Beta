@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f421803cd0543cdb58fee449750447c, type: 3}
+  m_Name: TestDeck
+  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Blueprint.BlueprintDeckDefinition
+  pool: {fileID: 11400000, guid: 4af1166e5e3ae554ba5bca48596df415, type: 2}
+  blueprintCounts:
+  - blueprint: {fileID: 11400000, guid: a3854d2f8d7ab4243926245807f9dc95, type: 2}
+    count: 3
+  - blueprint: {fileID: 11400000, guid: eb800a011b417f94ca37e4c501da9261, type: 2}
+    count: 4
+  - blueprint: {fileID: 11400000, guid: e10dd47be59c9484b999adc2ecf6463d, type: 2}
+    count: 18
