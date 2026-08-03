@@ -1,12 +1,18 @@
-﻿using MiniCities.Definitions.Blueprint;
+﻿using System;
+using MiniCities.Definitions.Blueprint;
 using MiniCities.Runtime.Blueprint;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace MiniCities.UI.Blueprint
 {
-    public class BlueprintUI : MonoBehaviour
+    public class BlueprintUI : 
+        MonoBehaviour,
+        IPointerEnterHandler,
+        IPointerExitHandler,
+        IPointerClickHandler
     {
         [SerializeField] private Image background;
         [SerializeField] private Image nameplate;
@@ -20,6 +26,10 @@ namespace MiniCities.UI.Blueprint
         [SerializeField] private TMP_Text description;
 
         public BlueprintRuntime Blueprint { get; private set; }
+
+        public event Action<BlueprintUI> Hovered;
+        public event Action<BlueprintUI> Unhovered;
+        public event Action<BlueprintUI> Clicked;
         
         public void Set(BlueprintRuntime blueprint)
         {
@@ -40,15 +50,21 @@ namespace MiniCities.UI.Blueprint
 
         public void Refresh() => Set(Blueprint);
 
+        public void OnPointerEnter(PointerEventData e) => Hovered?.Invoke(this);
+        public void OnPointerExit(PointerEventData e) => Unhovered?.Invoke(this);
+        public void OnPointerClick(PointerEventData e) => Clicked?.Invoke(this);
+
         private static void HandleIcon(Image icon, TMP_Text tmp, int number)
         {
             if (number == 0)
             {
                 icon.enabled = false;
+                tmp.enabled = false;
                 return;
             }
 
             icon.enabled = true;
+            tmp.enabled = true;
             tmp.text = number.ToString();
         }
     }
