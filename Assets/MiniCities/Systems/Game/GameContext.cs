@@ -1,8 +1,8 @@
 ﻿using MiniCities.Systems.BuffSys;
-using MiniCities.Systems.CitySys;
-using MiniCities.Systems.MapSys;
+using MiniCities.Systems.City;
+using MiniCities.Systems.Map;
 
-namespace MiniCities.Systems.GameSys
+namespace MiniCities.Systems.Game
 {
     public class GameContext
     {

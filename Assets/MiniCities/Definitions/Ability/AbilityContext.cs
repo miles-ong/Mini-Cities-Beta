@@ -1,6 +1,6 @@
 ﻿using MiniCities.Core.Event;
 using MiniCities.Runtime.Block;
-using MiniCities.Systems.GameSys;
+using MiniCities.Systems.Game;
 
 namespace MiniCities.Definitions.Ability
 {

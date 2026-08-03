@@ -2,10 +2,10 @@
 using JetBrains.Annotations;
 using MiniCities.Definitions.Block;
 using MiniCities.Runtime.Block;
-using MiniCities.Runtime.Game.MapSystem;
+using MiniCities.Runtime.Map;
 using UnityEngine;
 
-namespace MiniCities.Systems.MapSys
+namespace MiniCities.Systems.Map
 {
     public class MapRenderer : MonoBehaviour
     {

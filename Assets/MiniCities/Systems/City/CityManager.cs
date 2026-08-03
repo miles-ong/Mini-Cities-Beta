@@ -4,7 +4,7 @@ using MiniCities.Definitions.Blueprint;
 using MiniCities.Runtime.Block;
 using MiniCities.Systems.BuffSys;
 
-namespace MiniCities.Systems.CitySys
+namespace MiniCities.Systems.City
 {
     public class CityManager
     {

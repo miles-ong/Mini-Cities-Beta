@@ -2,7 +2,7 @@
 using MiniCities.Runtime.Block;
 using UnityEngine;
 
-namespace MiniCities.Runtime.Game.MapSystem
+namespace MiniCities.Runtime.Map
 {
     public class MapRuntime
     {

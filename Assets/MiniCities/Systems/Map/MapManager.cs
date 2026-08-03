@@ -3,11 +3,11 @@ using JetBrains.Annotations;
 using MiniCities.Core.Grid;
 using MiniCities.Definitions.Map;
 using MiniCities.Runtime.Block;
-using MiniCities.Runtime.Game.MapSystem;
+using MiniCities.Runtime.Map;
 using MiniCities.Systems.Cam;
 using UnityEngine;
 
-namespace MiniCities.Systems.MapSys
+namespace MiniCities.Systems.Map
 {
     public class MapManager : MonoBehaviour
     {

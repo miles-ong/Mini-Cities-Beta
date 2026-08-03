@@ -1,5 +1,5 @@
 ﻿using MiniCities.Definitions.Map;
-using MiniCities.Systems.MapSys;
+using MiniCities.Systems.Map;
 using UnityEngine;
 
 namespace MiniCities.Systems.Game
