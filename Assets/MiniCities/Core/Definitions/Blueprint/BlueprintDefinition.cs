@@ -4,18 +4,14 @@ using UnityEngine;
 
 namespace MiniCities.Core.Definitions.Blueprint
 {
-    [CreateAssetMenu(fileName = "NewBlueprintDefinition", menuName = "Mini Cities/Blueprint/Normal")]
+    [CreateAssetMenu(fileName = "BLUEPRINT_", menuName = "Mini Cities/Blueprint")]
     public class BlueprintDefinition : ScriptableObject
     {
+        public string displayName = "Unnamed";
         public BlueprintFile file;
         public BlueprintCategory category;
         [SerializeReference] public IPlacementRule[] placementRules;
         public AbilityDefinition[] abilities;
-    }
-
-    [CreateAssetMenu(fileName = "NewBuildingBlueprintDefinition", menuName = "Mini Cities/Blueprint/Building")]
-    public class BuildingBlueprintDefinition : BlueprintDefinition
-    {
         public BlockDefinition building;
     }
 }

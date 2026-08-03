@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace MiniCities.Core.Definitions.Map
 {
-    [CreateAssetMenu(fileName = "NewMapDefinition", menuName = "Mini Cities/Map")]
+    [CreateAssetMenu(fileName = "MAP_", menuName = "Mini Cities/Map")]
     public class MapDefinition : ScriptableObject
     {
-        public string displayName;
+        public string displayName = "Unnamed";
         public MapSize size;
         public int terrainFactor;
         public BlockDefinitionGrid grid = new();

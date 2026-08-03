@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(MapDefinition))]
-public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
+public class MapEditor : RegistryEditor<MapDefinition, BlockRegistry>
 {
     private const float ViewPadding = 50f;
 
@@ -43,9 +43,14 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
     private void DrawMap()
     {
         EditorGUILayout.LabelField("Map", EditorStylesUtility.Header);
+        
         EditorGUILayout.Space(EditorStylesUtility.LargeSpacing);
 
+        var prev = Target.displayName;
+        
         Target.displayName = EditorGUILayout.TextField("Name", Target.displayName);
+
+        if (!Target.displayName.Equals(prev)) MarkDirty();
 
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
@@ -56,6 +61,7 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
     private void DrawTools()
     {
         EditorGUILayout.LabelField("Tools", EditorStylesUtility.Header);
+        
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
         DrawBrushes();
@@ -74,6 +80,7 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
     private void DrawLayer()
     {
         EditorGUILayout.LabelField($"Layer {_selectedLayer + 1} out of {Target.Height}", EditorStylesUtility.Subheader);
+        
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
         for (var z = 0; z < Target.Length; z++)
@@ -89,7 +96,7 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
     private void DrawTile(Vector3Int coord)
     {
         var block = Target[coord];
-        var label = block is not null ? block.name : "Empty";
+        var label = block is not null ? block.displayName : "Empty";
         var buttonSize = _viewWidth / Target.Width;
         var rect = GUILayoutUtility.GetRect(buttonSize, buttonSize);
 
@@ -123,6 +130,7 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
     private void DrawBrushes()
     {
         EditorGUILayout.LabelField("Brushes", EditorStylesUtility.Subheader);
+        
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
         var blocks = Registry.blocks;
@@ -136,7 +144,7 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
         {
             GUI.backgroundColor = b == _selectedBlock ? Color.cyan : b.group.ToColor();
 
-            if (GUILayout.Button(b.name, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
+            if (GUILayout.Button(b.displayName, GUILayout.Width(buttonSize), GUILayout.Height(buttonSize)))
                 _selectedBlock = b;
             
             GUI.backgroundColor = Color.white;
@@ -144,6 +152,7 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
             if (++rowCount % cols != 0) continue;
             
             EditorGUILayout.EndHorizontal();
+            
             EditorGUILayout.BeginHorizontal();
         }
         
@@ -153,6 +162,7 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
     private void DrawDimensions()
     {
         EditorGUILayout.LabelField("Dimensions", EditorStylesUtility.Subheader);
+        
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
 
         Target.size = (MapSize)EditorGUILayout.EnumPopup("Size", Target.size);
@@ -174,6 +184,7 @@ public class MapDefinitionEditor : RegistryEditor<MapDefinition, BlockRegistry>
     private void DrawModifiers()
     {
         EditorGUILayout.LabelField("Modifiers", EditorStylesUtility.Subheader);
+        
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
 
         Target.terrainFactor = EditorGUILayout.IntSlider("Terrain Factor", Target.terrainFactor, 1, 5);

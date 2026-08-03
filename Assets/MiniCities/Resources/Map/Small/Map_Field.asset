@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f7944d5c0c4399a3400e1158393384, type: 3}
   m_Name: Map_Field
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Data.Map.MapData
+  displayName: Field
   size: 0
   terrainFactor: 1
   grid:

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine;
 
 namespace MiniCities.Core.Deck
 {
-    [Serializable]
     public abstract class Deck<T>
     {
         private readonly List<T> _items = new();
@@ -19,7 +16,7 @@ namespace MiniCities.Core.Deck
 
         public T Draw()
         {
-            if (_drawPile.Count == 0) FillDrawPile();
+            if (_drawPile.Count == 0) throw new EmptyDrawPileException();
 
             var item = _drawPile[0];
             _drawPile.RemoveAt(0);
@@ -47,6 +44,13 @@ namespace MiniCities.Core.Deck
                 
                 (list[i], list[j]) = (list[j], list[i]);
             }
+        }
+    }
+
+    public class EmptyDrawPileException : Exception
+    {
+        public EmptyDrawPileException()
+        {
         }
     }
 }

@@ -2,7 +2,7 @@
 using MiniCities.Core.Raycast;
 using UnityEngine;
 
-namespace MiniCities.Runtime.Game.Map
+namespace MiniCities.Runtime.Game.Tracker
 {
     public class PlacementTracker : MonoBehaviour
     {

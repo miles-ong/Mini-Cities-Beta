@@ -12,6 +12,7 @@ public class MapPoolEditor : RegistryEditor<MapPool, MapRegistry>
         if (Registry is null) return;
         
         EditorGUILayout.LabelField("Map Pool", EditorStylesUtility.Header);
+        
         EditorGUILayout.Space(EditorStylesUtility.LargeSpacing);
 
         DrawStats();
@@ -19,6 +20,7 @@ public class MapPoolEditor : RegistryEditor<MapPool, MapRegistry>
         foreach (MapSize s in Enum.GetValues(typeof(MapSize)))
         {
             EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
+            
             DrawMapToggles(s);
         }
     }
@@ -26,14 +28,17 @@ public class MapPoolEditor : RegistryEditor<MapPool, MapRegistry>
     private void DrawStats()
     {
         EditorGUILayout.LabelField("Stats", EditorStylesUtility.Subheader);
+        
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
         EditorGUILayout.LabelField($"Total Enabled Maps: {Target.maps.Items.Count}");
+        
         EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
 
         foreach (MapSize s in Enum.GetValues(typeof(MapSize)))
         {
             var count = Target.GetBySize(s).Count;
+            
             EditorGUILayout.LabelField($"{s} Maps: {count}");
         }
     }
@@ -75,7 +80,5 @@ public class MapPoolEditor : RegistryEditor<MapPool, MapRegistry>
 
             MarkDirty();
         }
-
-        if (enableAll || disableAll) MarkDirty();
     }
 }

@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58dc415c67ee4040a311dbd54953f6d7, type: 3}
-  m_Name: Test
+  m_Name: Blueprint_Harbor
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Blueprint.BlueprintDefinition
+  displayName: Harbor
   file: 0
-  category: 0
+  category: 1
   placementRules: []
-  abilities:
-  - trigger: 0
-    conditions: []
-    effects: []
+  abilities: []
+  building: {fileID: 0}
   references:
     version: 2
     RefIds: []
