@@ -1,4 +1,4 @@
-﻿using MiniCities.Core.Definitions.Block;
+﻿using MiniCities.Definitions.Block;
 using UnityEngine;
 
 namespace MiniCities.Core.Event

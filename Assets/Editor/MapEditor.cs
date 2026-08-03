@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
-using MiniCities.Core.Definitions.Block;
-using MiniCities.Core.Definitions.Map;
+using MiniCities.Definitions.Block;
+using MiniCities.Definitions.Map;
 using UnityEditor;
 using UnityEngine;
 

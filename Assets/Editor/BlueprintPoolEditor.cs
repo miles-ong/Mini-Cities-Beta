@@ -1,7 +1,6 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
-using MiniCities.Core.Definitions.Blueprint;
+using MiniCities.Definitions.Blueprint;
 using UnityEditor;
 using UnityEngine;
 

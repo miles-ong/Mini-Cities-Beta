@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using MiniCities.Core.Definitions.Map;
+using MiniCities.Definitions.Map;
 using UnityEditor;
 using UnityEngine;
 
