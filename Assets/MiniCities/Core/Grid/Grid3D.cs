@@ -42,20 +42,31 @@ namespace MiniCities.Core.Grid
             GridItems = resizedItems;
         }
 
-        public HashSet<T> GetItemsInScope(Vector3Int coord, GridScope scope) => scope switch
+        public HashSet<T> GetItemsInScope(Vector3Int coord, GridScope scope, GridLevel level, bool includeSelf)
         {
-            GridScope.Adjacent => GetAdjacent(coord),
-            GridScope.Surrounding => GetSurrounding(coord),
-            GridScope.All => GridItems.ToHashSet(),
-            _ => throw new ArgumentOutOfRangeException(nameof(scope), $"{scope} is not supported")
-        };
+            var items = scope switch
+            {
+                GridScope.Adjacent => GetAdjacent(coord, level),
+                GridScope.Nearby => GetNearby(coord, level),
+                GridScope.All => GridItems.ToHashSet(),
+                GridScope.On => new HashSet<T>(),
+                _ => throw new ArgumentOutOfRangeException(nameof(scope), $"{scope} is not supported")
+            };
 
-        private HashSet<T> GetAdjacent(Vector3Int coord)
+            if (scope == GridScope.On && InBounds(coord + level.ToVector()))
+                items.Add(GridItems[GetIndex(coord + level.ToVector(),  GridDimensions)]);
+
+            if (includeSelf && InBounds(coord)) items.Add(GridItems[GetIndex(coord, GridDimensions)]);
+
+            return items;
+        }
+
+        private HashSet<T> GetAdjacent(Vector3Int coord, GridLevel level)
         {
-            var left = coord + Vector3Int.left;
-            var forward = coord + Vector3Int.forward;
-            var right = coord + Vector3Int.right;
-            var back = coord + Vector3Int.back;
+            var left = coord + Vector3Int.left + level.ToVector();
+            var forward = coord + Vector3Int.forward + level.ToVector();
+            var right = coord + Vector3Int.right + level.ToVector();
+            var back = coord + Vector3Int.back + level.ToVector();
             
             var adjacent = new HashSet<T>();
 
@@ -67,21 +78,21 @@ namespace MiniCities.Core.Grid
             return adjacent;
         }
 
-        private HashSet<T> GetSurrounding(Vector3Int coord)
+        private HashSet<T> GetNearby(Vector3Int coord, GridLevel level)
         {
-            var surrounding = new HashSet<T>();
+            var nearby = new HashSet<T>();
             
             for (var x = -1; x <= 1; x++)
             for (var z = -1; z <= 1; z++)
             {
                 if (x == 0 && z == 0) continue;
                 
-                var pos = new Vector3Int(coord.x + x, coord.y, coord.z + z);
+                var pos = new Vector3Int(coord.x + x, coord.y, coord.z + z) + level.ToVector();
 
-                if (InBounds(pos)) surrounding.Add(GridItems[GetIndex(pos, GridDimensions)]);
+                if (InBounds(pos)) nearby.Add(GridItems[GetIndex(pos, GridDimensions)]);
             }
 
-            return surrounding;
+            return nearby;
         }
         
         private bool InBounds(Vector3Int coord)

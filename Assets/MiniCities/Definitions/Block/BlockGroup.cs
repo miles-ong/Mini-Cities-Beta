@@ -5,7 +5,9 @@ namespace MiniCities.Definitions.Block
     public enum BlockGroup
     {
         Land,
-        Water
+        Water,
+        Terrain,
+        Building
     }
 
     public static class BlockGroupExtensions

@@ -1,4 +1,5 @@
-﻿using MiniCities.Definitions.Ability;
+﻿using System.Linq;
+using MiniCities.Definitions.Ability;
 using MiniCities.Definitions.Block;
 using UnityEngine;
 
@@ -13,8 +14,19 @@ namespace MiniCities.Definitions.Blueprint
         public int population;
         public int culture;
         public int pollution;
+        public BlockDefinition building;
         [SerializeReference] public IPlacementRule[] placementRules;
         public AbilityDefinition[] abilities;
-        public BlockDefinition building;
+
+        public string GenerateDescription()
+        {
+            var abilityText = abilities == null || abilities.Length == 0
+                ? "No abilities."
+                : string.Join("\n", abilities.Select(a => a.Describe()));
+
+            if (placementRules == null || placementRules.Length == 0) return abilityText;
+
+            return $"{abilityText} Must be placed {string.Join(" and ", placementRules.Select(a => a.Describe()))}.";
+        }
     }
 }

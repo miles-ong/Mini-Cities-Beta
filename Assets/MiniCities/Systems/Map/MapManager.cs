@@ -36,7 +36,24 @@ namespace MiniCities.Systems.Map
             renderer.UpdateBlock(coord, block);
         }
 
-        public HashSet<BlockRuntime> GetBlocksInScope(Vector3Int coord, GridScope scope) =>
-            _currentMap.Grid.GetItemsInScope(coord, scope);
+        public HashSet<BlockRuntime> GetBlocksInScope(Vector3Int coord, GridScope scope, GridLevel level, bool includeSelf = false) =>
+            _currentMap.Grid.GetItemsInScope(coord, scope, level, includeSelf);
+
+        public HashSet<T> GetBlocksInScope<T>(
+            Vector3Int coord,
+            GridScope scope,
+            GridLevel level,
+            bool includeSelf = false)
+            where T : BlockRuntime
+        {
+            var result = new HashSet<T>();
+
+            foreach (var b in GetBlocksInScope(coord, scope, level, includeSelf))
+            {
+                if (b is T typed) result.Add(typed);
+            }
+
+            return result;
+        }
     }
 }

@@ -1,4 +1,7 @@
-﻿using MiniCities.Definitions.Blueprint;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MiniCities.Definitions.Block;
+using MiniCities.Definitions.Blueprint;
 
 namespace MiniCities.Runtime.Blueprint
 {
@@ -9,6 +12,8 @@ namespace MiniCities.Runtime.Blueprint
         public BlueprintCategory Category;
         public string Description = "Test";
         public BuildingStats Stats { get; private set; }
+        public List<IPlacementRule> PlacementRules { get; }
+        public BlockDefinition Building { get; }
         
         public BlueprintRuntime(BlueprintDefinition definition)
         {
@@ -22,6 +27,9 @@ namespace MiniCities.Runtime.Blueprint
                 Culture = definition.culture,
                 Pollution = definition.pollution
             };
+
+            PlacementRules = definition.placementRules.ToList();
+            Building = definition.building;
         }
     }
 }

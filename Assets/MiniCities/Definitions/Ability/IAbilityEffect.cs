@@ -7,11 +7,12 @@ namespace MiniCities.Definitions.Ability
     public interface IAbilityEffect
     {
         public void Activate(AbilityContext ctx);
+        public string Describe();
         public IAbilityEffect Clone();
     }
 
     [Serializable]
-    public class ModifyStatEffect : IAbilityEffect
+    public class ModifyBaseStatEffect : IAbilityEffect
     {
         public BuildingStat stat;
         public Operation operation;
@@ -23,7 +24,21 @@ namespace MiniCities.Definitions.Ability
             ctx.Building.MarkDirty();
         }
 
-        public IAbilityEffect Clone() => new ModifyStatEffect()
+        public string Describe()
+        {
+            var valueText = operation switch
+            {
+                Operation.Add => $"+{amount}",
+                Operation.Subtract => $"-{amount}",
+                Operation.Multiply => $"x{amount}",
+                Operation.Divide => $"/{amount}",
+                _ => amount.ToString("0.##")
+            };
+
+            return $"{valueText} {stat}";
+        }
+
+        public IAbilityEffect Clone() => new ModifyBaseStatEffect()
         {
             stat = stat,
             operation = operation,

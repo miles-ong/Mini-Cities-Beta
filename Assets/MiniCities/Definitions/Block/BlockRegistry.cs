@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MiniCities.View;
 using UnityEngine;
 
 namespace MiniCities.Definitions.Block
@@ -8,6 +9,10 @@ namespace MiniCities.Definitions.Block
     public class BlockRegistry : ScriptableObject
     {
         public List<BlockDefinition> blocks = new();
+        
+        private NullBuildingView _nullBuildingView;
+
+        public NullBuildingView NullBuildingView => _nullBuildingView;
         
         #if UNITY_EDITOR
         private void OnValidate() =>

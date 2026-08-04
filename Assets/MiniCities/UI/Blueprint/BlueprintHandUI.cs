@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
+using MiniCities.Core.Event;
 using MiniCities.Runtime.Blueprint;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -82,6 +83,7 @@ namespace MiniCities.UI.Blueprint
         private void OnBlueprintClicked(BlueprintUI blueprint)
         {
             _selected = blueprint;
+            EventBus<BlueprintSelectedEvent>.Raise(new BlueprintSelectedEvent(blueprint.Blueprint));
             UpdateBlueprintPositions();
         }
 

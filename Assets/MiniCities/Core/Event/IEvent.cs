@@ -1,4 +1,5 @@
 ﻿using MiniCities.Definitions.Block;
+using MiniCities.Runtime.Blueprint;
 using UnityEngine;
 
 namespace MiniCities.Core.Event
@@ -16,6 +17,16 @@ namespace MiniCities.Core.Event
         {
             Cell = cell;
             Block = block;
+        }
+    }
+
+    public sealed class BlueprintSelectedEvent : IEvent
+    {
+        public BlueprintRuntime Blueprint { get; }
+
+        public BlueprintSelectedEvent(BlueprintRuntime blueprint)
+        {
+            Blueprint = blueprint;
         }
     }
 }

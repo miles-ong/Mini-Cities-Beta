@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using MiniCities.Definitions.Block;
 using MiniCities.Runtime.Block;
 using MiniCities.Runtime.Map;
+using MiniCities.View;
 using UnityEngine;
 
 namespace MiniCities.Systems.Map
 {
     public class MapRenderer : MonoBehaviour
     {
+        [SerializeField] private NullBuildingView nullBuildingView;
+        
         private readonly Dictionary<Vector3Int, GameObject> _views = new();
 
         public void Render(MapRuntime map, BlockDefinitionGrid grid)
@@ -49,8 +53,23 @@ namespace MiniCities.Systems.Map
         {
             if (block is null) return;
             
-            var gameObj = Instantiate(block.Definition.prefab, coord, Quaternion.identity, transform);
-            _views[coord] = gameObj;
+            _views[coord] = CreateBlockView(block, coord);
+        }
+
+        private GameObject CreateBlockView(BlockRuntime block, Vector3Int position)
+        {
+            if (block.Definition.prefab != null)
+                return Instantiate(block.Definition.prefab, position, Quaternion.identity, transform);
+
+            if (block is BuildingRuntime building)
+            {
+                var nullView = Instantiate(nullBuildingView, position, Quaternion.identity, transform);
+                nullView.Set(building.Blueprint);
+
+                return nullView.gameObject;
+            }
+
+            throw new MissingFieldException(nameof(block), "Failed to find null prefab.");
         }
     }
 }

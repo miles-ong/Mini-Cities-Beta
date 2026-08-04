@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58dc415c67ee4040a311dbd54953f6d7, type: 3}
-  m_Name: Blueprint_Neighborhood
+  m_Name: BP_Factory
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Blueprint.BlueprintDefinition
-  displayName: Neighborhood
+  displayName: Factory
   file: 0
-  category: 0
-  population: 15
-  culture: 5
+  category: 2
+  population: 0
+  culture: 0
   pollution: 0
   placementRules: []
   abilities: []
-  building: {fileID: 0}
+  building: {fileID: 11400000, guid: 4f7edd38edad2f749a116dc7f4036d92, type: 2}
   references:
     version: 2
     RefIds: []

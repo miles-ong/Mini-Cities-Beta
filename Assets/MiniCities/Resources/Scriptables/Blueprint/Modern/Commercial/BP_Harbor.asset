@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58dc415c67ee4040a311dbd54953f6d7, type: 3}
+  m_Name: BP_Harbor
+  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Blueprint.BlueprintDefinition
+  displayName: Harbor
+  file: 0
+  category: 1
+  population: 0
+  culture: 0
+  pollution: 0
+  building: {fileID: 11400000, guid: 7f9bd451f8376504cb1cf9dd297ece34, type: 2}
+  placementRules:
+  - rid: 6376856362774954063
+  abilities:
+  - trigger: 0
+    conditions: []
+    effects:
+    - rid: 6376856362774954064
+  references:
+    version: 2
+    RefIds:
+    - rid: 6376856362774954063
+      type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint, asm: Assembly-CSharp}
+      data:
+        scope: 3
+        group: 1
+    - rid: 6376856362774954064
+      type: {class: ModifyBaseStatEffect, ns: MiniCities.Definitions.Ability, asm: Assembly-CSharp}
+      data:
+        stat: 1
+        operation: 1
+        amount: 15

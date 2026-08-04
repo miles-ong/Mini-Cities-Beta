@@ -37,10 +37,6 @@ namespace MiniCities.UI.Blueprint
 
             background.color = blueprint.Category.ToColor();
             nameplate.color = blueprint.Category.ToColor();
-
-            Debug.Log(blueprint.Category.ToColor());
-            Debug.Log(background.color);
-            
             displayName.text = blueprint.DisplayName;
             HandleIcon(populationIcon, populationNumber, blueprint.Stats.Population);
             HandleIcon(pollutionIcon, pollutionNumber, blueprint.Stats.Pollution);
