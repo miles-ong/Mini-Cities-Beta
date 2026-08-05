@@ -23,10 +23,10 @@ namespace MiniCities.Systems.Tracker
             EventBus<BlueprintSelectedEvent>.OnEvent += OnBlueprintSelected;
         }
 
-        private void OnBlueprintSelected(BlueprintSelectedEvent evt)
+        private void OnBlueprintSelected(BlueprintSelectedEvent e)
         {
             selectionTracker.enabled = false;
-            placementTracker.Begin(evt.Blueprint);
+            placementTracker.Begin(e.Blueprint);
         }
     }
 }

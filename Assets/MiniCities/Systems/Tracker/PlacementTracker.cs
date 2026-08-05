@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MiniCities.Core.Event;
 using MiniCities.Core.Grid;
 using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint.Placement;
@@ -6,6 +7,7 @@ using MiniCities.Runtime.Blueprint;
 using MiniCities.Systems.Map;
 using MiniCities.View;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace MiniCities.Systems.Tracker
 {
@@ -15,8 +17,9 @@ namespace MiniCities.Systems.Tracker
         [SerializeField] private LayerMask mask;
 
         private MapManager _map;
-        
         private GridRaycaster _raycaster;
+
+        private BlueprintRuntime _blueprint;
         private BlockView _preview;
         private Transform _transform;
         private Renderer[] _renderers;
@@ -34,7 +37,8 @@ namespace MiniCities.Systems.Tracker
         public void Begin(BlueprintRuntime blueprint)
         {
             if (_preview != null) Destroy(_preview.gameObject);
-            
+
+            _blueprint = blueprint;
             var view = blueprint.Building.view;
 
             if (view == null)
@@ -76,34 +80,43 @@ namespace MiniCities.Systems.Tracker
         {
             if (_raycaster.TryGetGridHit(mask, out var gridHit) && gridHit.IsTop)
             {
-                if (gridHit.Cell == _lastCell) return;
-
-                foreach (var r in _renderers) r.enabled = true;
-
-                _lastCell = gridHit.Cell;
-                var ctx = new PlacementContext(gridHit, _map);
-                _canPlace = true;
-                Debug.Log($"Evaluating {_rules.Count} rules at {gridHit.Cell}");
-
-                foreach (var r in _rules)
+                if (gridHit.Cell != _lastCell)
                 {
-                    var passed = r.Evaluate(ctx);
-                    
-                    Debug.Log($"{r.Describe()} -> {passed}");
+                    foreach (var r in _renderers) r.enabled = true;
 
-                    if (passed) continue;
+                    _lastCell = gridHit.Cell;
+                    var ctx = new PlacementContext(gridHit, _map);
+                    _canPlace = true;
+                    Debug.Log($"Evaluating {_rules.Count} rules at {gridHit.Cell}");
+
+                    foreach (var r in _rules)
+                    {
+                        var passed = r.Evaluate(ctx);
                     
-                    _canPlace = false;
-                    break;
+                        Debug.Log($"{r.Describe()} -> {passed}");
+
+                        if (passed) continue;
+                    
+                        _canPlace = false;
+                        break;
+                    }
+                
+                    _preview.SetShader(true, _canPlace);
+                    _transform.position = GridTransform.CellToWorld(gridHit.Cell);
                 }
                 
-                _preview.SetShader(true, _canPlace);
-                _transform.position = GridTransform.CellToWorld(gridHit.Cell);
+                if (_canPlace && Mouse.current.leftButton.wasPressedThisFrame)
+                {
+                    Debug.Log($"Placing at {gridHit.Cell}");
+                    
+                    EventBus<BlueprintPlacedEvent>.Raise(new BlueprintPlacedEvent(_blueprint, gridHit.Cell));
+                }
 
                 return;
             }
-
+            
             _lastCell = default;
+            _canPlace = false;
 
             foreach (var r in _renderers) r.enabled = false;
         }

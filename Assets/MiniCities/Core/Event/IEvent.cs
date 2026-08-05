@@ -1,4 +1,4 @@
-﻿using MiniCities.Definitions.Block;
+﻿using MiniCities.Runtime.Block;
 using MiniCities.Runtime.Blueprint;
 using UnityEngine;
 
@@ -8,15 +8,15 @@ namespace MiniCities.Core.Event
     {
     }
 
-    public sealed class BlockPlacedEvent : IEvent // swap with building placed soon? // proof of concept
+    public sealed class BlueprintPlacedEvent : IEvent 
     {
-        public Vector3Int Cell { get; }
-        public BlockDefinition Block { get; }
+        public BlueprintRuntime Blueprint { get; }
+        public Vector3Int Location { get; }
 
-        public BlockPlacedEvent(Vector3Int cell, BlockDefinition block)
+        public BlueprintPlacedEvent(BlueprintRuntime blueprint, Vector3Int location)
         {
-            Cell = cell;
-            Block = block;
+            Blueprint = blueprint;
+            Location = location;
         }
     }
 

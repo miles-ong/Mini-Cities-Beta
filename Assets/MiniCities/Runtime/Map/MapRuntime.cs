@@ -25,7 +25,7 @@ namespace MiniCities.Runtime.Map
         {
             Size = definition.size;
             TerrainFactor = definition.terrainFactor;
-            Grid = new BlockRuntimeGrid(definition.Dimensions);
+            Grid = new BlockRuntimeGrid(definition.Dimensions + Vector3Int.up); // building layer
         }
 
         public Vector3 GetWorldCenter()

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using MiniCities.Core.Event;
 using MiniCities.Core.Grid;
 using MiniCities.Definitions.Map;
 using MiniCities.Runtime.Block;
@@ -17,13 +18,18 @@ namespace MiniCities.Systems.Map
         
         private MapRuntime _currentMap;
 
+        private void Start()
+        {
+            EventBus<BlueprintPlacedEvent>.OnEvent += OnBlueprintPlaced;
+        }
+
         public void LoadMap(MapDefinition definition)
         {
             renderer.Clear();
             _currentMap = new MapRuntime(definition);
             cameraController.SetAnchor(_currentMap.GetWorldCenter());
             
-            for (var y = 0; y < _currentMap.Height; y++) 
+            for (var y = 0; y < _currentMap.Height - 1; y++) 
             for (var z = 0; z < _currentMap.Length; z++)
             for (var x = 0; x < _currentMap.Width; x++)
             {
@@ -45,6 +51,9 @@ namespace MiniCities.Systems.Map
         public void SetBlock(Vector3Int coord, [CanBeNull] BlockRuntime block)
         {
             _currentMap[coord] = block;
+
+            if (block != null) block.Location = coord;
+            
             renderer.UpdateBlock(coord, block);
         }
 
@@ -66,6 +75,15 @@ namespace MiniCities.Systems.Map
             }
 
             return result;
+        }
+
+        private void OnBlueprintPlaced(BlueprintPlacedEvent e)
+        {
+            var building = new BuildingRuntime(e.Blueprint, e.Location);
+            
+            Debug.Log($"Placing: {building.Blueprint.DisplayName}");
+            
+            SetBlock(e.Location, building);
         }
     }
 }

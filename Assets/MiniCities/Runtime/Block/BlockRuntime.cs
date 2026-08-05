@@ -6,7 +6,7 @@ namespace MiniCities.Runtime.Block
     public class BlockRuntime
     {
         public BlockDefinition Definition { get; }
-        public Vector3Int Location { get; }
+        public Vector3Int Location;
 
         public BlockRuntime(BlockDefinition definition, Vector3Int location)
         {

@@ -742,7 +742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ef0bca02ba84f83a9e1a6ba01a0b550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_.Systems.Map.MapRenderer
-  nullBuildingView: {fileID: 0}
+  nullBuildingView: {fileID: 8266176662168842410, guid: 451bc3e56ae60f04b912f67dd666bb97, type: 3}
 --- !u!4 &1009000383
 Transform:
   m_ObjectHideFlags: 0
