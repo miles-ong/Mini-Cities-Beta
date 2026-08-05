@@ -1,6 +1,7 @@
 ﻿using System;
 using MiniCities.Core;
-using MiniCities.Definitions.Blueprint;
+using MiniCities.Definitions.Blueprint.Stat;
+using MiniCities.Systems.City.Stat;
 
 namespace MiniCities.Definitions.Ability
 {
@@ -12,7 +13,7 @@ namespace MiniCities.Definitions.Ability
     }
 
     [Serializable]
-    public class ModifyBaseStatEffect : IAbilityEffect
+    public class ModifyBuildingBaseStat : IAbilityEffect
     {
         public BuildingStat stat;
         public Operation operation;
@@ -20,25 +21,32 @@ namespace MiniCities.Definitions.Ability
 
         public void Activate(AbilityContext ctx)
         {
-            ctx.Building.BaseStats.ModifyStat(stat, operation, amount);
+            ctx.Building.BaseStats.Modify(stat, operation, amount);
             ctx.Building.MarkDirty();
         }
 
-        public string Describe()
+        public string Describe() => $"{operation.ToDescriptionText(amount)} {stat}";
+        
+        public IAbilityEffect Clone() => new ModifyBuildingBaseStat()
         {
-            var valueText = operation switch
-            {
-                Operation.Add => $"+{amount}",
-                Operation.Subtract => $"-{amount}",
-                Operation.Multiply => $"x{amount}",
-                Operation.Divide => $"/{amount}",
-                _ => amount.ToString("0.##")
-            };
+            stat = stat,
+            operation = operation,
+            amount = amount
+        };
+    }
 
-            return $"{valueText} {stat}";
-        }
+    [Serializable]
+    public class ModifyCityBaseStat : IAbilityEffect
+    {
+        public CityStat stat = 0;
+        public Operation operation = 0;
+        public float amount;
 
-        public IAbilityEffect Clone() => new ModifyBaseStatEffect()
+        public void Activate(AbilityContext ctx) => ctx.Game.City.ModifyBaseStat(stat, operation, amount);
+
+        public string Describe() => $"{operation.ToDescriptionText(amount)} {stat}";
+
+        public IAbilityEffect Clone() => new ModifyCityBaseStat()
         {
             stat = stat,
             operation = operation,

@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_.Entities.Block.BlockData
   displayName: Water
   group: 1
-  prefab: {fileID: 7575322306328836848, guid: d4e31a8c1d05d184d95d91ab744385e6, type: 3}
+  view: {fileID: 3797612340702404401, guid: de286536fa079bb428fe559a2ccd0db9, type: 3}

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 
 namespace MiniCities.Core.Grid
@@ -44,41 +44,43 @@ namespace MiniCities.Core.Grid
 
         public HashSet<T> GetItemsInScope(Vector3Int coord, GridScope scope, GridLevel level, bool includeSelf)
         {
+            var leveled = coord + level.ToVector();
+
+            if (!InBounds(leveled)) return new HashSet<T>();
+            
             var items = scope switch
             {
-                GridScope.Adjacent => GetAdjacent(coord, level),
-                GridScope.Nearby => GetNearby(coord, level),
-                GridScope.All => GridItems.ToHashSet(),
+                GridScope.Adjacent => GetAdjacent(leveled),
+                GridScope.Nearby => GetNearby(leveled),
+                GridScope.All => new HashSet<T>(GridItems.Where(i => i != null)),
                 GridScope.On => new HashSet<T>(),
-                _ => throw new ArgumentOutOfRangeException(nameof(scope), $"{scope} is not supported")
+                _ => throw new ArgumentOutOfRangeException(nameof(scope), "Not supported.")
             };
 
-            if (scope == GridScope.On && InBounds(coord + level.ToVector()))
-                items.Add(GridItems[GetIndex(coord + level.ToVector(),  GridDimensions)]);
-
-            if (includeSelf && InBounds(coord)) items.Add(GridItems[GetIndex(coord, GridDimensions)]);
+            if (scope == GridScope.On && InBounds(leveled)) AddAndIgnoreNull(items, leveled);
+            if (includeSelf && InBounds(leveled)) AddAndIgnoreNull(items, leveled);
 
             return items;
         }
 
-        private HashSet<T> GetAdjacent(Vector3Int coord, GridLevel level)
+        private HashSet<T> GetAdjacent(Vector3Int coord)
         {
-            var left = coord + Vector3Int.left + level.ToVector();
-            var forward = coord + Vector3Int.forward + level.ToVector();
-            var right = coord + Vector3Int.right + level.ToVector();
-            var back = coord + Vector3Int.back + level.ToVector();
+            var left = coord + Vector3Int.left;
+            var forward = coord + Vector3Int.forward;
+            var right = coord + Vector3Int.right;
+            var back = coord + Vector3Int.back;
             
             var adjacent = new HashSet<T>();
 
-            if (InBounds(left)) adjacent.Add(GridItems[GetIndex(left, GridDimensions)]);
-            if (InBounds(forward)) adjacent.Add(GridItems[GetIndex(forward, GridDimensions)]);
-            if (InBounds(right)) adjacent.Add(GridItems[GetIndex(right, GridDimensions)]);
-            if (InBounds(back)) adjacent.Add(GridItems[GetIndex(back, GridDimensions)]);
+            AddAndIgnoreNull(adjacent, left);
+            AddAndIgnoreNull(adjacent, forward);
+            AddAndIgnoreNull(adjacent, right);
+            AddAndIgnoreNull(adjacent, back);
 
             return adjacent;
         }
 
-        private HashSet<T> GetNearby(Vector3Int coord, GridLevel level)
+        private HashSet<T> GetNearby(Vector3Int coord)
         {
             var nearby = new HashSet<T>();
             
@@ -86,28 +88,37 @@ namespace MiniCities.Core.Grid
             for (var z = -1; z <= 1; z++)
             {
                 if (x == 0 && z == 0) continue;
-                
-                var pos = new Vector3Int(coord.x + x, coord.y, coord.z + z) + level.ToVector();
 
-                if (InBounds(pos)) nearby.Add(GridItems[GetIndex(pos, GridDimensions)]);
+                var pos = new Vector3Int(coord.x + x, coord.y, coord.z + z);
+
+                AddAndIgnoreNull(nearby, pos);
             }
 
             return nearby;
+        }
+
+        private void AddAndIgnoreNull(HashSet<T> set, Vector3Int coord)
+        {
+            if (!InBounds(coord)) return;
+
+            var item = GridItems[GetIndex(coord, GridDimensions)];
+
+            if (item != null) set.Add(item);
         }
         
         private bool InBounds(Vector3Int coord)
             => coord.x >= 0 && coord.x < Width && coord.y >= 0 && coord.y < Height && coord.z >= 0 && coord.z < Length;
         
-        private static int GetIndex(Vector3Int coord, Vector3Int dim) 
-            => coord.x + (coord.z * dim.x) + (coord.y * dim.x * dim.z);
-        
         private int GetCheckedIndex(Vector3Int coord)
         {
             if (!InBounds(coord))
                 throw new ArgumentOutOfRangeException(nameof(coord),
-                    $"{coord} is out of bounds for dimensions {GridDimensions}");
+                    $"Out of bounds for dimensions {GridDimensions}");
 
             return GetIndex(coord, GridDimensions);
         }
+        
+        private static int GetIndex(Vector3Int coord, Vector3Int dim) 
+            => coord.x + (coord.z * dim.x) + (coord.y * dim.x * dim.z);
     }
 }

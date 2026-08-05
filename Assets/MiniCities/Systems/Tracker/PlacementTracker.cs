@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using MiniCities.Core.Grid;
-using MiniCities.Definitions.Blueprint;
+using MiniCities.Definitions.Block;
+using MiniCities.Definitions.Blueprint.Placement;
 using MiniCities.Runtime.Blueprint;
+using MiniCities.Systems.Map;
 using MiniCities.View;
 using UnityEngine;
 
@@ -11,32 +13,39 @@ namespace MiniCities.Systems.Tracker
     {
         [SerializeField] private NullBuildingView nullBuildingView;
         [SerializeField] private LayerMask mask;
+
+        private MapManager _map;
         
         private GridRaycaster _raycaster;
-        private GameObject _preview;
+        private BlockView _preview;
         private Transform _transform;
         private Renderer[] _renderers;
         private List<IPlacementRule> _rules;
 
-        private bool _lastHit = false;
+        private Vector3Int _lastCell;
+        private bool _canPlace;
 
-        public void SetRaycaster(GridRaycaster raycaster) => _raycaster = raycaster;
+        public void Initialize(GridRaycaster raycaster, MapManager map)
+        {
+            _raycaster = raycaster;
+            _map = map;
+        }
 
         public void Begin(BlueprintRuntime blueprint)
         {
-            if (_preview != null) Destroy(_preview);
+            if (_preview != null) Destroy(_preview.gameObject);
             
-            var prefab = blueprint.Building.prefab;
+            var view = blueprint.Building.view;
 
-            if (prefab == null)
+            if (view == null)
             {
                 var nullInst = Instantiate(nullBuildingView, Vector3.zero, Quaternion.identity);
                 nullInst.Set(blueprint);
-                _preview = nullInst.gameObject;
+                _preview = nullInst;
             }
             else
             {
-                _preview = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+                _preview = Instantiate(view, Vector3.zero, Quaternion.identity);
             }
             
             _transform = _preview.transform;
@@ -45,9 +54,10 @@ namespace MiniCities.Systems.Tracker
             foreach (var r in _renderers) r.enabled = false;
 
             _rules = blueprint.PlacementRules;
-            _lastHit = false;
             
             enabled = true;
+            
+            Debug.Log("Placement Tracking Enabled");
         }
 
         public void End()
@@ -58,20 +68,44 @@ namespace MiniCities.Systems.Tracker
             _transform = null;
             _renderers = null;
             _rules = null;
-            _lastHit = false;
+            _lastCell = default;
+            _canPlace = false;
         }
 
         private void Update()
         {
-            var hit = _raycaster.TryGetGridHit(mask, out var gridHit) && gridHit.IsTop;
+            if (_raycaster.TryGetGridHit(mask, out var gridHit) && gridHit.IsTop)
+            {
+                if (gridHit.Cell == _lastCell) return;
 
-            if (hit) _transform.position = GridTransform.CellToWorld(gridHit.Cell);
+                foreach (var r in _renderers) r.enabled = true;
 
-            if (hit == _lastHit) return;
+                _lastCell = gridHit.Cell;
+                var ctx = new PlacementContext(gridHit, _map);
+                _canPlace = true;
+                Debug.Log($"Evaluating {_rules.Count} rules at {gridHit.Cell}");
 
-            foreach (var r in _renderers) r.enabled = hit;
+                foreach (var r in _rules)
+                {
+                    var passed = r.Evaluate(ctx);
+                    
+                    Debug.Log($"{r.Describe()} -> {passed}");
 
-            _lastHit = hit;
+                    if (passed) continue;
+                    
+                    _canPlace = false;
+                    break;
+                }
+                
+                _preview.SetShader(true, _canPlace);
+                _transform.position = GridTransform.CellToWorld(gridHit.Cell);
+
+                return;
+            }
+
+            _lastCell = default;
+
+            foreach (var r in _renderers) r.enabled = false;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace MiniCities.Systems.BuffSys
+﻿namespace MiniCities.Systems.City.Buff
 {
     public interface IBuffSource
     {

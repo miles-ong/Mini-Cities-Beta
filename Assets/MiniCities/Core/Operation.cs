@@ -4,10 +4,10 @@ namespace MiniCities.Core
 {
     public enum Operation
     {
-        Add = 1,
-        Subtract = 2,
-        Multiply = 3,
-        Divide = 4
+        Add,
+        Subtract,
+        Multiply,
+        Divide
     }
 
     public static class OperationExtensions
@@ -18,7 +18,16 @@ namespace MiniCities.Core
             Operation.Subtract => value - amount,
             Operation.Multiply => value * amount,
             Operation.Divide => value / (amount != 0 ? amount : 1),
-            _ => throw new ArgumentOutOfRangeException(nameof(operation), $"{operation} is not supported.")
+            _ => throw new ArgumentOutOfRangeException(nameof(operation), "Not supported.")
+        };
+
+        public static string ToDescriptionText(this Operation operation, float amount) => operation switch
+        {
+            Operation.Add => $"+{amount}",
+            Operation.Subtract => $"-{amount}",
+            Operation.Multiply => $"x{amount}",
+            Operation.Divide => $"/{amount}",
+            _ => throw new ArgumentOutOfRangeException(nameof(operation), "Not supported.")
         };
     }
 }

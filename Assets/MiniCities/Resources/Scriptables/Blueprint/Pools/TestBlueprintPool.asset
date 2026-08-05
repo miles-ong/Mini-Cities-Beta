@@ -11,4 +11,4 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7975f05d6c7c4cacabdc0558bf4ed6ac, type: 3}
   m_Name: TestBlueprintPool
-  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Blueprint.BlueprintPool
+  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Definitions.Blueprint.BlueprintPool

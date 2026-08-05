@@ -62,7 +62,7 @@ namespace MiniCities.Runtime.Blueprint
         {
             for (var i = blueprints.Count - 1; i > 0; i--)
             {
-                var j = _random.Range(0, i + 1); // swap for seeded random
+                var j = _random.Range(0, i + 1);
                 
                 (blueprints[i], blueprints[j]) = (blueprints[j], blueprints[i]);
             }

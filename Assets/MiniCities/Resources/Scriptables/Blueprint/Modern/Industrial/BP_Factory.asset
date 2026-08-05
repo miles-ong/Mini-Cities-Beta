@@ -15,12 +15,26 @@ MonoBehaviour:
   displayName: Factory
   file: 0
   category: 2
-  population: 0
-  culture: 0
-  pollution: 0
-  placementRules: []
-  abilities: []
+  stats:
+    values:
+    - Stat: 0
+      Value: 0
+    - Stat: 1
+      Value: 0
+    - Stat: 2
+      Value: 5
   building: {fileID: 11400000, guid: 4f7edd38edad2f749a116dc7f4036d92, type: 2}
+  placementRules:
+  - rid: 6376856387859513419
+  abilities:
+  - trigger: 0
+    conditions: []
+    effects: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 6376856387859513419
+      type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
+      data:
+        scope: 3
+        group: 0

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &7341318542754547617
+--- !u!1001 &685869905309794946
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
       propertyPath: m_LocalPosition.z
@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 357fc2ebb571daa4f93fe2e5ac1c538e, type: 2}
     - target: {fileID: 919132149155446097, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
       propertyPath: m_Name
       value: PFB_WaterBlock
@@ -62,20 +66,23 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3902822760010423289}
+      addedObject: {fileID: 1389109380315762319}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3797612340702404401}
   m_SourcePrefab: {fileID: 100100000, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
---- !u!1 &7575322306328836848 stripped
+--- !u!1 &379950375032209363 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
-  m_PrefabInstance: {fileID: 7341318542754547617}
+  m_PrefabInstance: {fileID: 685869905309794946}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &3902822760010423289
+--- !u!65 &1389109380315762319
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7575322306328836848}
+  m_GameObject: {fileID: 379950375032209363}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -88,5 +95,23 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.8113208, z: 1}
-  m_Center: {x: 0, y: 0.4056604, z: 0}
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &3797612340702404401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379950375032209363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04f4e0e177274043addc6ef3e652c443, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.View.BlockView
+  renderer: {fileID: 2181192107572436486}
+--- !u!23 &2181192107572436486 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 37bf01e13c6e91345b325140c51718d6, type: 3}
+  m_PrefabInstance: {fileID: 685869905309794946}
+  m_PrefabAsset: {fileID: 0}

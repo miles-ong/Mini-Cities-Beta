@@ -166,6 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Systems.Tracker.TrackerManager
   camera: {fileID: 330585545}
+  mapManager: {fileID: 1036732723}
   selectionTracker: {fileID: 2086810471}
   placementTracker: {fileID: 1756434857}
 --- !u!1 &330585543
@@ -678,6 +679,7 @@ MonoBehaviour:
   testMap: {fileID: 11400000, guid: 45a5a6f11587a6d4a869da21f7a05892, type: 2}
   testDeck: {fileID: 11400000, guid: e415bc1fd36b26a46bb73e269e6ee713, type: 2}
   blueprintHandUI: {fileID: 1117598514}
+  seed: 100
 --- !u!1 &946828735
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ef0bca02ba84f83a9e1a6ba01a0b550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_.Systems.Map.MapRenderer
-  nullBuildingView: {fileID: 8633895770919743471, guid: 451bc3e56ae60f04b912f67dd666bb97, type: 3}
+  nullBuildingView: {fileID: 0}
 --- !u!4 &1009000383
 Transform:
   m_ObjectHideFlags: 0
@@ -985,8 +987,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fe93c2fc9c4c5283cdc5df5353698c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_.Systems.Trackers.PlacementTracker
-  nullBuildingView: {fileID: 8633895770919743471, guid: 451bc3e56ae60f04b912f67dd666bb97, type: 3}
-  placementMask:
+  nullBuildingView: {fileID: 8266176662168842410, guid: 451bc3e56ae60f04b912f67dd666bb97, type: 3}
+  mask:
     serializedVersion: 2
     m_Bits: 128
 --- !u!1 &1792358732

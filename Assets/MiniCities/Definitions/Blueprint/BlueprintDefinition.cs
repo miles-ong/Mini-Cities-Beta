@@ -1,28 +1,37 @@
 ﻿using System.Linq;
+using MiniCities.Core.Grid;
 using MiniCities.Definitions.Ability;
 using MiniCities.Definitions.Block;
+using MiniCities.Definitions.Blueprint.Placement;
+using MiniCities.Definitions.Blueprint.Stat;
 using UnityEngine;
 
 namespace MiniCities.Definitions.Blueprint
 {
-    [CreateAssetMenu(fileName = "BLUEPRINT_", menuName = "Mini Cities/Blueprint")]
+    [CreateAssetMenu(fileName = "BP_", menuName = "Mini Cities/Blueprint")]
     public class BlueprintDefinition : ScriptableObject
     {
         public string displayName = "Unnamed";
         public BlueprintFile file;
         public BlueprintCategory category;
-        public int population;
-        public int culture;
-        public int pollution;
+        public BuildingStats stats = new();
         public BlockDefinition building;
         [SerializeReference] public IPlacementRule[] placementRules;
         public AbilityDefinition[] abilities;
+
+        private void Reset()
+        {
+            placementRules = new IPlacementRule[]
+            {
+                new BlockGroupPlacementRule { scope = GridScope.On, group = BlockGroup.Land }
+            };
+        }
 
         public string GenerateDescription()
         {
             var abilityText = abilities == null || abilities.Length == 0
                 ? "No abilities."
-                : string.Join("\n", abilities.Select(a => a.Describe()));
+                : string.Join("\n", abilities.Select(AbilityDescriptionUtility.Describe));
 
             if (placementRules == null || placementRules.Length == 0) return abilityText;
 

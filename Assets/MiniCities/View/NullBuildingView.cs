@@ -5,23 +5,17 @@ using UnityEngine;
 
 namespace MiniCities.View
 {
-    public class NullBuildingView : MonoBehaviour
+    public class NullBuildingView : BlockView
     {
         [SerializeField] private TMP_Text displayName;
-        [SerializeField] private Renderer renderer;
-
-        private MaterialPropertyBlock _block;
         
-        private void Awake() => _block = new MaterialPropertyBlock();
-
         public void Set(BlueprintRuntime blueprint)
         {
             displayName.text = blueprint.DisplayName;
-            renderer.GetPropertyBlock(_block, 1);
-            _block.SetColor("_BaseColor", blueprint.Category.ToColor());
-            renderer.SetPropertyBlock(_block, 1);
             
-            Debug.Log("Set");
+            renderer.GetPropertyBlock(Block, 1);
+            Block.SetColor("_BaseColor", blueprint.Category.ToColor());
+            renderer.SetPropertyBlock(Block, 1);
         }
     }
 }

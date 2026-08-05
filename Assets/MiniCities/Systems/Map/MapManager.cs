@@ -19,11 +19,23 @@ namespace MiniCities.Systems.Map
 
         public void LoadMap(MapDefinition definition)
         {
+            renderer.Clear();
             _currentMap = new MapRuntime(definition);
-            renderer.Render(_currentMap, definition.grid);
             cameraController.SetAnchor(_currentMap.GetWorldCenter());
+            
+            for (var y = 0; y < _currentMap.Height; y++) 
+            for (var z = 0; z < _currentMap.Length; z++)
+            for (var x = 0; x < _currentMap.Width; x++)
+            {
+                var coord = new Vector3Int(x, y, z);
+                var data = definition.grid[coord];
+                var block = new BlockRuntime(data, coord);
+                
+                _currentMap[coord] = block;
+                renderer.RenderBlock(coord, block);
+            }
         }
-
+        
         public void UnloadMap()
         {
             renderer.Clear();

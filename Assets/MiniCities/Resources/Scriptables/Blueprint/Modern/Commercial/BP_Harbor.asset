@@ -11,32 +11,43 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58dc415c67ee4040a311dbd54953f6d7, type: 3}
   m_Name: BP_Harbor
-  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Blueprint.BlueprintDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Definitions.Blueprint.BlueprintDefinition
   displayName: Harbor
   file: 0
   category: 1
-  population: 0
-  culture: 0
-  pollution: 0
+  stats:
+    values:
+    - Stat: 0
+      Value: 5
+    - Stat: 1
+      Value: 5
+    - Stat: 2
+      Value: 0
   building: {fileID: 11400000, guid: 7f9bd451f8376504cb1cf9dd297ece34, type: 2}
   placementRules:
-  - rid: 6376856362774954063
+  - rid: 6376856387859513417
+  - rid: 6376856387859513421
   abilities:
   - trigger: 0
     conditions: []
     effects:
-    - rid: 6376856362774954064
+    - rid: 6376856387859513418
   references:
     version: 2
     RefIds:
-    - rid: 6376856362774954063
-      type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint, asm: Assembly-CSharp}
+    - rid: 6376856387859513417
+      type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
       data:
         scope: 3
-        group: 1
-    - rid: 6376856362774954064
-      type: {class: ModifyBaseStatEffect, ns: MiniCities.Definitions.Ability, asm: Assembly-CSharp}
+        group: 0
+    - rid: 6376856387859513418
+      type: {class: ModifyCityBaseStat, ns: MiniCities.Definitions.Ability, asm: Assembly-CSharp}
       data:
-        stat: 1
-        operation: 1
-        amount: 15
+        stat: 3
+        operation: 0
+        amount: 5
+    - rid: 6376856387859513421
+      type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
+      data:
+        scope: 0
+        group: 1

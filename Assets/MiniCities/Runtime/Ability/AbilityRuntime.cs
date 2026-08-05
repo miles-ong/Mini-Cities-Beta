@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MiniCities.Definitions.Ability;
 
 namespace MiniCities.Runtime.Ability
@@ -6,14 +7,14 @@ namespace MiniCities.Runtime.Ability
     public class AbilityRuntime
     {
         public AbilityTrigger Trigger;
-        public IAbilityCondition[] Conditions;
-        public IAbilityEffect[] Effects;
+        public List<IAbilityCondition> Conditions;
+        public List<IAbilityEffect> Effects;
         
         public AbilityRuntime(AbilityDefinition definition)
         {
             Trigger = definition.trigger;
-            Conditions = definition.conditions.Select(e => e.Clone()).ToArray();
-            Effects = definition.effects.Select(e => e.Clone()).ToArray();
+            Conditions = definition.conditions.Select(e => e.Clone()).ToList();
+            Effects = definition.effects.Select(e => e.Clone()).ToList();
         }
     }
 }

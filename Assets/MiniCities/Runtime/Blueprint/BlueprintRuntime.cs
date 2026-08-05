@@ -1,35 +1,47 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MiniCities.Definitions.Ability;
 using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint;
+using MiniCities.Definitions.Blueprint.Placement;
+using MiniCities.Definitions.Blueprint.Stat;
+using MiniCities.Runtime.Ability;
 
 namespace MiniCities.Runtime.Blueprint
 {
     public class BlueprintRuntime
     {
-        public string DisplayName;
-        public BlueprintFile File;
+        public readonly string DisplayName;
+        public readonly BlueprintFile File;
         public BlueprintCategory Category;
-        public string Description = "Test";
-        public BuildingStats Stats { get; private set; }
-        public List<IPlacementRule> PlacementRules { get; }
-        public BlockDefinition Building { get; }
+        public readonly BuildingStats Stats;
+        public readonly BlockDefinition Building;
+        public readonly List<IPlacementRule> PlacementRules;
+        public readonly List<AbilityRuntime> Abilities;
+        
+        public string Description { get; private set; }
         
         public BlueprintRuntime(BlueprintDefinition definition)
         {
             DisplayName = definition.displayName;
             File = definition.file;
             Category = definition.category;
-            
-            Stats = new BuildingStats
-            {
-                Population = definition.population,
-                Culture = definition.culture,
-                Pollution = definition.pollution
-            };
-
-            PlacementRules = definition.placementRules.ToList();
+            Stats = definition.stats.Clone();
             Building = definition.building;
+            PlacementRules = definition.placementRules.ToList();
+            Abilities = definition.abilities.Select(a => new AbilityRuntime(a)).ToList();
+            Description = GenerateDescription();
+        }
+
+        private string GenerateDescription()
+        {
+            var abilityText = Abilities == null || Abilities.Count == 0
+                ? "No abilities."
+                : string.Join("\n", Abilities.Select(AbilityDescriptionUtility.Describe));
+
+            if (PlacementRules == null || PlacementRules.Count == 0) return abilityText;
+
+            return $"{abilityText} Must be placed {string.Join(" and ", PlacementRules.Select(a => a.Describe()))}.";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using MiniCities.Definitions.Blueprint;
+using MiniCities.Definitions.Blueprint.Stat;
 using MiniCities.Runtime.Blueprint;
 using TMPro;
 using UnityEngine;
@@ -38,10 +39,10 @@ namespace MiniCities.UI.Blueprint
             background.color = blueprint.Category.ToColor();
             nameplate.color = blueprint.Category.ToColor();
             displayName.text = blueprint.DisplayName;
-            HandleIcon(populationIcon, populationNumber, blueprint.Stats.Population);
-            HandleIcon(pollutionIcon, pollutionNumber, blueprint.Stats.Pollution);
-            HandleIcon(cultureIcon, cultureNumber, blueprint.Stats.Culture);
-            description.text = blueprint.Description; // make description builder soon
+            HandleIcon(populationIcon, populationNumber, blueprint.Stats.Get(BuildingStat.Population));
+            HandleIcon(pollutionIcon, pollutionNumber, blueprint.Stats.Get(BuildingStat.Pollution));
+            HandleIcon(cultureIcon, cultureNumber, blueprint.Stats.Get(BuildingStat.Culture));
+            description.text = blueprint.Description;
         }
 
         public void Refresh() => Set(Blueprint);

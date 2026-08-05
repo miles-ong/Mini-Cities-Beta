@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Linq;
+using MiniCities.Core.Grid;
 using MiniCities.Definitions.Ability;
+using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint;
+using MiniCities.Definitions.Blueprint.Placement;
+using MiniCities.Definitions.Blueprint.Stat;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,24 +15,29 @@ public class BlueprintEditor : Editor
     private SerializedProperty _displayName;
     private SerializedProperty _file;
     private SerializedProperty _category;
-    private SerializedProperty _population;
-    private SerializedProperty _culture;
-    private SerializedProperty _pollution;
+    private SerializedProperty _stats;
     private SerializedProperty _building;
     private SerializedProperty _placementRules;
     private SerializedProperty _abilities;
+
+    private BlueprintFile _lastSyncedFile;
 
     private void OnEnable()
     {
         _displayName = serializedObject.FindProperty("displayName");
         _file = serializedObject.FindProperty("file");
         _category = serializedObject.FindProperty("category");
-        _population = serializedObject.FindProperty("population");
-        _culture = serializedObject.FindProperty("culture");
-        _pollution = serializedObject.FindProperty("pollution");
+        _stats = serializedObject.FindProperty("stats");
         _building = serializedObject.FindProperty("building");
         _placementRules = serializedObject.FindProperty("placementRules");
         _abilities = serializedObject.FindProperty("abilities");
+
+        serializedObject.Update();
+        
+        _lastSyncedFile = (BlueprintFile)_file.enumValueIndex;
+        SyncStatsToRequired(_stats.FindPropertyRelative("values"), _lastSyncedFile.GetRequiredStats());
+        
+        serializedObject.ApplyModifiedProperties();
     }
 
     public override void OnInspectorGUI()
@@ -36,15 +45,11 @@ public class BlueprintEditor : Editor
         serializedObject.Update();
 
         EditorGUILayout.LabelField("Blueprint", EditorStylesUtility.Header);
-        
         EditorGUILayout.Space(EditorStylesUtility.LargeSpacing);
-
+        
         EditorGUILayout.PropertyField(_displayName);
         EditorGUILayout.PropertyField(_file);
         EditorGUILayout.PropertyField(_category);
-        EditorGUILayout.PropertyField(_population);
-        EditorGUILayout.PropertyField(_culture);
-        EditorGUILayout.PropertyField(_pollution);
 
         var category = (BlueprintCategory)_category.enumValueIndex;
 
@@ -52,8 +57,17 @@ public class BlueprintEditor : Editor
             EditorGUILayout.PropertyField(_building);
         
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
+
+        DrawStats();
         
-        DrawPolymorphicList(_placementRules, typeof(IPlacementRule), "Placement Rules");
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
+        
+        DrawPolymorphicList(
+            _placementRules, 
+            typeof(IPlacementRule), 
+            "Placement Rules", 
+            1,
+            () => new BlockGroupPlacementRule { scope = GridScope.On, group = BlockGroup.Land });
 
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
 
@@ -70,6 +84,40 @@ public class BlueprintEditor : Editor
         var bp = (BlueprintDefinition)target;
         
         EditorGUILayout.HelpBox(bp.GenerateDescription(), MessageType.None);
+    }
+
+    private void DrawStats()
+    {
+        EditorGUILayout.LabelField("Stats", EditorStylesUtility.Subheader);
+        
+        EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
+        
+        EditorGUI.indentLevel++;
+
+        var currentFile = (BlueprintFile)_file.enumValueIndex;
+        var values = _stats.FindPropertyRelative("values");
+
+        if (currentFile != _lastSyncedFile)
+        {
+            SyncStatsToRequired(values, currentFile.GetRequiredStats());
+            _lastSyncedFile = currentFile;
+        }
+            
+        var required = currentFile.GetRequiredStats();
+
+        foreach (var stat in required)
+        {
+            var index = FindStatIndex(values, stat);
+
+            if (index < 0) continue;
+
+            var element = values.GetArrayElementAtIndex(index);
+            var valueProp = element.FindPropertyRelative("Value");
+            
+            EditorGUILayout.PropertyField(valueProp, new GUIContent(stat.ToString()));
+        }
+
+        EditorGUI.indentLevel--;
     }
 
     private void DrawAbilities()
@@ -120,13 +168,28 @@ public class BlueprintEditor : Editor
         if (removeIndex >= 0) _abilities.DeleteArrayElementAtIndex(removeIndex);
     }
 
-    private static void DrawPolymorphicList(SerializedProperty prop, Type interfaceType, string label)
+    private static void DrawPolymorphicList(
+        SerializedProperty prop, 
+        Type interfaceType, 
+        string label,
+        int minElements = 0,
+        Func<IPlacementRule> defaultRules = null)
     {
         EditorGUILayout.LabelField(label, EditorStylesUtility.Subheader);
         
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
         EditorGUI.indentLevel++;
+
+        if (prop.arraySize < minElements && defaultRules != null)
+        {
+            while (prop.arraySize < minElements)
+            {
+                var index = prop.arraySize;
+                prop.InsertArrayElementAtIndex(index);
+                prop.GetArrayElementAtIndex(index).managedReferenceValue = defaultRules();
+            }
+        }
 
         var removeIndex = -1;
 
@@ -138,7 +201,10 @@ public class BlueprintEditor : Editor
 
             EditorGUILayout.PropertyField(element, includeChildren: true);
 
-            if (GUILayout.Button("-", GUILayout.Width(20))) removeIndex = i;
+            var canRemove = prop.arraySize > minElements;
+
+            using (new EditorGUI.DisabledScope(!canRemove))
+                if (GUILayout.Button("-", GUILayout.Width(20))) removeIndex = i;
             
             EditorGUILayout.EndHorizontal();
         }
@@ -149,7 +215,7 @@ public class BlueprintEditor : Editor
             prop.DeleteArrayElementAtIndex(removeIndex);
         }
         
-        if (GUILayout.Button($"Add {label}", GUILayout.Width(120))) ShowAddMenu(prop, interfaceType);
+        if (GUILayout.Button($"Add {label}", GUILayout.Width(200))) ShowAddMenu(prop, interfaceType);
 
         EditorGUI.indentLevel--;
     }
@@ -186,5 +252,34 @@ public class BlueprintEditor : Editor
         }
         
         menu.ShowAsContext();
+    }
+
+    private static void SyncStatsToRequired(SerializedProperty values, BuildingStat[] required)
+    {
+        for (var i = values.arraySize - 1; i >= 0; i--)
+        {
+            var stat = (BuildingStat)values.GetArrayElementAtIndex(i).FindPropertyRelative("Stat").enumValueIndex;
+            
+            if (Array.IndexOf(required, stat) < 0) values.DeleteArrayElementAtIndex(i);
+        }
+
+        foreach (var stat in required)
+        {
+            if (FindStatIndex(values, stat) >= 0) continue;
+
+            var index = values.arraySize;
+            values.InsertArrayElementAtIndex(index);
+            values.GetArrayElementAtIndex(index).FindPropertyRelative("Stat").enumValueIndex = (int)stat;
+            values.GetArrayElementAtIndex(index).FindPropertyRelative("Value").intValue = 0;
+        }
+    }
+
+    private static int FindStatIndex(SerializedProperty values, BuildingStat stat)
+    {
+        for (var i = 0; i < values.arraySize; i++)
+            if ((BuildingStat)values.GetArrayElementAtIndex(i).FindPropertyRelative("Stat").enumValueIndex == stat)
+                return i;
+
+        return -1;
     }
 }

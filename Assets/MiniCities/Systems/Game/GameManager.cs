@@ -1,9 +1,7 @@
 ﻿using MiniCities.Core.Random;
-using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint;
 using MiniCities.Definitions.Map;
 using MiniCities.Runtime.Blueprint;
-using MiniCities.Systems.BuffSys;
 using MiniCities.Systems.City;
 using MiniCities.Systems.Map;
 using MiniCities.UI.Blueprint;
@@ -19,25 +17,19 @@ namespace MiniCities.Systems.Game
         [SerializeField] private BlueprintDeckDefinition testDeck;
         [SerializeField] private BlueprintHandUI blueprintHandUI;
 
-        private SeededRandom _random;
-        private CityManager _cityManager;
-        private BuffManager _buffManager = new();
+        [SerializeField] private int seed;
         
+        private readonly CityManager _cityManager = new();
+        
+        private SeededRandom _random;
         private GameContext _context;
         private BlueprintDeckRuntime _deck;
         
         private void Start()
         {
-            Initialize();
-            
+            _random = new SeededRandom(seed);
             mapManager.LoadMap(testMap);
-        }
-
-        public void Initialize()
-        {
-            _random = new SeededRandom(5000);
-            _cityManager = new CityManager(_buffManager);
-            _context = new GameContext(new SeededRandom(5000), mapManager, _cityManager, _buffManager);
+            _context = new GameContext(_random, mapManager, _cityManager);
             _deck = new BlueprintDeckRuntime(testDeck, _context);
             _deck.FillDrawPile();
         }
