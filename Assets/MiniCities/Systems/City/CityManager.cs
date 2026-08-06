@@ -3,10 +3,13 @@ using System.Linq;
 using MiniCities.Core.Event;
 using MiniCities.Core.Grid;
 using MiniCities.Core.Math;
+using MiniCities.Definitions.Ability;
 using MiniCities.Definitions.Blueprint.Stat;
 using MiniCities.Runtime.Block;
+using MiniCities.Systems.City.Ability;
 using MiniCities.Systems.City.Buff;
 using MiniCities.Systems.City.Stat;
+using MiniCities.Systems.Game;
 using MiniCities.Systems.Map;
 using UnityEngine;
 
@@ -27,6 +30,7 @@ namespace MiniCities.Systems.City
         private readonly Dictionary<BuildingRuntime, CityContribution> _lastContribution = new();
         private readonly BuildingBuffIndex _buildingBuffIndex = new();
         private readonly CityBuffIndex _cityBuffIndex = new();
+        private readonly AbilityDispatcher _abilityDispatcher = new();
 
         private CityStats _baseStats;
         private CityStats _totalStats;
@@ -43,6 +47,8 @@ namespace MiniCities.Systems.City
             EventBus<BuildingPlacedEvent>.OnEvent += OnBuildingPlaced;
             EventBus<BuildingRemovedEvent>.OnEvent += OnBuildingRemoved;
         }
+
+        public void SetContext(GameContext context) => _abilityDispatcher.SetContext(context);
         
         public void ModifyBaseStat(CityStat stat, Operation operation, float amount) =>
             _baseStats.ModifyStat(stat, operation, amount);
@@ -62,12 +68,15 @@ namespace MiniCities.Systems.City
         public void RegisterCityBuff(CityBuff buff) => _cityBuffIndex.Register(buff);
         public void UnregisterCityBuff(CityBuff buff) => _cityBuffIndex.Unregister(buff);
         
-        public void RecalculateCity()
+        private void RecalculateCity()
         {
             RecalculateDirtyBuildings();
             _totalStats = _baseStats;
             
             foreach (var cb in _cityBuffIndex.Buffs) _totalStats.ModifyStat(cb.Stat, cb.Operation, cb.Amount);
+            
+            Debug.Log(_totalStats);
+            EventQueue.OnDrained -= RecalculateCity;
         }
         
         private void OnBuildingPlaced(BuildingPlacedEvent e)
@@ -76,6 +85,12 @@ namespace MiniCities.Systems.City
             _activeBuildings.Add(building);
             building.MarkDirty();
             MarkNeighborsDirty(building.Location);
+
+            _abilityDispatcher.QueueWhenPlaced(building);
+            _abilityDispatcher.QueueWhenever(AbilityTriggerType.WheneverBuildingPlaced, building, _activeBuildings);
+            
+            EventQueue.OnDrained += RecalculateCity;
+            EventQueue.Pump();
         }
 
         private void OnBuildingRemoved(BuildingRemovedEvent e)
@@ -92,6 +107,8 @@ namespace MiniCities.Systems.City
             _cityBuffIndex.RemoveSource(building);
             _buildingBuffIndex.RemoveReceiver(building);
             _activeBuildings.Remove(building);
+
+            _abilityDispatcher.QueueWhenever(AbilityTriggerType.WheneverBuildingRemoved, building, _activeBuildings);
 
             MarkNeighborsDirty(building.Location);
         }

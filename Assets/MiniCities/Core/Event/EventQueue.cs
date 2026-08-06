@@ -7,10 +7,10 @@ namespace MiniCities.Core.Event
     {
         public static event Action OnDrained;
         
-        private static readonly Queue<Action> _queue = new();
+        private static readonly Queue<Action> Events = new();
         private static bool _isPumping;
 
-        public static void Enqueue(Action dispatch) => _queue.Enqueue(dispatch);
+        public static void Enqueue(Action dispatch) => Events.Enqueue(dispatch);
 
         public static void Pump()
         {
@@ -20,9 +20,9 @@ namespace MiniCities.Core.Event
 
             try
             {
-                while (_queue.Count > 0)
+                while (Events.Count > 0)
                 {
-                    var dispatch = _queue.Dequeue();
+                    var dispatch = Events.Dequeue();
                     dispatch.Invoke();
                 }
 

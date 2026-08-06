@@ -33,6 +33,7 @@ namespace MiniCities.Systems.Game
             
             _context = new GameContext(_random, mapManager, cityManager, deck, blueprintHand);
             
+            cityManager.SetContext(_context);
             mapManager.LoadMap(testMap);
             blueprintHand.LoadDeck(deck);
             deck.FillDrawPile();
