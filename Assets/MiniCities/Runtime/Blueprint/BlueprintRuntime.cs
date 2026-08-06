@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using MiniCities.Core.Event;
 using MiniCities.Definitions.Ability;
 using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint;

@@ -13,7 +13,7 @@ namespace MiniCities.UI.Blueprint
         [SerializeField] private SplineContainer curve;
         [SerializeField] private RectTransform drawPoint;
         [SerializeField] private RectTransform discardPoint;
-        [SerializeField] private BlueprintUI blueprintPrefab;
+        [SerializeField] private BlueprintUI blueprintUI;
 
         // add proper game settings soon
         [Header("Draw Settings")]
@@ -39,12 +39,15 @@ namespace MiniCities.UI.Blueprint
         private void Start()
         {
             _spline = curve.Spline;
-            _originalScale = blueprintPrefab.transform.localScale;
+            _originalScale = blueprintUI.transform.localScale;
+
+            EventBus<BlueprintDrawnEvent>.OnEvent += OnBlueprintDrawn;
+            EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
-        public void Add(BlueprintRuntime blueprint)
+        private void Add(BlueprintRuntime blueprint)
         {
-            var ui = Instantiate(blueprintPrefab, drawPoint.position, Quaternion.identity, transform);
+            var ui = Instantiate(blueprintUI, drawPoint.position, Quaternion.identity, transform);
 
             ui.Set(blueprint);
             
@@ -56,13 +59,17 @@ namespace MiniCities.UI.Blueprint
             UpdateBlueprintPositions();
         }
 
-        public void Remove(BlueprintRuntime blueprint)
+        private void Remove(BlueprintRuntime blueprint)
         {
             var ui = _blueprints.Find(b => b.Blueprint == blueprint);
 
             if (ui is null) return;
 
             _blueprints.Remove(ui);
+
+            if (_hovered?.Blueprint == blueprint) _hovered = null;
+            if (_selected?.Blueprint == blueprint) _selected = null;
+            
             Destroy(ui.gameObject);
             UpdateBlueprintPositions();
         }
@@ -83,7 +90,7 @@ namespace MiniCities.UI.Blueprint
         private void OnBlueprintClicked(BlueprintUI blueprint)
         {
             _selected = blueprint;
-            EventBus<BlueprintSelectedEvent>.Raise(new BlueprintSelectedEvent(blueprint.Blueprint));
+            EventBus<BlueprintSelectedEvent>.Fire(new BlueprintSelectedEvent(blueprint.Blueprint));
             UpdateBlueprintPositions();
         }
 
@@ -133,5 +140,12 @@ namespace MiniCities.UI.Blueprint
 
             return firstPos + index * spacing;
         }
+        
+        #region Event Handlers
+
+        private void OnBlueprintDrawn(BlueprintDrawnEvent e) => Add(e.Blueprint);
+        private void OnBlueprintUsed(BlueprintUsedEvent e) => Remove(e.Blueprint);
+
+        #endregion
     }
 }

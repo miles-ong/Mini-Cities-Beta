@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using MiniCities.Core.Event;
 using MiniCities.Core.Grid;
-using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint.Placement;
 using MiniCities.Runtime.Blueprint;
 using MiniCities.Systems.Map;
@@ -15,7 +14,7 @@ namespace MiniCities.Systems.Tracker
     {
         [SerializeField] private NullBuildingView nullBuildingView;
         [SerializeField] private LayerMask mask;
-
+        
         private MapManager _map;
         private GridRaycaster _raycaster;
 
@@ -109,7 +108,7 @@ namespace MiniCities.Systems.Tracker
                 {
                     Debug.Log($"Placing at {gridHit.Cell}");
                     
-                    EventBus<BlueprintPlacedEvent>.Raise(new BlueprintPlacedEvent(_blueprint, gridHit.Cell));
+                    EventBus<BlueprintUsedEvent>.Fire(new BlueprintUsedEvent(_blueprint, gridHit.Cell));
                 }
 
                 return;

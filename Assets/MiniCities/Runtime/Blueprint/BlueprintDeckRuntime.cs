@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MiniCities.Core.Random;
+using MiniCities.Core.Math;
 using MiniCities.Definitions.Blueprint;
-using MiniCities.Systems.Game;
 
 namespace MiniCities.Runtime.Blueprint
 {
@@ -19,9 +18,9 @@ namespace MiniCities.Runtime.Blueprint
 
         private readonly SeededRandom _random;
         
-        public BlueprintDeckRuntime(BlueprintDeckDefinition definition, GameContext ctx)
+        public BlueprintDeckRuntime(BlueprintDeckDefinition definition, SeededRandom random)
         {
-            _random = ctx.Random;
+            _random = random;
             
             foreach (var bc in definition.blueprintCounts)
             {

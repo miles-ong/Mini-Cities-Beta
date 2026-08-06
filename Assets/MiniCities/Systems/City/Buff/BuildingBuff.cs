@@ -1,6 +1,6 @@
 ﻿using System;
 using JetBrains.Annotations;
-using MiniCities.Core;
+using MiniCities.Core.Math;
 using MiniCities.Definitions.Blueprint.Stat;
 using MiniCities.Runtime.Block;
 using UnityEngine;

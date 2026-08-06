@@ -1,4 +1,4 @@
-﻿using MiniCities.Core;
+﻿using MiniCities.Core.Math;
 using MiniCities.Systems.City.Stat;
 
 namespace MiniCities.Systems.City.Buff

@@ -20,7 +20,7 @@ namespace MiniCities.Systems.Map
 
         private void Start()
         {
-            EventBus<BlueprintPlacedEvent>.OnEvent += OnBlueprintPlaced;
+            EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
         public void LoadMap(MapDefinition definition)
@@ -47,6 +47,8 @@ namespace MiniCities.Systems.Map
             renderer.Clear();
             _currentMap = null;
         }
+
+        public BlockRuntime GetBlock(Vector3Int coord) => _currentMap[coord];
 
         public void SetBlock(Vector3Int coord, [CanBeNull] BlockRuntime block)
         {
@@ -77,13 +79,13 @@ namespace MiniCities.Systems.Map
             return result;
         }
 
-        private void OnBlueprintPlaced(BlueprintPlacedEvent e)
+        private void OnBlueprintUsed(BlueprintUsedEvent e)
         {
             var building = new BuildingRuntime(e.Blueprint, e.Location);
             
-            Debug.Log($"Placing: {building.Blueprint.DisplayName}");
-            
             SetBlock(e.Location, building);
+            
+            EventBus<BuildingPlacedEvent>.Fire(new BuildingPlacedEvent(building));
         }
     }
 }

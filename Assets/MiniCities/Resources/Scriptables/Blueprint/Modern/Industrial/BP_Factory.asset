@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58dc415c67ee4040a311dbd54953f6d7, type: 3}
   m_Name: BP_Factory
-  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Blueprint.BlueprintDefinition
+  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Definitions.Blueprint.BlueprintDefinition
   displayName: Factory
   file: 0
   category: 2
@@ -22,19 +22,32 @@ MonoBehaviour:
     - Stat: 1
       Value: 0
     - Stat: 2
-      Value: 5
+      Value: 0
   building: {fileID: 11400000, guid: 4f7edd38edad2f749a116dc7f4036d92, type: 2}
   placementRules:
-  - rid: 6376856387859513419
+  - rid: 6376856409524142155
   abilities:
-  - trigger: 0
+  - trigger:
+      type: 0
+      filterByCategory: 0
+      category: 0
+      filterByBlock: 0
+      block: {fileID: 0}
+      stat: 0
+      comparison: 0
+      threshold: 0
     conditions: []
-    effects: []
+    effects:
+    - rid: 6376856409524142156
   references:
     version: 2
     RefIds:
-    - rid: 6376856387859513419
+    - rid: 6376856409524142155
       type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
       data:
         scope: 3
         group: 0
+    - rid: 6376856409524142156
+      type: {class: DrawBlueprint, ns: MiniCities.Definitions.Ability, asm: Assembly-CSharp}
+      data:
+        amount: 2

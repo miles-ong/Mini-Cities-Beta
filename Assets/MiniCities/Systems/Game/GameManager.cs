@@ -1,4 +1,4 @@
-﻿using MiniCities.Core.Random;
+﻿using MiniCities.Core.Math;
 using MiniCities.Definitions.Blueprint;
 using MiniCities.Definitions.Map;
 using MiniCities.Runtime.Blueprint;
@@ -14,32 +14,33 @@ namespace MiniCities.Systems.Game
     {
         [SerializeField] private MapManager mapManager;
         [SerializeField] private MapDefinition testMap;
-        [SerializeField] private BlueprintDeckDefinition testDeck;
+        [SerializeField] private BlueprintHand blueprintHand;
         [SerializeField] private BlueprintHandUI blueprintHandUI;
+        
+        [SerializeField] private BlueprintDeckDefinition testDeck;
 
         [SerializeField] private int seed;
         
-        private readonly CityManager _cityManager = new();
-        
         private SeededRandom _random;
+        
         private GameContext _context;
-        private BlueprintDeckRuntime _deck;
         
         private void Start()
         {
             _random = new SeededRandom(seed);
+            var deck = new BlueprintDeckRuntime(testDeck, _random);
+            var cityManager = new CityManager(mapManager);
+            
+            _context = new GameContext(_random, mapManager, cityManager, deck, blueprintHand);
+            
             mapManager.LoadMap(testMap);
-            _context = new GameContext(_random, mapManager, _cityManager);
-            _deck = new BlueprintDeckRuntime(testDeck, _context);
-            _deck.FillDrawPile();
+            blueprintHand.LoadDeck(deck);
+            deck.FillDrawPile();
         }
 
         private void Update()
         {
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                blueprintHandUI.Add(_deck.Draw());
-            }
+            if (Keyboard.current.spaceKey.wasReleasedThisFrame) blueprintHand.DrawBlueprint();
         }
     }
 }

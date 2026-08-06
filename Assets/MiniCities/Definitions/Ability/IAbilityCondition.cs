@@ -24,7 +24,7 @@ namespace MiniCities.Definitions.Ability
         public bool includeSelf;
 
         public bool Evaluate(AbilityContext ctx) => ctx.Game.Map.GetBlocksInScope<BuildingRuntime>(
-            ctx.Building.Location,
+            ctx.Owner.Location,
             scope,
             level,
             includeSelf)
@@ -59,7 +59,7 @@ namespace MiniCities.Definitions.Ability
         public bool includeSelf;
 
         public bool Evaluate(AbilityContext ctx) => ctx.Game.Map.GetBlocksInScope(
-            ctx.Building.Location,
+            ctx.Owner.Location,
             scope,
             level,
             includeSelf).Count(b => b.Definition.group == group) >= amount;
@@ -93,7 +93,7 @@ namespace MiniCities.Definitions.Ability
         public bool includeSelf;
 
         public bool Evaluate(AbilityContext ctx) => ctx.Game.Map.GetBlocksInScope(
-            ctx.Building.Location,
+            ctx.Owner.Location,
             scope,
             level,
             includeSelf).Count(b => b.Definition == block) >= amount;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MiniCities.Core
+namespace MiniCities.Core.Math
 {
     public enum Operation
     {

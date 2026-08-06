@@ -1,4 +1,4 @@
-﻿namespace MiniCities.Core.Random
+﻿namespace MiniCities.Core.Math
 {
     public class SeededRandom
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using MiniCities.Definitions.Ability.Trigger;
 using UnityEngine;
 
 namespace MiniCities.Definitions.Ability

@@ -18,36 +18,44 @@ MonoBehaviour:
   stats:
     values:
     - Stat: 0
-      Value: 5
+      Value: 0
     - Stat: 1
-      Value: 5
+      Value: 0
     - Stat: 2
       Value: 0
   building: {fileID: 11400000, guid: 7f9bd451f8376504cb1cf9dd297ece34, type: 2}
   placementRules:
-  - rid: 6376856387859513417
-  - rid: 6376856387859513421
+  - rid: 6376856409524142151
+  - rid: 6376856409524142154
   abilities:
-  - trigger: 0
+  - trigger:
+      type: 0
+      filterByCategory: 0
+      category: 0
+      filterByBlock: 0
+      block: {fileID: 0}
+      stat: 0
+      comparison: 0
+      threshold: 0
     conditions: []
     effects:
-    - rid: 6376856387859513418
+    - rid: 6376856409524142153
   references:
     version: 2
     RefIds:
-    - rid: 6376856387859513417
+    - rid: 6376856409524142151
       type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
       data:
-        scope: 3
-        group: 0
-    - rid: 6376856387859513418
+        scope: 0
+        group: 1
+    - rid: 6376856409524142153
       type: {class: ModifyCityBaseStat, ns: MiniCities.Definitions.Ability, asm: Assembly-CSharp}
       data:
         stat: 3
         operation: 0
         amount: 5
-    - rid: 6376856387859513421
+    - rid: 6376856409524142154
       type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
       data:
-        scope: 0
-        group: 1
+        scope: 3
+        group: 0

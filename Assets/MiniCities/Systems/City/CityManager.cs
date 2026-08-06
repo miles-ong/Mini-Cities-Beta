@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using MiniCities.Core;
+using MiniCities.Core.Event;
+using MiniCities.Core.Grid;
+using MiniCities.Core.Math;
 using MiniCities.Definitions.Blueprint.Stat;
 using MiniCities.Runtime.Block;
 using MiniCities.Systems.City.Buff;
 using MiniCities.Systems.City.Stat;
+using MiniCities.Systems.Map;
 using UnityEngine;
 
 namespace MiniCities.Systems.City
@@ -18,10 +20,11 @@ namespace MiniCities.Systems.City
             public int Culture;
             public int Pollution;
         }
-        
-        private readonly Dictionary<Vector3Int, BuildingRuntime> _buildings = new();
-        private readonly Dictionary<BuildingRuntime, CityContribution> _lastContribution = new();
 
+        private readonly MapManager _map;
+
+        private readonly HashSet<BuildingRuntime> _activeBuildings = new();
+        private readonly Dictionary<BuildingRuntime, CityContribution> _lastContribution = new();
         private readonly BuildingBuffIndex _buildingBuffIndex = new();
         private readonly CityBuffIndex _cityBuffIndex = new();
 
@@ -33,33 +36,12 @@ namespace MiniCities.Systems.City
         public int Pollution => _totalStats.Pollution;
         public int Money =>  _totalStats.Money;
 
-        public CityManager()
+        public CityManager(MapManager map)
         {
-            // reg events
-        }
+            _map = map;
 
-        public void AddBuilding(BuildingRuntime building) => _buildings.Add(building.Location, building);
-
-        public void RemoveBuilding(BuildingRuntime building)
-        {
-            foreach (var b in _buildingBuffIndex.GetSourceBuffs(building)) MarkAffectedDirty(b);
-
-            var last = _lastContribution.TryGetValue(building, out var c) ? c : default;
-            ApplyContributionDelta(last, default);
-            _lastContribution.Remove(building);
-            
-            _buildings.Remove(building.Location);
-
-            _buildingBuffIndex.RemoveSource(building);
-            _cityBuffIndex.RemoveSource(building);
-            _buildingBuffIndex.RemoveReceiver(building);
-        }
-
-        public BuildingRuntime GetBuilding(Vector3Int location)
-        {
-            _buildings.TryGetValue(location, out var building);
-
-            return building;
+            EventBus<BuildingPlacedEvent>.OnEvent += OnBuildingPlaced;
+            EventBus<BuildingRemovedEvent>.OnEvent += OnBuildingRemoved;
         }
         
         public void ModifyBaseStat(CityStat stat, Operation operation, float amount) =>
@@ -88,9 +70,41 @@ namespace MiniCities.Systems.City
             foreach (var cb in _cityBuffIndex.Buffs) _totalStats.ModifyStat(cb.Stat, cb.Operation, cb.Amount);
         }
         
+        private void OnBuildingPlaced(BuildingPlacedEvent e)
+        {
+            var building = e.Building;
+            _activeBuildings.Add(building);
+            building.MarkDirty();
+            MarkNeighborsDirty(building.Location);
+        }
+
+        private void OnBuildingRemoved(BuildingRemovedEvent e)
+        {
+            var building = e.Building;
+
+            foreach (var b in _buildingBuffIndex.GetSourceBuffs(building)) MarkAffectedDirty(b);
+
+            var last = _lastContribution.GetValueOrDefault(building);
+            ApplyContributionDelta(last, default);
+            _lastContribution.Remove(building);
+
+            _buildingBuffIndex.RemoveSource(building);
+            _cityBuffIndex.RemoveSource(building);
+            _buildingBuffIndex.RemoveReceiver(building);
+            _activeBuildings.Remove(building);
+
+            MarkNeighborsDirty(building.Location);
+        }
+
+        private void MarkNeighborsDirty(Vector3Int location)
+        {
+            foreach (var n in _map.GetBlocksInScope<BuildingRuntime>(location, GridScope.Nearby, GridLevel.Level))
+                n.MarkDirty();
+        }
+        
         private void RecalculateDirtyBuildings()
         {
-            foreach (var b in _buildings.Values)
+            foreach (var b in _activeBuildings)
             {
                 if (b.CachedVersion == b.CurrentVersion) continue;
                 
@@ -105,7 +119,7 @@ namespace MiniCities.Systems.City
             foreach (var b in GetOrderedBuildingBuffs(building)) building.TotalStats.Modify(b.Stat, b.Operation, b.Amount);
 
             var newC = ComputeCityContribution(building.TotalStats);
-            var oldC = _lastContribution.TryGetValue(building, out var prev) ? prev : default;
+            var oldC = _lastContribution.GetValueOrDefault(building);
             ApplyContributionDelta(oldC, newC);
             _lastContribution[building] = newC;
             
@@ -121,8 +135,21 @@ namespace MiniCities.Systems.City
 
         private void MarkAffectedDirty(BuildingBuff buff)
         {
-            if (buff.Receiver != null) buff.Receiver.MarkDirty();
-            else if (buff.Location != null && _buildings.TryGetValue(buff.Location.Value, out var b)) b.MarkDirty();
+            if (buff.Receiver != null)
+            {
+                buff.Receiver.MarkDirty();
+            }
+            else if (buff.Location != null)
+            {
+                if (_map.GetBlock(buff.Location.Value) is BuildingRuntime b) b.MarkDirty();
+            }
+        }
+        
+        private void ApplyContributionDelta(CityContribution oldC, CityContribution newC)
+        {
+            _baseStats.ModifyStat(CityStat.Population, Operation.Add, newC.Population - oldC.Population);
+            _baseStats.ModifyStat(CityStat.Culture, Operation.Add, newC.Culture - oldC.Culture);
+            _baseStats.ModifyStat(CityStat.Pollution, Operation.Add, newC.Pollution - oldC.Pollution);
         }
 
         private static CityContribution ComputeCityContribution(BuildingStats stats) => new()
@@ -131,12 +158,5 @@ namespace MiniCities.Systems.City
             Culture = stats.Get(BuildingStat.Culture),
             Pollution = stats.Get(BuildingStat.Pollution)
         };
-
-        private void ApplyContributionDelta(CityContribution oldC, CityContribution newC)
-        {
-            _baseStats.ModifyStat(CityStat.Population, Operation.Add, newC.Population - oldC.Population);
-            _baseStats.ModifyStat(CityStat.Culture, Operation.Add, newC.Culture - oldC.Culture);
-            _baseStats.ModifyStat(CityStat.Pollution, Operation.Add, newC.Pollution - oldC.Pollution);
-        }
     }
 }

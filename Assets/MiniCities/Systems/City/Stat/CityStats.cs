@@ -1,5 +1,5 @@
 ﻿using System;
-using MiniCities.Core;
+using MiniCities.Core.Math;
 
 namespace MiniCities.Systems.City.Stat
 {

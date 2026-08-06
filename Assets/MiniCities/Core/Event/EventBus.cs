@@ -7,6 +7,13 @@ namespace MiniCities.Core.Event
     {
         [CanBeNull] public static event Action<T> OnEvent;
 
-        public static void Raise(T evt) => OnEvent?.Invoke(evt);
+        public static void Fire(T evt) => OnEvent?.Invoke(evt);
+        public static void Queue(T evt) => EventQueue.Enqueue(() => OnEvent?.Invoke(evt));
+
+        public static void RaiseAndPump(T evt)
+        {
+            EventQueue.Enqueue(() => OnEvent?.Invoke(evt));
+            EventQueue.Pump();
+        }
     }
 }

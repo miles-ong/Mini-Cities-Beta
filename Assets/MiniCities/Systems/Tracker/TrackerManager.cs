@@ -18,15 +18,23 @@ namespace MiniCities.Systems.Tracker
         {
             _raycaster = new GridRaycaster(camera);
 
+            selectionTracker.Initialize(_raycaster);
             placementTracker.Initialize(_raycaster, mapManager);
 
             EventBus<BlueprintSelectedEvent>.OnEvent += OnBlueprintSelected;
+            EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
         private void OnBlueprintSelected(BlueprintSelectedEvent e)
         {
-            selectionTracker.enabled = false;
+            selectionTracker.End();
             placementTracker.Begin(e.Blueprint);
+        }
+
+        private void OnBlueprintUsed(BlueprintUsedEvent e)
+        {
+            selectionTracker.Begin();
+            placementTracker.End();
         }
     }
 }

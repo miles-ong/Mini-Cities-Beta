@@ -141,13 +141,13 @@ public class BlueprintEditor : Editor
             
             EditorGUILayout.BeginHorizontal();
             
-            EditorGUILayout.LabelField($"Ability {i}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"Ability {i + 1}", EditorStyles.boldLabel);
 
             if (GUILayout.Button("Remove", GUILayout.Width(70))) removeIndex = i;
             
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.PropertyField(trigger);
+            DrawTrigger(trigger);
             
             EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
             
@@ -168,8 +168,60 @@ public class BlueprintEditor : Editor
         if (removeIndex >= 0) _abilities.DeleteArrayElementAtIndex(removeIndex);
     }
 
+    private void DrawTrigger(SerializedProperty triggerProp)
+    {
+        var typeProp = triggerProp.FindPropertyRelative("type");
+
+        EditorGUILayout.PropertyField(typeProp, new GUIContent("Trigger"));
+        
+        var type = (AbilityTriggerType)typeProp.enumValueIndex;
+
+        var usesBuildingFilter = type is
+            AbilityTriggerType.WheneverBuildingPlaced or
+            AbilityTriggerType.WheneverBuildingRemoved or
+            AbilityTriggerType.WheneverBuildingMoved;
+
+        var usesStatsFilter = type is AbilityTriggerType.WheneverCityStatReached;
+
+        if (!usesBuildingFilter && !usesStatsFilter) return;
+
+        EditorGUI.indentLevel++;
+        
+        EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
+
+        if (usesBuildingFilter)
+        {
+            var filterByCategory = triggerProp.FindPropertyRelative("filterByCategory");
+            var filterByBuilding = triggerProp.FindPropertyRelative("filterByBlock");
+
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(filterByCategory, new GUIContent("Filter By Category"));
+
+            if (EditorGUI.EndChangeCheck() && filterByCategory.boolValue) filterByBuilding.boolValue = false; 
+            
+            EditorGUI.BeginChangeCheck();
+            EditorGUILayout.PropertyField(filterByBuilding, new GUIContent("Filter By Block"));
+
+            if (EditorGUI.EndChangeCheck() && filterByBuilding.boolValue) filterByCategory.boolValue = false;
+            
+            if (filterByCategory.boolValue)
+                EditorGUILayout.PropertyField(triggerProp.FindPropertyRelative("category"), new GUIContent("Category"));
+            else if (filterByBuilding.boolValue)
+                EditorGUILayout.PropertyField(triggerProp.FindPropertyRelative("block"), new GUIContent("Block"));
+        }
+
+        if (usesStatsFilter)
+        {
+            EditorGUILayout.PropertyField(triggerProp.FindPropertyRelative("stat"), new GUIContent("Stat"));
+            EditorGUILayout.PropertyField(triggerProp.FindPropertyRelative("comparison"), new GUIContent("Comparison"));
+            EditorGUILayout.PropertyField(triggerProp.FindPropertyRelative("threshold"), new GUIContent("Threshold"));
+        }
+
+        EditorGUI.indentLevel--;
+    }
+
     private static void DrawPolymorphicList(
-        SerializedProperty prop, 
+        SerializedProperty listProp, 
         Type interfaceType, 
         string label,
         int minElements = 0,
@@ -181,27 +233,27 @@ public class BlueprintEditor : Editor
         
         EditorGUI.indentLevel++;
 
-        if (prop.arraySize < minElements && defaultRules != null)
+        if (listProp.arraySize < minElements && defaultRules != null)
         {
-            while (prop.arraySize < minElements)
+            while (listProp.arraySize < minElements)
             {
-                var index = prop.arraySize;
-                prop.InsertArrayElementAtIndex(index);
-                prop.GetArrayElementAtIndex(index).managedReferenceValue = defaultRules();
+                var index = listProp.arraySize;
+                listProp.InsertArrayElementAtIndex(index);
+                listProp.GetArrayElementAtIndex(index).managedReferenceValue = defaultRules();
             }
         }
 
         var removeIndex = -1;
 
-        for (var i = 0; i < prop.arraySize; i++)
+        for (var i = 0; i < listProp.arraySize; i++)
         {
-            var element = prop.GetArrayElementAtIndex(i);
+            var element = listProp.GetArrayElementAtIndex(i);
 
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.PropertyField(element, includeChildren: true);
 
-            var canRemove = prop.arraySize > minElements;
+            var canRemove = listProp.arraySize > minElements;
 
             using (new EditorGUI.DisabledScope(!canRemove))
                 if (GUILayout.Button("-", GUILayout.Width(20))) removeIndex = i;
@@ -211,11 +263,11 @@ public class BlueprintEditor : Editor
 
         if (removeIndex >= 0)
         {
-            prop.GetArrayElementAtIndex(removeIndex).managedReferenceValue = null;
-            prop.DeleteArrayElementAtIndex(removeIndex);
+            listProp.GetArrayElementAtIndex(removeIndex).managedReferenceValue = null;
+            listProp.DeleteArrayElementAtIndex(removeIndex);
         }
         
-        if (GUILayout.Button($"Add {label}", GUILayout.Width(200))) ShowAddMenu(prop, interfaceType);
+        if (GUILayout.Button($"Add {label}", GUILayout.Width(200))) ShowAddMenu(listProp, interfaceType);
 
         EditorGUI.indentLevel--;
     }

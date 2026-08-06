@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MiniCities.Core;
+using MiniCities.Core.Math;
 using UnityEngine;
 
 namespace MiniCities.Definitions.Blueprint.Stat

@@ -1,5 +1,5 @@
 ﻿using System;
-using MiniCities.Core;
+using MiniCities.Core.Math;
 using MiniCities.Definitions.Blueprint.Stat;
 using MiniCities.Systems.City.Stat;
 
@@ -21,8 +21,8 @@ namespace MiniCities.Definitions.Ability
 
         public void Activate(AbilityContext ctx)
         {
-            ctx.Building.BaseStats.Modify(stat, operation, amount);
-            ctx.Building.MarkDirty();
+            ctx.Owner.BaseStats.Modify(stat, operation, amount);
+            ctx.Owner.MarkDirty();
         }
 
         public string Describe() => $"{operation.ToDescriptionText(amount)} {stat}";
@@ -50,6 +50,27 @@ namespace MiniCities.Definitions.Ability
         {
             stat = stat,
             operation = operation,
+            amount = amount
+        };
+    }
+
+    [Serializable]
+    public class DrawBlueprint : IAbilityEffect
+    {
+        public int amount = 1;
+
+        public void Activate(AbilityContext ctx)
+        {
+            if (amount <= 0) return;
+
+            if (amount == 1) ctx.Game.Hand.DrawBlueprint();
+            else ctx.Game.Hand.DrawMultipleBlueprints(amount);
+        }
+
+        public string Describe() => $"draw {amount} blueprint{(amount > 1 ? "s" : "")}";
+
+        public IAbilityEffect Clone() => new DrawBlueprint()
+        {
             amount = amount
         };
     }

@@ -1,20 +1,17 @@
-﻿using MiniCities.Core.Event;
-using MiniCities.Runtime.Block;
+﻿using MiniCities.Runtime.Block;
 using MiniCities.Systems.Game;
 
 namespace MiniCities.Definitions.Ability
 {
     public readonly struct AbilityContext
     {
-        public GameContext Game { get; }
-        public IEvent Evt { get; }
-        public BuildingRuntime Building { get; }
-
-        public AbilityContext(GameContext game, IEvent evt, BuildingRuntime building)
+        public readonly GameContext Game;
+        public readonly BuildingRuntime Owner;
+        
+        public AbilityContext(GameContext game, BuildingRuntime owner)
         {
             Game = game;
-            Evt = evt;
-            Building = building;
+            Owner = owner;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace MiniCities.Runtime.Block
         public readonly BlueprintRuntime Blueprint;
         public readonly BuildingStats BaseStats;
         public readonly BuildingStats TotalStats;
-
+        
         public int CurrentVersion { get; private set; }
         public int CachedVersion { get; private set; } = -1;
 
@@ -20,7 +20,7 @@ namespace MiniCities.Runtime.Block
             BaseStats = blueprint.Stats;
             TotalStats = BaseStats.Clone();
         }
-
+        
         public void MarkDirty() => CurrentVersion++;
         public void MarkClean() => CachedVersion = CurrentVersion;
     }
