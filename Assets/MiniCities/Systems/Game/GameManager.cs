@@ -12,6 +12,7 @@ namespace MiniCities.Systems.Game
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private CityManager cityManager;
         [SerializeField] private MapManager mapManager;
         [SerializeField] private MapDefinition testMap;
         [SerializeField] private BlueprintHand blueprintHand;
@@ -29,7 +30,6 @@ namespace MiniCities.Systems.Game
         {
             _random = new SeededRandom(seed);
             var deck = new BlueprintDeckRuntime(testDeck, _random);
-            var cityManager = new CityManager(mapManager);
             
             _context = new GameContext(_random, mapManager, cityManager, deck, blueprintHand);
             

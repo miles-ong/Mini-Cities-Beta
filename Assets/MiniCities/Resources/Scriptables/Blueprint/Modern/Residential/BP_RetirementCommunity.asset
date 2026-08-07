@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58dc415c67ee4040a311dbd54953f6d7, type: 3}
+  m_Name: BP_RetirementCommunity
+  m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Definitions.Blueprint.BlueprintDefinition
+  displayName: Retirement Community
+  file: 0
+  category: 0
+  stats:
+    values:
+    - Stat: 0
+      Value: 10
+    - Stat: 1
+      Value: 5
+    - Stat: 2
+      Value: 0
+  building: {fileID: 11400000, guid: f4a93d6e3dd1c2c439a8a4da7bcd8db9, type: 2}
+  placementRules:
+  - rid: 6376856430960705605
+  abilities:
+  - trigger:
+      type: 2
+      filterByCategory: 1
+      category: 0
+      filterByBlock: 0
+      block: {fileID: 0}
+      stat: 0
+      comparison: 0
+      threshold: 0
+    conditions: []
+    effects:
+    - rid: 6376856430960705606
+  references:
+    version: 2
+    RefIds:
+    - rid: 6376856430960705605
+      type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
+      data:
+        scope: 3
+        group: 0
+    - rid: 6376856430960705606
+      type: {class: ModifyBuildingBaseStat, ns: MiniCities.Definitions.Ability, asm: Assembly-CSharp}
+      data:
+        stat: 0
+        operation: 0
+        amount: 15

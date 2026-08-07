@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MiniCities.Core.Event;
 using MiniCities.Core.Grid;
@@ -11,11 +12,12 @@ using MiniCities.Systems.City.Buff;
 using MiniCities.Systems.City.Stat;
 using MiniCities.Systems.Game;
 using MiniCities.Systems.Map;
+using Unity.Properties;
 using UnityEngine;
 
 namespace MiniCities.Systems.City
 {
-    public class CityManager
+    public class CityManager : MonoBehaviour
     {
         private struct CityContribution
         {
@@ -24,7 +26,7 @@ namespace MiniCities.Systems.City
             public int Pollution;
         }
 
-        private readonly MapManager _map;
+        [SerializeField] private MapManager mapManager;
 
         private readonly HashSet<BuildingRuntime> _activeBuildings = new();
         private readonly Dictionary<BuildingRuntime, CityContribution> _lastContribution = new();
@@ -35,15 +37,17 @@ namespace MiniCities.Systems.City
         private CityStats _baseStats;
         private CityStats _totalStats;
 
+        [CreateProperty]
         public int Population => _totalStats.Population;
+        [CreateProperty]
         public int Culture => _totalStats.Culture;
+        [CreateProperty]
         public int Pollution => _totalStats.Pollution;
+        [CreateProperty]
         public int Money =>  _totalStats.Money;
 
-        public CityManager(MapManager map)
+        private void Start()
         {
-            _map = map;
-
             EventBus<BuildingPlacedEvent>.OnEvent += OnBuildingPlaced;
             EventBus<BuildingRemovedEvent>.OnEvent += OnBuildingRemoved;
         }
@@ -115,7 +119,7 @@ namespace MiniCities.Systems.City
 
         private void MarkNeighborsDirty(Vector3Int location)
         {
-            foreach (var n in _map.GetBlocksInScope<BuildingRuntime>(location, GridScope.Nearby, GridLevel.Level))
+            foreach (var n in mapManager.GetBlocksInScope<BuildingRuntime>(location, GridScope.Nearby, GridLevel.Level))
                 n.MarkDirty();
         }
         
@@ -158,7 +162,7 @@ namespace MiniCities.Systems.City
             }
             else if (buff.Location != null)
             {
-                if (_map.GetBlock(buff.Location.Value) is BuildingRuntime b) b.MarkDirty();
+                if (mapManager.GetBlock(buff.Location.Value) is BuildingRuntime b) b.MarkDirty();
             }
         }
         

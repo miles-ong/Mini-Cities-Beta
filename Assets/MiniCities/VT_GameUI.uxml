@@ -1,0 +1,36 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="CityStats" style="flex-grow: 1; position: absolute; top: 32px; left: 32px; height: 134px; flex-direction: row; right: 32px; bottom: auto; justify-content: flex-start; align-items: center; align-self: flex-end;">
+        <ui:VisualElement name="PopulationStat" style="flex-grow: 1; flex-direction: row-reverse; justify-content: flex-start; align-items: center;">
+            <ui:Label text="0" name="PopulationValue" style="-unity-text-align: middle-right; white-space: nowrap; background-image: resource(&quot;Sprites/spr_Container#spr_Container&quot;); width: 298px; left: -64px; right: auto; background-size: 100% 100%; background-position-x: center; font-size: 48px; -unity-text-auto-size: none; bottom: 0%; top: 0%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 16px; padding-right: 32px; padding-bottom: 16px; padding-left: 80px; -unity-background-scale-mode: stretch-to-fill; background-position-y: center;">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="Population" binding-mode="ToTarget"/>
+                </Bindings>
+            </ui:Label>
+            <ui:Image name="PopulationIcon" source="project://database/Assets/MiniCities/Resources/Sprites/spr_PopulationIcon.png?fileID=21300000&amp;guid=ca3509641c11adb4ea2b259094dcf5a5&amp;type=3#spr_PopulationIcon"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="CultureStat" style="flex-grow: 1; flex-direction: row-reverse; justify-content: flex-start; align-items: center;">
+            <ui:Label text="0" name="CultureValue" style="-unity-text-align: middle-right; white-space: nowrap; background-image: resource(&quot;Sprites/spr_Container#spr_Container&quot;); width: 298px; left: -64px; right: auto; background-size: 100% 100%; background-position-x: center; font-size: 48px; -unity-text-auto-size: none; bottom: 0%; top: 0%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 16px; padding-right: 32px; padding-bottom: 16px; padding-left: 80px; -unity-background-scale-mode: stretch-to-fill; background-position-y: center;">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="Culture" binding-mode="ToTarget"/>
+                </Bindings>
+            </ui:Label>
+            <ui:Image name="CultureIcon" source="project://database/Assets/MiniCities/Resources/Sprites/spr_CultureIcon.png?fileID=21300000&amp;guid=5d63a2efcf564944580b724abc1fac7d&amp;type=3#spr_CultureIcon"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="MoneyStat" style="flex-grow: 1; flex-direction: row-reverse; justify-content: flex-start; align-items: center;">
+            <ui:Label text="0" name="MoneyValue" style="-unity-text-align: middle-right; white-space: nowrap; background-image: resource(&quot;Sprites/spr_Container#spr_Container&quot;); width: 298px; left: -64px; right: auto; background-size: 100% 100%; background-position-x: center; font-size: 48px; -unity-text-auto-size: none; bottom: 0%; top: 0%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 16px; padding-right: 32px; padding-bottom: 16px; padding-left: 80px; -unity-background-scale-mode: stretch-to-fill; background-position-y: center;">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="Money" binding-mode="ToTarget"/>
+                </Bindings>
+            </ui:Label>
+            <ui:Image name="MoneyIcon" source="project://database/Assets/MiniCities/Resources/Sprites/spr_MoneyIcon.png?fileID=21300000&amp;guid=99a196865d374374ebeb741b78d6e0b6&amp;type=3#spr_MoneyIcon"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="PollutionStat" style="flex-grow: 1; flex-direction: row-reverse; justify-content: flex-start; align-items: center;">
+            <ui:Label text="0" name="PollutionValue" style="-unity-text-align: middle-right; white-space: nowrap; background-image: resource(&quot;Sprites/spr_Container#spr_Container&quot;); width: 298px; left: -64px; right: auto; background-size: 100% 100%; background-position-x: center; font-size: 48px; -unity-text-auto-size: none; bottom: 0%; top: 0%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 16px; padding-right: 32px; padding-bottom: 16px; padding-left: 80px; -unity-background-scale-mode: stretch-to-fill; background-position-y: center;">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="Pollution" binding-mode="ToTarget"/>
+                </Bindings>
+            </ui:Label>
+            <ui:Image name="PollutionIcon" source="project://database/Assets/MiniCities/Resources/Sprites/spr_PollutionIcon.png?fileID=21300000&amp;guid=0f8e0e5c90c6eab4d9db798c7062fbd3&amp;type=3#spr_PollutionIcon"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -49,8 +49,12 @@ namespace MiniCities.Systems.City.Ability
             var batch = new List<Activation>();
 
             foreach (var o in activeBuildings)
-            foreach (var (i, a) in o.GetAbilities(type))
-                if (a.Trigger.MatchesBuilding(triggeringBuilding)) batch.Add(new Activation(o, i, a));
+            {
+                if (o == triggeringBuilding) continue; // skip the triggering building's whenever placed ability
+                
+                foreach (var (i, a) in o.GetAbilities(type))
+                    if (a.Trigger.MatchesBuilding(triggeringBuilding)) batch.Add(new Activation(o, i, a));
+            }
 
             Debug.Log($"Queueing {batch.Count} {type} abilities!");
             Queue(batch, (game, owner) => AbilityContext.ForBuilding(game, owner, triggeringBuilding));

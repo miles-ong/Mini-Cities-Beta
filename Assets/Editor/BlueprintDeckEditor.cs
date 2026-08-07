@@ -7,6 +7,13 @@ using UnityEngine;
 [CustomEditor(typeof(BlueprintDeckDefinition))]
 public class BlueprintDeckEditor : MCEditor<BlueprintDeckDefinition>
 {
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        SyncDeck();
+    }
+    
     public override void OnInspectorGUI()
     {
         EditorGUILayout.LabelField("Blueprint Deck", EditorStylesUtility.Header);
@@ -16,8 +23,8 @@ public class BlueprintDeckEditor : MCEditor<BlueprintDeckDefinition>
         var prev = Target.pool;
         Target.pool = (BlueprintPool)EditorGUILayout.ObjectField("Pool", Target.pool,  typeof(BlueprintPool), false);
 
-        if (Target.pool is null) return;
-        if (Target.pool is not null && Target.pool != prev) SyncDeck();
+        if (Target.pool == null) return;
+        if (Target.pool != null && Target.pool != prev) SyncDeck();
 
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         

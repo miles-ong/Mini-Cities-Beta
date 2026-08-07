@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using MiniCities.Core.Pool;
 using MiniCities.Definitions.Blueprint;
 using UnityEditor;
 using UnityEngine;
@@ -7,6 +8,13 @@ using UnityEngine;
 [CustomEditor(typeof(BlueprintPool))]
 public class BlueprintPoolEditor : RegistryEditor<BlueprintPool, BlueprintRegistry>
 {
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        Target.blueprints ??= new Pool<BlueprintDefinition>();
+    }
+
     public override void OnInspectorGUI()
     {
         if (Registry is null) return;
