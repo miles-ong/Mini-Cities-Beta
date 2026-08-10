@@ -9,7 +9,7 @@ namespace MiniCities.Core.Event
     }
     
     #region Blueprint Events
-    public sealed class BlueprintUsedEvent : IEvent 
+    public readonly struct BlueprintUsedEvent : IEvent 
     {
         public BlueprintRuntime Blueprint { get; }
         public Vector3Int Location { get; }
@@ -21,14 +21,14 @@ namespace MiniCities.Core.Event
         }
     }
 
-    public sealed class BlueprintSelectedEvent : IEvent
+    public readonly struct BlueprintSelectedEvent : IEvent
     {
         public BlueprintRuntime Blueprint { get; }
 
         public BlueprintSelectedEvent(BlueprintRuntime blueprint) => Blueprint = blueprint;
     }
 
-    public sealed class BlueprintDrawnEvent : IEvent
+    public readonly struct BlueprintDrawnEvent : IEvent
     {
         public BlueprintRuntime Blueprint { get; }
 
@@ -38,18 +38,44 @@ namespace MiniCities.Core.Event
 
     #region Building Events
 
-    public sealed class BuildingPlacedEvent : IEvent
+    public readonly struct BuildingPlacedEvent : IEvent
     {
         public BuildingRuntime Building { get; }
 
         public BuildingPlacedEvent(BuildingRuntime building) => Building = building;
     }
 
-    public sealed class BuildingRemovedEvent : IEvent
+    public readonly struct BuildingRemovedEvent : IEvent
     {
         public BuildingRuntime Building { get; }
         
         public BuildingRemovedEvent(BuildingRuntime building) => Building = building;
+    }
+
+    public readonly struct BuildingMovedEvent : IEvent
+    {
+        public BuildingRuntime Building { get; }
+        public Vector3Int To { get; }
+        public Vector3Int From { get; }
+
+        public BuildingMovedEvent(BuildingRuntime building, Vector3Int to, Vector3Int from)
+        {
+            Building = building;
+            To = to;
+            From = from;
+        }
+    }
+
+    #endregion
+    
+    #region Camera Events
+
+    public readonly struct CameraRotationStartedEvent : IEvent
+    {
+    }
+
+    public readonly struct CameraRotationEndedEvent : IEvent
+    {
     }
 
     #endregion

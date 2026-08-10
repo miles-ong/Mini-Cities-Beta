@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace MiniCities.Definitions.Map
 {
-    [CreateAssetMenu(fileName = "MAP_", menuName = "Mini Cities/Map")]
+    [CreateAssetMenu(fileName = "M_", menuName = "Mini Cities/Map")]
     public class MapDefinition : ScriptableObject
     {
         public string displayName = "Unnamed";

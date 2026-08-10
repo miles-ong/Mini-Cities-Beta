@@ -12,8 +12,9 @@ namespace MiniCities.Definitions.Blueprint
     public class BlueprintDefinition : ScriptableObject
     {
         public string displayName = "Unnamed";
-        public BlueprintFile file;
+        public BlueprintEra era;
         public BlueprintCategory category;
+        public BlueprintRarity rarity;
         public BuildingStats stats = new();
         public BlockDefinition building;
         [SerializeReference] public IPlacementRule[] placementRules;

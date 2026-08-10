@@ -4,8 +4,8 @@ using MiniCities.Definitions.Map;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(MapPool))]
-public class MapPoolEditor : RegistryEditor<MapPool, MapRegistry>
+[CustomEditor(typeof(MapPoolDefinition))]
+public class MapPoolEditor : RegistryEditor<MapPoolDefinition, MapRegistry>
 {
     public override void OnInspectorGUI()
     {

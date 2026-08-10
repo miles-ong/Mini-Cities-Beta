@@ -10,20 +10,20 @@ namespace MiniCities.Systems.Game
         public readonly SeededRandom Random;
         public readonly MapManager Map;
         public readonly CityManager City;
-        public readonly BlueprintDeckRuntime Deck;
+        public readonly BlueprintFileRuntime File;
         public readonly BlueprintHand Hand;
 
         public GameContext(
             SeededRandom random, 
             MapManager map, 
             CityManager city, 
-            BlueprintDeckRuntime deck,
+            BlueprintFileRuntime file,
             BlueprintHand hand)
         {
             Random = random;
             Map = map;
             City = city;
-            Deck = deck;
+            File = file;
             Hand = hand;
         }
     }

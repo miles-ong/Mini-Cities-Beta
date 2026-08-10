@@ -11,7 +11,7 @@ namespace MiniCities.Runtime.Blueprint
         [SerializeField] private int maxHandSize;
         [SerializeField] private float drawSpeed;
 
-        private BlueprintDeckRuntime _deck;
+        private BlueprintFileRuntime _file;
         private readonly List<BlueprintRuntime> _hand = new();
 
         private void Start()
@@ -19,24 +19,22 @@ namespace MiniCities.Runtime.Blueprint
             EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
-        public void LoadDeck(BlueprintDeckRuntime deck) => _deck = deck;
+        public void LoadFile(BlueprintFileRuntime file) => _file = file;
 
-        public bool DrawBlueprint() => TryDrawBlueprint(() => _deck.Draw());
+        public bool DrawBlueprint() => TryDrawBlueprint(() => _file.Draw());
 
         public void DrawMultipleBlueprints(int amount) =>
             StartCoroutine(TryDrawMultipleBlueprints(amount, DrawBlueprint));
 
-        private bool TryDrawBlueprint(Func<BlueprintRuntime> drawFunc)
+        private bool TryDrawBlueprint(Func<BlueprintRuntime> drawFunction)
         {
             if (_hand.Count >= maxHandSize) return false;
 
             try
             {
-                var blueprint = drawFunc();
+                var blueprint = drawFunction();
                 _hand.Add(blueprint);
                 EventBus<BlueprintDrawnEvent>.Fire(new BlueprintDrawnEvent(blueprint));
-                
-                Debug.Log($"Hand Size: {_hand.Count}");
 
                 return true;
             }
@@ -46,11 +44,11 @@ namespace MiniCities.Runtime.Blueprint
             }
         }
 
-        private IEnumerator TryDrawMultipleBlueprints(int amount, Func<bool> drawFunc)
+        private IEnumerator TryDrawMultipleBlueprints(int amount, Func<bool> drawFunction)
         {
             while (amount > 0)
             {
-                if (!drawFunc()) yield break;
+                if (!drawFunction()) yield break;
 
                 amount--;
 

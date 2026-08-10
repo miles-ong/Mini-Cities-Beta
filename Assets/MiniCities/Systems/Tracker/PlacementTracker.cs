@@ -53,21 +53,18 @@ namespace MiniCities.Systems.Tracker
             
             _transform = _preview.transform;
             _renderers = _preview.GetComponentsInChildren<Renderer>();
+            _rules = blueprint.PlacementRules;
 
             foreach (var r in _renderers) r.enabled = false;
-
-            _rules = blueprint.PlacementRules;
             
             enabled = true;
-            
-            Debug.Log("Placement Tracking Enabled");
         }
 
         public void End()
         {
             enabled = false;
             
-            Destroy(_preview);
+            Destroy(_preview.gameObject);
             _transform = null;
             _renderers = null;
             _rules = null;
@@ -105,11 +102,7 @@ namespace MiniCities.Systems.Tracker
                 }
                 
                 if (_canPlace && Mouse.current.leftButton.wasPressedThisFrame)
-                {
-                    Debug.Log($"Placing at {gridHit.Cell}");
-                    
                     EventBus<BlueprintUsedEvent>.Fire(new BlueprintUsedEvent(_blueprint, gridHit.Cell));
-                }
 
                 return;
             }

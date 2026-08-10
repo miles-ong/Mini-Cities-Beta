@@ -10,8 +10,11 @@ namespace MiniCities.Definitions.Blueprint
         public List<BlueprintDefinition> blueprints = new();
         
         #if UNITY_EDITOR
+        
         private void OnValidate() =>
-            blueprints.Sort((a, b) => string.Compare(a.displayName, b.displayName, StringComparison.OrdinalIgnoreCase));
+            blueprints.Sort((a, b) => 
+                string.Compare(a.displayName, b.displayName, StringComparison.OrdinalIgnoreCase));
+        
         #endif
     }
 }

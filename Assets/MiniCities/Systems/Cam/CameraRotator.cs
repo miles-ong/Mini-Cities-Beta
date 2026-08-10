@@ -1,18 +1,20 @@
-﻿using UnityEngine;
+﻿using MiniCities.Core.Event;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace MiniCities.Systems.Cam
 {
     public class CameraRotator
     {
-        private Transform _anchor;
+        private readonly Transform _anchor;
 
         private float _sensitivity;
         private float _minPitch;
         private float _maxPitch;
-        
         private float _yaw;
         private float _pitch;
+
+        private bool _rotating;
 
         public CameraRotator(Transform anchor, CameraSettings settings)
         {
@@ -28,7 +30,17 @@ namespace MiniCities.Systems.Cam
 
         public void Update()
         {
-            if (!Mouse.current.rightButton.isPressed) return;
+            var isPressed = Mouse.current.rightButton.isPressed;
+
+            if (isPressed != _rotating)
+            {
+                _rotating = isPressed;
+                
+                if (_rotating) EventBus<CameraRotationStartedEvent>.Fire(new CameraRotationStartedEvent());
+                else EventBus<CameraRotationEndedEvent>.Fire(new CameraRotationEndedEvent());
+            }
+
+            if (!_rotating) return;
             
             var delta = Mouse.current.delta.ReadValue();
             _yaw += delta.x * _sensitivity;

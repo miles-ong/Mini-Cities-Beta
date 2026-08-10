@@ -13,20 +13,22 @@ using UnityEngine;
 public class BlueprintEditor : Editor
 {
     private SerializedProperty _displayName;
-    private SerializedProperty _file;
+    private SerializedProperty _era;
     private SerializedProperty _category;
+    private SerializedProperty _rarity;
     private SerializedProperty _stats;
     private SerializedProperty _building;
     private SerializedProperty _placementRules;
     private SerializedProperty _abilities;
 
-    private BlueprintFile _lastSyncedFile;
+    private BlueprintEra _lastSyncedEra;
 
     private void OnEnable()
     {
         _displayName = serializedObject.FindProperty("displayName");
-        _file = serializedObject.FindProperty("file");
+        _era = serializedObject.FindProperty("era");
         _category = serializedObject.FindProperty("category");
+        _rarity = serializedObject.FindProperty("rarity");
         _stats = serializedObject.FindProperty("stats");
         _building = serializedObject.FindProperty("building");
         _placementRules = serializedObject.FindProperty("placementRules");
@@ -34,8 +36,8 @@ public class BlueprintEditor : Editor
 
         serializedObject.Update();
         
-        _lastSyncedFile = (BlueprintFile)_file.enumValueIndex;
-        SyncStatsToRequired(_stats.FindPropertyRelative("values"), _lastSyncedFile.GetRequiredStats());
+        _lastSyncedEra = (BlueprintEra)_era.enumValueIndex;
+        SyncStatsToRequired(_stats.FindPropertyRelative("values"), _lastSyncedEra.GetRequiredStats());
         
         serializedObject.ApplyModifiedProperties();
     }
@@ -48,8 +50,9 @@ public class BlueprintEditor : Editor
         EditorGUILayout.Space(EditorStylesUtility.LargeSpacing);
         
         EditorGUILayout.PropertyField(_displayName);
-        EditorGUILayout.PropertyField(_file);
+        EditorGUILayout.PropertyField(_era);
         EditorGUILayout.PropertyField(_category);
+        EditorGUILayout.PropertyField(_rarity);
 
         var category = (BlueprintCategory)_category.enumValueIndex;
 
@@ -81,9 +84,9 @@ public class BlueprintEditor : Editor
         
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
 
-        var bp = (BlueprintDefinition)target;
+        var blueprint = (BlueprintDefinition)target;
         
-        EditorGUILayout.HelpBox(bp.GenerateDescription(), MessageType.None);
+        EditorGUILayout.HelpBox(blueprint.GenerateDescription(), MessageType.None);
     }
 
     private void DrawStats()
@@ -94,18 +97,18 @@ public class BlueprintEditor : Editor
         
         EditorGUI.indentLevel++;
 
-        var currentFile = (BlueprintFile)_file.enumValueIndex;
+        var currentEra = (BlueprintEra)_era.enumValueIndex;
         var values = _stats.FindPropertyRelative("values");
 
-        if (currentFile != _lastSyncedFile)
+        if (currentEra != _lastSyncedEra)
         {
-            SyncStatsToRequired(values, currentFile.GetRequiredStats());
-            _lastSyncedFile = currentFile;
+            SyncStatsToRequired(values, currentEra.GetRequiredStats());
+            _lastSyncedEra = currentEra;
         }
             
-        var required = currentFile.GetRequiredStats();
+        var requiredStats = currentEra.GetRequiredStats();
 
-        foreach (var stat in required)
+        foreach (var stat in requiredStats)
         {
             var index = FindStatIndex(values, stat);
 

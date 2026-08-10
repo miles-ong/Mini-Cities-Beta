@@ -9,11 +9,5 @@ namespace MiniCities.Core.Event
 
         public static void Fire(T evt) => OnEvent?.Invoke(evt);
         public static void Queue(T evt) => EventQueue.Enqueue(() => OnEvent?.Invoke(evt));
-
-        public static void RaiseAndPump(T evt)
-        {
-            EventQueue.Enqueue(() => OnEvent?.Invoke(evt));
-            EventQueue.Pump();
-        }
     }
 }

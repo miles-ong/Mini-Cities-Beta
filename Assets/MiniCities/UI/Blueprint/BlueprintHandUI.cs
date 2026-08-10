@@ -28,21 +28,31 @@ namespace MiniCities.UI.Blueprint
         [SerializeField] private float selectHeight;
         [SerializeField] private float selectAnimationSpeed;
 
+        [Header("Camera Movement Settings")] 
+        [SerializeField] private float rotationLowerHeight;
+        [SerializeField] private float rotationLowerAnimationSpeed;
+
         private Spline _spline;
         private Vector3 _originalScale;
+        private Vector3 _originalHandPosition;
 
         private readonly List<BlueprintUI> _blueprints = new();
         
         private BlueprintUI _hovered;
         private BlueprintUI _selected;
+        private int _selectedIndex;
+        private bool _handLowered;
 
         private void Start()
         {
             _spline = curve.Spline;
             _originalScale = blueprintUI.transform.localScale;
+            _originalHandPosition = transform.localPosition;
 
             EventBus<BlueprintDrawnEvent>.OnEvent += OnBlueprintDrawn;
             EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
+            EventBus<CameraRotationStartedEvent>.OnEvent += OnCameraRotationStarted;
+            EventBus<CameraRotationEndedEvent>.OnEvent += OnCameraRotationEnded;
         }
 
         private void Add(BlueprintRuntime blueprint)
@@ -90,8 +100,9 @@ namespace MiniCities.UI.Blueprint
         private void OnBlueprintClicked(BlueprintUI blueprint)
         {
             _selected = blueprint;
-            EventBus<BlueprintSelectedEvent>.Fire(new BlueprintSelectedEvent(blueprint.Blueprint));
             UpdateBlueprintPositions();
+            
+            EventBus<BlueprintSelectedEvent>.Fire(new BlueprintSelectedEvent(blueprint.Blueprint));
         }
 
         private void UpdateBlueprintPositions()
@@ -140,11 +151,26 @@ namespace MiniCities.UI.Blueprint
 
             return firstPos + index * spacing;
         }
+
+        private void SetHandLowered(bool lowered)
+        {
+            if (_handLowered == lowered) return;
+
+            _handLowered = lowered;
+
+            var target = lowered
+                ? _originalHandPosition + Vector3.down * rotationLowerHeight
+                : _originalHandPosition;
+
+            transform.DOLocalMove(target, rotationLowerAnimationSpeed);
+        }
         
         #region Event Handlers
 
         private void OnBlueprintDrawn(BlueprintDrawnEvent e) => Add(e.Blueprint);
         private void OnBlueprintUsed(BlueprintUsedEvent e) => Remove(e.Blueprint);
+        private void OnCameraRotationStarted(CameraRotationStartedEvent e) => SetHandLowered(true);
+        private void OnCameraRotationEnded(CameraRotationEndedEvent e) => SetHandLowered(false);
 
         #endregion
     }

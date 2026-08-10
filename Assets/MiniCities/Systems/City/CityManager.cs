@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using MiniCities.Core.Event;
 using MiniCities.Core.Grid;
@@ -79,7 +78,6 @@ namespace MiniCities.Systems.City
             
             foreach (var cb in _cityBuffIndex.Buffs) _totalStats.ModifyStat(cb.Stat, cb.Operation, cb.Amount);
             
-            Debug.Log(_totalStats);
             EventQueue.OnDrained -= RecalculateCity;
         }
         

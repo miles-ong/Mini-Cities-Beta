@@ -116,4 +116,27 @@ namespace MiniCities.Definitions.Ability
             includeSelf = includeSelf
         };
     }
+
+    [Serializable]
+    public sealed class BlockInRangeOfBuildingPlaced : IAbilityCondition
+    {
+        public GridScope scope;
+        public GridLevel level;
+
+        public bool Evaluate(AbilityContext ctx)
+        {
+            var buildings =
+                ctx.Game.Map.GetBlocksInScope<BuildingRuntime>(ctx.TriggeringBuilding.Location, scope, level, false);
+
+            return buildings.Contains(ctx.Owner);
+        }
+
+        public string Describe() => "i dont care rn";
+
+        public IAbilityCondition Clone() => new BlockInRangeOfBuildingPlaced()
+        {
+            scope = scope,
+            level = level,
+        };
+    }
 }

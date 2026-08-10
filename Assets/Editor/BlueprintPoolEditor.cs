@@ -5,8 +5,8 @@ using MiniCities.Definitions.Blueprint;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BlueprintPool))]
-public class BlueprintPoolEditor : RegistryEditor<BlueprintPool, BlueprintRegistry>
+[CustomEditor(typeof(BlueprintPoolDefinition))]
+public class BlueprintPoolEditor : RegistryEditor<BlueprintPoolDefinition, BlueprintRegistry>
 {
     protected override void OnEnable()
     {
@@ -88,5 +88,7 @@ public class BlueprintPoolEditor : RegistryEditor<BlueprintPool, BlueprintRegist
 
             MarkDirty();
         }
+
+        if (enableAll || disableAll) MarkDirty();
     }
 }

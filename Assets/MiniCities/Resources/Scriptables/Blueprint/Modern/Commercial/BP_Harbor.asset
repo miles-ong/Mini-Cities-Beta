@@ -13,20 +13,21 @@ MonoBehaviour:
   m_Name: BP_Harbor
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Definitions.Blueprint.BlueprintDefinition
   displayName: Harbor
-  file: 0
+  era: 0
   category: 1
+  rarity: 0
   stats:
     values:
     - Stat: 0
-      Value: 0
+      Value: 5
     - Stat: 1
-      Value: 0
+      Value: 10
     - Stat: 2
       Value: 0
   building: {fileID: 11400000, guid: 7f9bd451f8376504cb1cf9dd297ece34, type: 2}
   placementRules:
-  - rid: 6376856409524142151
-  - rid: 6376856409524142154
+  - rid: 6376856458467999813
+  - rid: 6376856458467999814
   abilities:
   - trigger:
       type: 0
@@ -39,23 +40,23 @@ MonoBehaviour:
       threshold: 0
     conditions: []
     effects:
-    - rid: 6376856409524142153
+    - rid: 6376856458467999815
   references:
     version: 2
     RefIds:
-    - rid: 6376856409524142151
+    - rid: 6376856458467999813
+      type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
+      data:
+        scope: 3
+        group: 0
+    - rid: 6376856458467999814
       type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
       data:
         scope: 0
         group: 1
-    - rid: 6376856409524142153
+    - rid: 6376856458467999815
       type: {class: ModifyCityBaseStat, ns: MiniCities.Definitions.Ability, asm: Assembly-CSharp}
       data:
         stat: 3
         operation: 0
         amount: 5
-    - rid: 6376856409524142154
-      type: {class: BlockGroupPlacementRule, ns: MiniCities.Definitions.Blueprint.Placement, asm: Assembly-CSharp}
-      data:
-        scope: 3
-        group: 0

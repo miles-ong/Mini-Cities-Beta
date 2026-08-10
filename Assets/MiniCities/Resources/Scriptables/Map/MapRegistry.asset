@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Map.MapRegistry
   maps:
   - {fileID: 11400000, guid: 45a5a6f11587a6d4a869da21f7a05892, type: 2}
+  - {fileID: 11400000, guid: 9d9faf812efc8c3409a025ecb810b6ab, type: 2}
   - {fileID: 11400000, guid: bf395a780c3e63c41a403676e85ca9e1, type: 2}
   - {fileID: 11400000, guid: b94370d9a3d17ea47b6a5f827dd07e92, type: 2}

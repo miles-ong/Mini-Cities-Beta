@@ -1,5 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MiniCities.View
 {
@@ -22,6 +21,15 @@ namespace MiniCities.View
             
                 renderer.SetPropertyBlock(Block, i);
             }
+        }
+
+        public void SetLayer(int layer) => SetLayerRecursive(transform, layer);
+
+        private static void SetLayerRecursive(Transform trans, int layer)
+        {
+            trans.gameObject.layer = layer;
+            
+            foreach (Transform child in trans) SetLayerRecursive(child, layer);
         }
     }
 }

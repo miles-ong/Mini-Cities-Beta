@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MiniCities.Core.Event;
 using MiniCities.Definitions.Ability;
 using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint;
@@ -13,8 +12,9 @@ namespace MiniCities.Runtime.Blueprint
     public class BlueprintRuntime
     {
         public readonly string DisplayName;
-        public readonly BlueprintFile File;
+        public readonly BlueprintEra Era;
         public BlueprintCategory Category;
+        public BlueprintRarity Rarity;
         public readonly BuildingStats Stats;
         public readonly BlockDefinition Building;
         public readonly List<IPlacementRule> PlacementRules;
@@ -25,8 +25,9 @@ namespace MiniCities.Runtime.Blueprint
         public BlueprintRuntime(BlueprintDefinition definition)
         {
             DisplayName = definition.displayName;
-            File = definition.file;
+            Era = definition.era;
             Category = definition.category;
+            Rarity = definition.rarity;
             Stats = definition.stats.Clone();
             Building = definition.building;
             PlacementRules = definition.placementRules.ToList();

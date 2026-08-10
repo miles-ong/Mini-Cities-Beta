@@ -46,11 +46,10 @@ public class MapEditor : RegistryEditor<MapDefinition, BlockRegistry>
         
         EditorGUILayout.Space(EditorStylesUtility.LargeSpacing);
 
-        var prev = Target.displayName;
-        
+        var previousDisplayName = Target.displayName;
         Target.displayName = EditorGUILayout.TextField("Name", Target.displayName);
 
-        if (!Target.displayName.Equals(prev)) MarkDirty();
+        if (!Target.displayName.Equals(previousDisplayName)) MarkDirty();
 
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         

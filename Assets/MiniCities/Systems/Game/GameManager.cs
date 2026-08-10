@@ -18,7 +18,7 @@ namespace MiniCities.Systems.Game
         [SerializeField] private BlueprintHand blueprintHand;
         [SerializeField] private BlueprintHandUI blueprintHandUI;
         
-        [SerializeField] private BlueprintDeckDefinition testDeck;
+        [SerializeField] private BlueprintFileDefinition testFile;
 
         [SerializeField] private int seed;
         
@@ -29,13 +29,13 @@ namespace MiniCities.Systems.Game
         private void Start()
         {
             _random = new SeededRandom(seed);
-            var deck = new BlueprintDeckRuntime(testDeck, _random);
+            var deck = new BlueprintFileRuntime(testFile, _random);
             
             _context = new GameContext(_random, mapManager, cityManager, deck, blueprintHand);
             
             cityManager.SetContext(_context);
             mapManager.LoadMap(testMap);
-            blueprintHand.LoadDeck(deck);
+            blueprintHand.LoadFile(deck);
             deck.FillDrawPile();
         }
 
