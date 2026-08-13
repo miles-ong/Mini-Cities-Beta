@@ -102,7 +102,7 @@ namespace MiniCities.Systems.Tracker
                 }
                 
                 if (_canPlace && Mouse.current.leftButton.wasPressedThisFrame)
-                    EventBus<BlueprintUsedEvent>.Fire(new BlueprintUsedEvent(_blueprint, gridHit.Cell));
+                    GameEventBus<BlueprintUsedEvent>.Fire(new BlueprintUsedEvent(_blueprint, gridHit.Cell));
 
                 return;
             }

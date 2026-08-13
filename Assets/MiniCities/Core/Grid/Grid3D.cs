@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace MiniCities.Core.Grid
@@ -42,68 +41,92 @@ namespace MiniCities.Core.Grid
             GridItems = resizedItems;
         }
 
-        public HashSet<T> GetItemsInScope(Vector3Int coord, GridScope scope, GridLevel level, bool includeSelf)
+        public List<Vector3Int> GetLocationsInScope(
+            Vector3Int coord, 
+            GridScope scope, 
+            GridLevel level,
+            bool includeSelf)
         {
             var leveled = coord + level.ToVector();
 
-            if (!InBounds(leveled)) return new HashSet<T>();
+            if (!InBounds(leveled)) return new List<Vector3Int>();
             
-            var items = scope switch
+            List<Vector3Int> locations;
+
+            switch (scope)
             {
-                GridScope.Adjacent => GetAdjacent(leveled),
-                GridScope.Nearby => GetNearby(leveled),
-                GridScope.All => new HashSet<T>(GridItems.Where(i => i != null)),
-                GridScope.On => new HashSet<T>(),
-                _ => throw new ArgumentOutOfRangeException(nameof(scope), "Not supported.")
-            };
-
-            if (scope == GridScope.On && InBounds(leveled)) AddAndIgnoreNull(items, leveled);
-            if (includeSelf && InBounds(leveled)) AddAndIgnoreNull(items, leveled);
-
-            return items;
-        }
-
-        private HashSet<T> GetAdjacent(Vector3Int coord)
-        {
-            var left = coord + Vector3Int.left;
-            var forward = coord + Vector3Int.forward;
-            var right = coord + Vector3Int.right;
-            var back = coord + Vector3Int.back;
-            
-            var adjacent = new HashSet<T>();
-
-            AddAndIgnoreNull(adjacent, left);
-            AddAndIgnoreNull(adjacent, forward);
-            AddAndIgnoreNull(adjacent, right);
-            AddAndIgnoreNull(adjacent, back);
-
-            return adjacent;
-        }
-
-        private HashSet<T> GetNearby(Vector3Int coord)
-        {
-            var nearby = new HashSet<T>();
-            
-            for (var x = -1; x <= 1; x++)
-            for (var z = -1; z <= 1; z++)
-            {
-                if (x == 0 && z == 0) continue;
-
-                var pos = new Vector3Int(coord.x + x, coord.y, coord.z + z);
-
-                AddAndIgnoreNull(nearby, pos);
+                case GridScope.Adjacent:
+                    locations = new List<Vector3Int>(4)
+                    {
+                        leveled + Vector3Int.left,
+                        leveled + Vector3Int.forward,
+                        leveled + Vector3Int.right,
+                        leveled + Vector3Int.back
+                    };
+                    
+                    if (includeSelf) locations.Add(leveled);
+                    
+                    break;
+                
+                case GridScope.Nearby:
+                    locations = new List<Vector3Int>(8)
+                    {
+                        leveled + Vector3Int.left,
+                        leveled + Vector3Int.left + Vector3Int.forward,
+                        leveled + Vector3Int.forward,
+                        leveled + Vector3Int.forward + Vector3Int.right,
+                        leveled + Vector3Int.right,
+                        leveled + Vector3Int.right + Vector3Int.back,
+                        leveled + Vector3Int.back,
+                        leveled + Vector3Int.back + Vector3Int.left
+                    };
+                    
+                    if (includeSelf) locations.Add(leveled);
+                    
+                    break;
+                
+                case GridScope.All:
+                    locations = new List<Vector3Int>(Width * Height);
+                    
+                    for (var z = 0; z < Length; z++)
+                    for (var x = 0; x < Width; x++)
+                        locations.Add(new Vector3Int(x, leveled.y, z));
+                    
+                    break;
+                
+                case GridScope.On:
+                    locations = new List<Vector3Int> { leveled };
+                    break;
+                
+                default:
+                    throw new ArgumentException($"{scope} not handled!");
             }
 
-            return nearby;
+            var inBounds = new List<Vector3Int>();
+
+            foreach (var location in locations)
+                if (InBounds(location)) inBounds.Add(location);
+
+            return inBounds;
         }
 
-        private void AddAndIgnoreNull(HashSet<T> set, Vector3Int coord)
+        public HashSet<T> GetItemsInScope(
+            Vector3Int coord, 
+            GridScope scope, 
+            GridLevel level, 
+            bool includeSelf)
         {
-            if (!InBounds(coord)) return;
+            var locations = GetLocationsInScope(coord, scope, level, includeSelf);
+            var items = new HashSet<T>();
 
-            var item = GridItems[GetIndex(coord, GridDimensions)];
+            foreach (var location in locations)
+            {
+                var item = GridItems[GetIndex(location, GridDimensions)];
 
-            if (item != null) set.Add(item);
+                if (item != null) items.Add(item);
+            }
+
+            return items;
         }
         
         private bool InBounds(Vector3Int coord)

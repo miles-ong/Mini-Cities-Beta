@@ -11,6 +11,8 @@ namespace MiniCities.Systems.City.Buff
         private readonly Dictionary<IBuffSource, HashSet<BuildingBuff>> _sourceIndex = new();
         private readonly Dictionary<IBuffReceiver, HashSet<BuildingBuff>> _receiverIndex = new();
         private readonly Dictionary<Vector3Int, HashSet<BuildingBuff>> _locationIndex = new();
+
+        private static int _buffNumber = 1;
         
         public void Register(BuildingBuff buff)
         {
@@ -41,6 +43,7 @@ namespace MiniCities.Systems.City.Buff
             {
                 lBuffs = new HashSet<BuildingBuff>();
                 _locationIndex.Add(buff.Location.Value, lBuffs);
+                Debug.Log($"Registering new buff-list at location ({buff.Location.Value})");
             }
 
             lBuffs.Add(buff);

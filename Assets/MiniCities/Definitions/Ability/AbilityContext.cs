@@ -7,16 +7,15 @@ namespace MiniCities.Definitions.Ability
     public readonly struct AbilityContext
     {
         public readonly GameContext Game;
-        public readonly BuildingRuntime Owner;
-
+        public readonly IAbilityActivator Activator;
         public readonly BuildingRuntime TriggeringBuilding;
         public readonly CityStat? TriggeringStat;
         public readonly float TriggeringStatValue;
         
-        public AbilityContext(GameContext game, BuildingRuntime owner)
+        public AbilityContext(GameContext game, IAbilityActivator activator)
         {
             Game = game;
-            Owner = owner;
+            Activator = activator;
             TriggeringBuilding = null;
             TriggeringStat = null;
             TriggeringStatValue = 0;
@@ -24,22 +23,29 @@ namespace MiniCities.Definitions.Ability
 
         private AbilityContext(
             GameContext game,
-            BuildingRuntime owner,
+            IAbilityActivator activator,
             BuildingRuntime triggeringBuilding,
             CityStat? triggeringStat,
             float triggeringStatValue)
         {
             Game = game;
-            Owner = owner;
+            Activator = activator;
             TriggeringBuilding = triggeringBuilding;
             TriggeringStat = triggeringStat;
             TriggeringStatValue = triggeringStatValue;
         }
 
-        public static AbilityContext ForBuilding(GameContext game, BuildingRuntime owner, BuildingRuntime triggeringBuilding) =>
-            new(game, owner, triggeringBuilding, null, 0f);
+        public static AbilityContext TriggeredByBuilding(
+            GameContext game, 
+            IAbilityActivator activator, 
+            BuildingRuntime triggeringBuilding) =>
+            new(game, activator, triggeringBuilding, null, 0f);
 
-        public static AbilityContext ForCityStat(GameContext game, BuildingRuntime owner, CityStat stat, float value) =>
-            new(game, owner, null, stat, value);
+        public static AbilityContext TriggeredByCityStat(
+            GameContext game, 
+            IAbilityActivator activator, 
+            CityStat stat, 
+            float value) =>
+            new(game, activator, null, stat, value);
     }
 }

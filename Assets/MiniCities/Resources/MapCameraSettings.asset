@@ -15,7 +15,7 @@ MonoBehaviour:
   startingRotation: {x: 45, y: 45}
   rotationSensitivity: 0.5
   minPitch: 15
-  maxPitch: 90
+  maxPitch: 85
   startingDistance: 9
   zoomSensitivity: 0.5
   minDistance: 6

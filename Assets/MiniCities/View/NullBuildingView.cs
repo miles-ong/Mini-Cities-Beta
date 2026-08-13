@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace MiniCities.View
 {
-    public class NullBuildingView : BlockView
+    public class NullBuildingView : BuildingView
     {
         [SerializeField] private TMP_Text displayName;
         

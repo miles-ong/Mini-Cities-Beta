@@ -39,7 +39,7 @@ namespace MiniCities.Runtime.Blueprint
         {
             var abilityText = Abilities == null || Abilities.Count == 0
                 ? "No abilities."
-                : string.Join("\n", Abilities.Select(AbilityDescriptionUtility.Describe));
+                : string.Join("\n", Abilities.Select(AbilityUtility.Describe));
 
             if (PlacementRules == null || PlacementRules.Count == 0) return abilityText;
 

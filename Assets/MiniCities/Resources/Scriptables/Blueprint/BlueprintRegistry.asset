@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Core.Definitions.Blueprint.BlueprintRegistry
   blueprints:
   - {fileID: 11400000, guid: eb800a011b417f94ca37e4c501da9261, type: 2}
+  - {fileID: 11400000, guid: 487bab250cece7d4b8ef0ae66da16d68, type: 2}
+  - {fileID: 11400000, guid: cacd4d6b7c046d546919a7fc9e37e0c9, type: 2}
+  - {fileID: 11400000, guid: cd1a31235ac61ae4f9e6abb47ec0c937, type: 2}

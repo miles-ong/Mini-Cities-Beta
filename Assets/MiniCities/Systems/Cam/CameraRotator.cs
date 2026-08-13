@@ -36,8 +36,8 @@ namespace MiniCities.Systems.Cam
             {
                 _rotating = isPressed;
                 
-                if (_rotating) EventBus<CameraRotationStartedEvent>.Fire(new CameraRotationStartedEvent());
-                else EventBus<CameraRotationEndedEvent>.Fire(new CameraRotationEndedEvent());
+                if (_rotating) GameEventBus<CameraRotationStartedEvent>.Fire(new CameraRotationStartedEvent());
+                else GameEventBus<CameraRotationEndedEvent>.Fire(new CameraRotationEndedEvent());
             }
 
             if (!_rotating) return;

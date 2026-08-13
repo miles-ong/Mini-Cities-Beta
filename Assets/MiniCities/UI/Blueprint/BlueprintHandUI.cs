@@ -49,10 +49,10 @@ namespace MiniCities.UI.Blueprint
             _originalScale = blueprintUI.transform.localScale;
             _originalHandPosition = transform.localPosition;
 
-            EventBus<BlueprintDrawnEvent>.OnEvent += OnBlueprintDrawn;
-            EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
-            EventBus<CameraRotationStartedEvent>.OnEvent += OnCameraRotationStarted;
-            EventBus<CameraRotationEndedEvent>.OnEvent += OnCameraRotationEnded;
+            GameEventBus<BlueprintDrawnEvent>.OnEvent += OnBlueprintDrawn;
+            GameEventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
+            GameEventBus<CameraRotationStartedEvent>.OnEvent += OnCameraRotationStarted;
+            GameEventBus<CameraRotationEndedEvent>.OnEvent += OnCameraRotationEnded;
         }
 
         private void Add(BlueprintRuntime blueprint)
@@ -102,7 +102,7 @@ namespace MiniCities.UI.Blueprint
             _selected = blueprint;
             UpdateBlueprintPositions();
             
-            EventBus<BlueprintSelectedEvent>.Fire(new BlueprintSelectedEvent(blueprint.Blueprint));
+            GameEventBus<BlueprintSelectedEvent>.Fire(new BlueprintSelectedEvent(blueprint.Blueprint));
         }
 
         private void UpdateBlueprintPositions()

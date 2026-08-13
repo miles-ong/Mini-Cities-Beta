@@ -36,6 +36,8 @@ namespace MiniCities.Systems.City
         private CityStats _baseStats;
         private CityStats _totalStats;
 
+        private static int _placementIndex;
+
         [CreateProperty]
         public int Population => _totalStats.Population;
         [CreateProperty]
@@ -47,8 +49,9 @@ namespace MiniCities.Systems.City
 
         private void Start()
         {
-            EventBus<BuildingPlacedEvent>.OnEvent += OnBuildingPlaced;
-            EventBus<BuildingRemovedEvent>.OnEvent += OnBuildingRemoved;
+            GameEventBus<BuildingPlacedEvent>.OnEvent += OnBuildingPlaced;
+            GameEventBus<BuildingRemovedEvent>.OnEvent += OnBuildingRemoved;
+            GameEventQueue.OnDispatch += RecalculateCity;
         }
 
         public void SetContext(GameContext context) => _abilityDispatcher.SetContext(context);
@@ -77,22 +80,20 @@ namespace MiniCities.Systems.City
             _totalStats = _baseStats;
             
             foreach (var cb in _cityBuffIndex.Buffs) _totalStats.ModifyStat(cb.Stat, cb.Operation, cb.Amount);
-            
-            EventQueue.OnDrained -= RecalculateCity;
         }
         
         private void OnBuildingPlaced(BuildingPlacedEvent e)
         {
             var building = e.Building;
+            building.SetPlacementOrder(_placementIndex++);
             _activeBuildings.Add(building);
             building.MarkDirty();
             MarkNeighborsDirty(building.Location);
 
             _abilityDispatcher.QueueWhenPlaced(building);
-            _abilityDispatcher.QueueWhenever(AbilityTriggerType.WheneverBuildingPlaced, building, _activeBuildings);
+            _abilityDispatcher.QueueWheneverBuilding(AbilityTriggerType.WheneverBuildingPlaced, building, _activeBuildings);
             
-            EventQueue.OnDrained += RecalculateCity;
-            EventQueue.Pump();
+            StartCoroutine(GameEventQueue.Pump(0.3f, 0.05f));
         }
 
         private void OnBuildingRemoved(BuildingRemovedEvent e)
@@ -110,15 +111,16 @@ namespace MiniCities.Systems.City
             _buildingBuffIndex.RemoveReceiver(building);
             _activeBuildings.Remove(building);
 
-            _abilityDispatcher.QueueWhenever(AbilityTriggerType.WheneverBuildingRemoved, building, _activeBuildings);
+            _abilityDispatcher.QueueWheneverBuilding(AbilityTriggerType.WheneverBuildingRemoved, building, _activeBuildings);
 
             MarkNeighborsDirty(building.Location);
         }
 
         private void MarkNeighborsDirty(Vector3Int location)
         {
-            foreach (var n in mapManager.GetBlocksInScope<BuildingRuntime>(location, GridScope.Nearby, GridLevel.Level))
-                n.MarkDirty();
+            var neighbors = mapManager.GetBlocksInScope<BuildingRuntime>(location, GridScope.Nearby, GridLevel.Level);
+
+            foreach (var neighbor in neighbors) neighbor.MarkDirty();
         }
         
         private void RecalculateDirtyBuildings()
@@ -135,10 +137,14 @@ namespace MiniCities.Systems.City
         {
             building.TotalStats.CopyFrom(building.BaseStats);
             
-            foreach (var b in GetOrderedBuildingBuffs(building)) building.TotalStats.Modify(b.Stat, b.Operation, b.Amount);
-
+            foreach (var b in GetOrderedBuildingBuffs(building)) 
+                building.TotalStats.Modify(b.Stat, b.Operation, b.Amount);
+            
             var newC = ComputeCityContribution(building.TotalStats);
             var oldC = _lastContribution.GetValueOrDefault(building);
+            
+            ShowContributionChanges(building, oldC, newC);
+            
             ApplyContributionDelta(oldC, newC);
             _lastContribution[building] = newC;
             
@@ -149,6 +155,7 @@ namespace MiniCities.Systems.City
             _buildingBuffIndex
                 .GetReceiverBuffs(building)
                 .Concat(_buildingBuffIndex.GetLocationalBuffs(building.Location))
+                .Where(b => b.Condition == null || b.Condition(building))
                 .OrderBy(b => b.Stat)
                 .ThenBy(b => b.Operation);
 
@@ -169,6 +176,20 @@ namespace MiniCities.Systems.City
             _baseStats.ModifyStat(CityStat.Population, Operation.Add, newC.Population - oldC.Population);
             _baseStats.ModifyStat(CityStat.Culture, Operation.Add, newC.Culture - oldC.Culture);
             _baseStats.ModifyStat(CityStat.Pollution, Operation.Add, newC.Pollution - oldC.Pollution);
+        }
+        
+        private static void ShowContributionChanges(
+            BuildingRuntime building,
+            CityContribution oldC,
+            CityContribution newC)
+        {
+            var populationDelta = newC.Population - oldC.Population;
+            var cultureDelta = newC.Culture - oldC.Culture;
+            var pollutionDelta = newC.Pollution - oldC.Pollution;
+
+            if (populationDelta != 0) building.ShowStatChange(BuildingStat.Population, populationDelta);
+            if (cultureDelta != 0) building.ShowStatChange(BuildingStat.Culture, cultureDelta);
+            if (pollutionDelta != 0) building.ShowStatChange(BuildingStat.Pollution, pollutionDelta);
         }
 
         private static CityContribution ComputeCityContribution(BuildingStats stats) => new()

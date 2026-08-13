@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MiniCities.Definitions.Blueprint
 {
@@ -22,7 +23,7 @@ namespace MiniCities.Definitions.Blueprint
             BlueprintCategory.Civic => new Color32(121, 136, 151, 255),
             BlueprintCategory.Initiative => new Color32(217, 56, 157, 255),
             BlueprintCategory.Disaster => new Color32(255, 77, 75, 255),
-            _ => Color.white
+            _ => throw new ArgumentException($"{category} not handled!")
         };
     }
 }

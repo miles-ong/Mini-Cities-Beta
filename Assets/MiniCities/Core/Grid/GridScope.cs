@@ -1,4 +1,7 @@
-﻿namespace MiniCities.Core.Grid
+﻿using System;
+using UnityEngine;
+
+namespace MiniCities.Core.Grid
 {
     public enum GridScope
     {
@@ -16,7 +19,7 @@
             GridScope.Nearby => "nearby",
             GridScope.All => "in a city with",
             GridScope.On => "on",
-            _ => scope.ToString()
+            _ => throw new ArgumentException($"{scope} not handled!")
         };
     }
 }

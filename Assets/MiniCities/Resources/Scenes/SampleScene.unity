@@ -709,7 +709,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Runtime.Game.GameManager
   cityManager: {fileID: 2145804627}
   mapManager: {fileID: 1036732723}
-  testMap: {fileID: 11400000, guid: 9d9faf812efc8c3409a025ecb810b6ab, type: 2}
+  testMap: {fileID: 11400000, guid: 45a5a6f11587a6d4a869da21f7a05892, type: 2}
   blueprintHand: {fileID: 1941017103}
   blueprintHandUI: {fileID: 1117598514}
   testFile: {fileID: 11400000, guid: c95ffd06ad21e25429bc0b8a0d708b93, type: 2}

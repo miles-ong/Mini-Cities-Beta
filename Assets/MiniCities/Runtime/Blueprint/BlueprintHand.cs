@@ -16,7 +16,7 @@ namespace MiniCities.Runtime.Blueprint
 
         private void Start()
         {
-            EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
+            GameEventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
         public void LoadFile(BlueprintFileRuntime file) => _file = file;
@@ -34,7 +34,7 @@ namespace MiniCities.Runtime.Blueprint
             {
                 var blueprint = drawFunction();
                 _hand.Add(blueprint);
-                EventBus<BlueprintDrawnEvent>.Fire(new BlueprintDrawnEvent(blueprint));
+                GameEventBus<BlueprintDrawnEvent>.Fire(new BlueprintDrawnEvent(blueprint));
 
                 return true;
             }

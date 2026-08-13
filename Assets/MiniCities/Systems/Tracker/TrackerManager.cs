@@ -21,8 +21,8 @@ namespace MiniCities.Systems.Tracker
             selectionTracker.Initialize(_raycaster);
             placementTracker.Initialize(_raycaster, mapManager);
 
-            EventBus<BlueprintSelectedEvent>.OnEvent += OnBlueprintSelected;
-            EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
+            GameEventBus<BlueprintSelectedEvent>.OnEvent += OnBlueprintSelected;
+            GameEventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
         private void OnBlueprintSelected(BlueprintSelectedEvent e)

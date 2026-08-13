@@ -1,13 +1,36 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 using MiniCities.Definitions.Ability.Trigger;
 using MiniCities.Runtime.Ability;
+using MiniCities.Runtime.Block;
 
 namespace MiniCities.Definitions.Ability
 {
-    public static class AbilityDescriptionUtility
+    public static class AbilityUtility
     {
+        #region Condition & Effect
+
+        public static BuildingRuntime ParseBuilding(AbilityContext context, bool queryTriggeringBuilding)
+        {
+            if (queryTriggeringBuilding)
+            {
+                return context.TriggeringBuilding ??
+                    throw new InvalidOperationException("TriggeringBuilding cannot be null!");
+            }
+            if (context.Activator is BuildingRuntime building)
+            {
+                return building;
+            }
+            
+            throw new InvalidOperationException($"If QueryTriggeringBuilding is set to false, Activator must be a building");
+        }
+        
+        #endregion
+        
+        #region Description
+        
         public static string Describe(AbilityRuntime runtime) =>
             Describe(runtime.Trigger, runtime.Conditions, runtime.Effects);
         public static string Describe(AbilityDefinition definition) =>
@@ -49,5 +72,7 @@ namespace MiniCities.Definitions.Ability
 
             return $"Whenever a building is {action}";
         }
+        
+        #endregion
     }
 }

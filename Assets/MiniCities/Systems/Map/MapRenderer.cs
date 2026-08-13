@@ -72,6 +72,7 @@ namespace MiniCities.Systems.Map
             }
             
             view.SetLayer(LayerMask.NameToLayer("Placeable"));
+            block.SetView(view);
             
             return view;
         }

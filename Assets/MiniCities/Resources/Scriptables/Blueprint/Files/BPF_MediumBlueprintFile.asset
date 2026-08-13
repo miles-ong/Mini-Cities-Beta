@@ -17,3 +17,5 @@ MonoBehaviour:
   blueprintCounts:
   - blueprint: {fileID: 11400000, guid: eb800a011b417f94ca37e4c501da9261, type: 2}
     count: 5
+  - blueprint: {fileID: 11400000, guid: 487bab250cece7d4b8ef0ae66da16d68, type: 2}
+    count: 0

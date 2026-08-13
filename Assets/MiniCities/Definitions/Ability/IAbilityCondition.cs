@@ -4,6 +4,7 @@ using MiniCities.Core.Grid;
 using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint;
 using MiniCities.Runtime.Block;
+using UnityEngine;
 
 namespace MiniCities.Definitions.Ability
 {
@@ -21,10 +22,11 @@ namespace MiniCities.Definitions.Ability
         public BlueprintCategory category;
         public GridScope scope;
         public GridLevel level;
+        public bool queryTriggeringBuilding;
         public bool includeSelf;
 
-        public bool Evaluate(AbilityContext ctx) => ctx.Game.Map.GetBlocksInScope<BuildingRuntime>(
-            ctx.Owner.Location,
+        public bool Evaluate(AbilityContext context) => context.Game.Map.GetBlocksInScope<BuildingRuntime>(
+            AbilityUtility.ParseBuilding(context, queryTriggeringBuilding).Location,
             scope,
             level,
             includeSelf)
@@ -35,8 +37,8 @@ namespace MiniCities.Definitions.Ability
             var subject = amount == 1
                 ? $"a {category} building"
                 : $"{amount} {category} buildings";
-
-            return $"{scope.ToDescriptionText()} {subject}";
+            
+            return $"{scope.ToDescriptionText()} {(queryTriggeringBuilding ? subject : "this building")}";
         }
 
         public IAbilityCondition Clone() => new BlueprintCategoryInRange()
@@ -45,6 +47,7 @@ namespace MiniCities.Definitions.Ability
             category = category,
             scope = scope,
             level = level,
+            queryTriggeringBuilding =  queryTriggeringBuilding,
             includeSelf = includeSelf,
         };
     }
@@ -56,13 +59,15 @@ namespace MiniCities.Definitions.Ability
         public BlockGroup group;
         public GridScope scope;
         public GridLevel level;
+        public bool queryTriggeringBuilding;
         public bool includeSelf;
 
-        public bool Evaluate(AbilityContext ctx) => ctx.Game.Map.GetBlocksInScope(
-            ctx.Owner.Location,
+        public bool Evaluate(AbilityContext context) => context.Game.Map.GetBlocksInScope(
+            AbilityUtility.ParseBuilding(context, queryTriggeringBuilding).Location,
             scope,
             level,
-            includeSelf).Count(b => b.Definition.group == group) >= amount;
+            includeSelf)
+            .Count(b => b.Definition.group == group) >= amount;
 
         public string Describe()
         {
@@ -70,7 +75,7 @@ namespace MiniCities.Definitions.Ability
                 ? $"a {group} block"
                 : $"{amount} {group} blocks";
 
-            return $"{scope.ToDescriptionText()} {subject}";
+            return $"{scope.ToDescriptionText()} {(queryTriggeringBuilding ? subject : "this building")}";
         }
 
         public IAbilityCondition Clone() => new BlockGroupInRange()
@@ -79,6 +84,7 @@ namespace MiniCities.Definitions.Ability
             group = group,
             scope = scope,
             level = level,
+            queryTriggeringBuilding =  queryTriggeringBuilding,
             includeSelf = includeSelf
         };
     }
@@ -90,13 +96,15 @@ namespace MiniCities.Definitions.Ability
         public BlockDefinition block;
         public GridScope scope;
         public GridLevel level;
+        public bool queryTriggeringBuilding;
         public bool includeSelf;
 
         public bool Evaluate(AbilityContext ctx) => ctx.Game.Map.GetBlocksInScope(
-            ctx.Owner.Location,
+            AbilityUtility.ParseBuilding(ctx, queryTriggeringBuilding).Location,
             scope,
             level,
-            includeSelf).Count(b => b.Definition == block) >= amount;
+            includeSelf)
+            .Count(b => b.Definition == block) >= amount;
         
         public string Describe()
         {
@@ -104,7 +112,7 @@ namespace MiniCities.Definitions.Ability
                 ? $"a {block.displayName} block"
                 : $"{amount} {block.displayName} blocks";
 
-            return $"{scope.ToDescriptionText()} {subject}";
+            return $"{scope.ToDescriptionText()} {(queryTriggeringBuilding ? subject : "this building")}";
         }
 
         public IAbilityCondition Clone() => new BlockInRange()
@@ -113,30 +121,8 @@ namespace MiniCities.Definitions.Ability
             block = block,
             scope = scope,
             level = level,
+            queryTriggeringBuilding =  queryTriggeringBuilding,
             includeSelf = includeSelf
-        };
-    }
-
-    [Serializable]
-    public sealed class BlockInRangeOfBuildingPlaced : IAbilityCondition
-    {
-        public GridScope scope;
-        public GridLevel level;
-
-        public bool Evaluate(AbilityContext ctx)
-        {
-            var buildings =
-                ctx.Game.Map.GetBlocksInScope<BuildingRuntime>(ctx.TriggeringBuilding.Location, scope, level, false);
-
-            return buildings.Contains(ctx.Owner);
-        }
-
-        public string Describe() => "i dont care rn";
-
-        public IAbilityCondition Clone() => new BlockInRangeOfBuildingPlaced()
-        {
-            scope = scope,
-            level = level,
         };
     }
 }

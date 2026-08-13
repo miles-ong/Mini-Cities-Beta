@@ -32,7 +32,7 @@ namespace MiniCities.Definitions.Blueprint
         {
             var abilityText = abilities == null || abilities.Length == 0
                 ? "No abilities."
-                : string.Join("\n", abilities.Select(AbilityDescriptionUtility.Describe));
+                : string.Join("\n", abilities.Select(AbilityUtility.Describe));
 
             if (placementRules == null || placementRules.Length == 0) return abilityText;
 

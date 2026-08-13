@@ -20,7 +20,7 @@ namespace MiniCities.Systems.Map
 
         private void Start()
         {
-            EventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
+            GameEventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
         public void LoadMap(MapDefinition definition)
@@ -59,7 +59,18 @@ namespace MiniCities.Systems.Map
             renderer.UpdateBlock(coord, block);
         }
 
-        public HashSet<BlockRuntime> GetBlocksInScope(Vector3Int coord, GridScope scope, GridLevel level, bool includeSelf = false) =>
+        public List<Vector3Int> GetLocationsInScope(
+            Vector3Int coord, 
+            GridScope scope, 
+            GridLevel level,
+            bool includeSelf = false) =>
+            _currentMap.Grid.GetLocationsInScope(coord, scope, level, includeSelf);
+
+        public HashSet<BlockRuntime> GetBlocksInScope(
+            Vector3Int coord, 
+            GridScope scope, 
+            GridLevel level, 
+            bool includeSelf = false) =>
             _currentMap.Grid.GetItemsInScope(coord, scope, level, includeSelf);
 
         public HashSet<T> GetBlocksInScope<T>(
@@ -85,7 +96,7 @@ namespace MiniCities.Systems.Map
             
             SetBlock(e.Location, building);
             
-            EventBus<BuildingPlacedEvent>.Fire(new BuildingPlacedEvent(building));
+            GameEventBus<BuildingPlacedEvent>.Fire(new BuildingPlacedEvent(building));
         }
     }
 }

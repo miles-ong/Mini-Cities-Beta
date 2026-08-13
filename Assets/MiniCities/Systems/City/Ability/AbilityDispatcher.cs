@@ -5,7 +5,6 @@ using MiniCities.Core.Event;
 using MiniCities.Definitions.Ability;
 using MiniCities.Runtime.Ability;
 using MiniCities.Runtime.Block;
-using MiniCities.Systems.City.Stat;
 using MiniCities.Systems.Game;
 using UnityEngine;
 
@@ -15,14 +14,17 @@ namespace MiniCities.Systems.City.Ability
     {
         private readonly struct Activation
         {
-            public readonly BuildingRuntime Owner;
-            public readonly int AbilityIndex;
+            public readonly IAbilityActivator Activator;
+            public readonly int Index;
             public readonly AbilityRuntime Ability;
 
-            public Activation(BuildingRuntime owner, int abilityIndex, AbilityRuntime ability)
+            public Activation(
+                IAbilityActivator activator, 
+                int index,
+                AbilityRuntime ability)
             {
-                Owner = owner;
-                AbilityIndex = abilityIndex;
+                Activator = activator;
+                Index = index;
                 Ability = ability;
             }
         }
@@ -33,68 +35,65 @@ namespace MiniCities.Systems.City.Ability
 
         public void QueueWhenPlaced(BuildingRuntime placed)
         {
-            var batch = placed.GetAbilities(AbilityTriggerType.WhenPlaced)
+            var activations = placed.GetAbilities(AbilityTriggerType.WhenPlaced)
                 .Select(ia => new Activation(placed, ia.index, ia.ability))
                 .ToList();
-
-            Debug.Log($"Queueing {batch.Count} {AbilityTriggerType.WhenPlaced} abilities!");
-            Queue(batch, (game, owner) => new AbilityContext(game, owner));
+            
+            Debug.Log($"Queueing {activations.Count} {AbilityTriggerType.WhenPlaced} abilities!");
+            QueueAbilities(activations, (game, owner) => new AbilityContext(game, owner));
         }
 
-        public void QueueWhenever(
-            AbilityTriggerType type, 
-            BuildingRuntime triggeringBuilding,
-            IEnumerable<BuildingRuntime> activeBuildings)
+        public void QueueWheneverBuilding(
+            AbilityTriggerType type,
+            BuildingRuntime placed,
+            IEnumerable<IAbilityActivator> activeActivators)
         {
-            var batch = new List<Activation>();
+            var activations = new List<Activation>();
 
-            foreach (var o in activeBuildings)
+            foreach (var activator in activeActivators)
             {
-                if (o == triggeringBuilding) continue; // skip the triggering building's whenever placed ability
+                if (activator is BuildingRuntime building && building == placed) continue;
                 
-                foreach (var (i, a) in o.GetAbilities(type))
-                    if (a.Trigger.MatchesBuilding(triggeringBuilding)) batch.Add(new Activation(o, i, a));
+                foreach (var (index, ability) in activator.GetAbilities(type))
+                    if (ability.Trigger.MatchesBuilding(placed)) 
+                        activations.Add(new Activation(activator, index, ability));
             }
-
-            Debug.Log($"Queueing {batch.Count} {type} abilities!");
-            Queue(batch, (game, owner) => AbilityContext.ForBuilding(game, owner, triggeringBuilding));
+            
+            Debug.Log($"Queueing {activations.Count} {type} abilities!");
+            QueueAbilities(activations, (game, owner) => AbilityContext.TriggeredByBuilding(game, owner, placed));
         }
 
-        public void QueueCityStatReached(CityStat stat, float value, IEnumerable<BuildingRuntime> activeBuildings)
+        private void QueueAbilities(
+            List<Activation> activations,
+            Func<GameContext, IAbilityActivator, AbilityContext> contextBuilder)
         {
-            var batch = new List<Activation>();
-            
-            foreach (var o in activeBuildings)
-            foreach (var (i, a) in o.GetAbilities(AbilityTriggerType.WheneverCityStatReached))
-                if (a.Trigger.MatchesStat(stat, value)) batch.Add(new Activation(o, i, a));
-            
-            Queue(batch, (game, owner) => AbilityContext.ForCityStat(game, owner, stat, value));
-        }
+            if (activations.Count == 0) return;
 
-        private void Queue(List<Activation> batch, Func<GameContext, BuildingRuntime, AbilityContext> buildContext)
-        {
-            if (batch.Count == 0) return;
+            if (_context == null)
+                throw new InvalidOperationException($"{nameof(QueueAbilities)} called before {nameof(SetContext)}!");
 
-            if (_context == null) throw new InvalidOperationException($"{nameof(Queue)} called before {nameof(SetContext)}.");
-            
-            batch.Sort((a, b) =>
-            {
-                var byCategory = a.Owner.Blueprint.Category.CompareTo(b.Owner.Blueprint.Category);
-
-                if (byCategory != 0) return byCategory;
-
-                var byPlacement = a.Owner.PlacementOrder.CompareTo(b.Owner.PlacementOrder);
-
-                return byPlacement != 0 ? byPlacement : a.AbilityIndex.CompareTo(b.AbilityIndex);
-            });
+            var sortedActivations = activations
+                .OrderBy(a => a.Activator.GetPriorityValue())
+                .ThenBy(a => a.Index);
 
             var game = _context.Value;
 
-            foreach (var a in batch)
+            foreach (var activation in sortedActivations)
             {
-                var ctx = buildContext(game, a.Owner);
-                EventQueue.Enqueue(() => a.Ability.Activate(ctx));
+                var context = contextBuilder(game, activation.Activator);
+                GameEventQueue.Enqueue(() => activation.Ability.Activate(context));
             }
         }
+
+        /*public void QueueCityStatReached(CityStat stat, float value, IEnumerable<BuildingRuntime> activeBuildings)
+        {
+            var batch = new List<Activation>();
+
+            foreach (var o in activeBuildings)
+            foreach (var (i, a) in o.GetAbilities(AbilityTriggerType.WheneverCityStatReached))
+                if (a.Trigger.MatchesStat(stat, value)) batch.Add(new Activation(o, i, a));
+
+            QueueAbilities(batch, (game, owner) => AbilityContext.ForCityStat(game, owner, stat, value));
+        }*/
     }
 }
