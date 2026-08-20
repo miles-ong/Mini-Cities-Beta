@@ -35,13 +35,8 @@ namespace MiniCities.Definitions.Ability
         }
 
         public string Describe() => $"{operation.ToDescriptionText(amount)} {stat}";
-        
-        public IAbilityEffect Clone() => new ModifyBuildingBaseStat()
-        {
-            stat = stat,
-            operation = operation,
-            amount = amount
-        };
+
+        public IAbilityEffect Clone() => (ModifyBuildingBaseStat)MemberwiseClone();
     }
 
     [Serializable]
@@ -55,23 +50,21 @@ namespace MiniCities.Definitions.Ability
 
         public string Describe() => $"{operation.ToDescriptionText(amount)} {stat}";
 
-        public IAbilityEffect Clone() => new ModifyCityBaseStat()
-        {
-            stat = stat,
-            operation = operation,
-            amount = amount
-        };
+        public IAbilityEffect Clone() => (ModifyCityBaseStat)MemberwiseClone();
     }
 
     [Serializable]
     public class BuffBuildingStatInRange : IAbilityEffect
     {
+        // Always Drawn
         public BuildingStat stat;
         public Operation operation;
         public float amount;
         public GridScope scope;
         public GridLevel level;
         public bool includeSelf;
+        
+        // Exclusive Options
         public bool buffByCategory;
         public BlueprintCategory targetCategory;
         public bool buffByBuilding;
@@ -100,20 +93,7 @@ namespace MiniCities.Definitions.Ability
             return string.Empty;
         }
 
-        public IAbilityEffect Clone() => new BuffBuildingStatInRange()
-        {
-            stat = stat,
-            operation = operation,
-            amount = amount,
-            scope = scope,
-            level = level,
-            includeSelf = includeSelf,
-            buffByCategory = buffByCategory,
-            targetCategory = targetCategory,
-            buffByBuilding = buffByBuilding,
-            targetBuilding = targetBuilding
-        };
-
+        public IAbilityEffect Clone() => (BuffBuildingStatInRange)MemberwiseClone();
         
         [CanBeNull] private Predicate<BuildingRuntime> GetCondition()
         {
@@ -144,9 +124,6 @@ namespace MiniCities.Definitions.Ability
 
         public string Describe() => $"draw {amount} blueprint{(amount > 1 ? "s" : "")}";
 
-        public IAbilityEffect Clone() => new DrawBlueprint()
-        {
-            amount = amount
-        };
+        public IAbilityEffect Clone() => (DrawBlueprint)MemberwiseClone();
     }
 }

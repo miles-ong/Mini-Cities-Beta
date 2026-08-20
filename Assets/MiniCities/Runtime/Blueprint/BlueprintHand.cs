@@ -14,12 +14,12 @@ namespace MiniCities.Runtime.Blueprint
         private BlueprintFileRuntime _file;
         private readonly List<BlueprintRuntime> _hand = new();
 
-        private void Start()
+        private void Awake()
         {
             GameEventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
-        public void LoadFile(BlueprintFileRuntime file) => _file = file;
+        public void SetFile(BlueprintFileRuntime file) => _file = file;
 
         public bool DrawBlueprint() => TryDrawBlueprint(() => _file.Draw());
 

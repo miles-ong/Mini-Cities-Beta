@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MiniCities.Definitions.Map;
 using UnityEditor;
@@ -7,6 +8,13 @@ using UnityEngine;
 [CustomEditor(typeof(MapPoolDefinition))]
 public class MapPoolEditor : RegistryEditor<MapPoolDefinition, MapRegistry>
 {
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        Target.maps ??= new List<MapDefinition>();
+    }
+    
     public override void OnInspectorGUI()
     {
         if (Registry is null) return;
@@ -31,7 +39,7 @@ public class MapPoolEditor : RegistryEditor<MapPoolDefinition, MapRegistry>
         
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
-        EditorGUILayout.LabelField($"Total Enabled Maps: {Target.maps.Items.Count}");
+        EditorGUILayout.LabelField($"Total Enabled Maps: {Target.maps.Count}");
         
         EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
 
@@ -80,5 +88,7 @@ public class MapPoolEditor : RegistryEditor<MapPoolDefinition, MapRegistry>
 
             MarkDirty();
         }
+
+        if (enableAll || disableAll) MarkDirty();
     }
 }

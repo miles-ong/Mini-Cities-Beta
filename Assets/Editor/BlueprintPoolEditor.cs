@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using MiniCities.Core.Pool;
 using MiniCities.Definitions.Blueprint;
 using UnityEditor;
 using UnityEngine;
@@ -12,7 +12,7 @@ public class BlueprintPoolEditor : RegistryEditor<BlueprintPoolDefinition, Bluep
     {
         base.OnEnable();
 
-        Target.blueprints ??= new Pool<BlueprintDefinition>();
+        Target.blueprints ??= new List<BlueprintDefinition>();
     }
 
     public override void OnInspectorGUI()
@@ -39,7 +39,7 @@ public class BlueprintPoolEditor : RegistryEditor<BlueprintPoolDefinition, Bluep
         
         EditorGUILayout.Space(EditorStylesUtility.MediumSpacing);
         
-        EditorGUILayout.LabelField($"Total Enabled Blueprints: {Target.blueprints.Items.Count}");
+        EditorGUILayout.LabelField($"Total Enabled Blueprints: {Target.blueprints.Count}");
         
         EditorGUILayout.Space(EditorStylesUtility.SmallSpacing);
 

@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7975f05d6c7c4cacabdc0558bf4ed6ac, type: 3}
-  m_Name: BPP_MainBlueprintPool
+  m_Name: BPP_Main
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Definitions.Blueprint.BlueprintPoolDefinition
   blueprints:
-    items:
-    - {fileID: 11400000, guid: eb800a011b417f94ca37e4c501da9261, type: 2}
-    - {fileID: 11400000, guid: 487bab250cece7d4b8ef0ae66da16d68, type: 2}
-    - {fileID: 11400000, guid: cacd4d6b7c046d546919a7fc9e37e0c9, type: 2}
-    - {fileID: 11400000, guid: cd1a31235ac61ae4f9e6abb47ec0c937, type: 2}
+  - {fileID: 11400000, guid: 487bab250cece7d4b8ef0ae66da16d68, type: 2}
+  - {fileID: 11400000, guid: cd1a31235ac61ae4f9e6abb47ec0c937, type: 2}
+  - {fileID: 11400000, guid: eb800a011b417f94ca37e4c501da9261, type: 2}
+  - {fileID: 11400000, guid: cacd4d6b7c046d546919a7fc9e37e0c9, type: 2}

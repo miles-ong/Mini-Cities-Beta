@@ -2,10 +2,10 @@ using MiniCities.Systems.City;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace MiniCities.UI
+namespace MiniCities.UI.Controllers
 {
     [RequireComponent(typeof(PanelRenderer))]
-    public class CityPanelRenderer : MonoBehaviour
+    public class CityPanelController : MonoBehaviour
     {
         [SerializeField] private CityManager cityManager;
 

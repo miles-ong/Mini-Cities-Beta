@@ -1,5 +1,6 @@
 ﻿using MiniCities.Runtime.Block;
 using MiniCities.Runtime.Blueprint;
+using MiniCities.Systems.Game;
 using UnityEngine;
 
 namespace MiniCities.Core.Event
@@ -8,7 +9,19 @@ namespace MiniCities.Core.Event
     {
     }
     
+    #region Game Events
+
+    public readonly struct LevelSelectedEvent : IEvent
+    {
+        public LevelContext Level { get; }
+
+        public LevelSelectedEvent(LevelContext level) => Level = level;
+    }
+    
+    #endregion
+    
     #region Blueprint Events
+    
     public readonly struct BlueprintUsedEvent : IEvent 
     {
         public BlueprintRuntime Blueprint { get; }
@@ -34,6 +47,7 @@ namespace MiniCities.Core.Event
 
         public BlueprintDrawnEvent(BlueprintRuntime blueprint) => Blueprint = blueprint;
     }
+    
     #endregion
 
     #region Building Events

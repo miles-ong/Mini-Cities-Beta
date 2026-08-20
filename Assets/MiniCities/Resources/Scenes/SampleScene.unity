@@ -707,13 +707,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14d505a93e464d039e64d22e5714c525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MiniCities.Runtime.Game.GameManager
+  gameSessionContext: {fileID: 11400000, guid: d2ece941a0dae484f8e7ebdb9ddfcb19, type: 2}
+  blueprintHand: {fileID: 1941017103}
   cityManager: {fileID: 2145804627}
   mapManager: {fileID: 1036732723}
-  testMap: {fileID: 11400000, guid: 45a5a6f11587a6d4a869da21f7a05892, type: 2}
-  blueprintHand: {fileID: 1941017103}
   blueprintHandUI: {fileID: 1117598514}
-  testFile: {fileID: 11400000, guid: c95ffd06ad21e25429bc0b8a0d708b93, type: 2}
-  seed: 100
 --- !u!1 &946828735
 GameObject:
   m_ObjectHideFlags: 0

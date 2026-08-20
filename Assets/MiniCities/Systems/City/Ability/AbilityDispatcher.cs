@@ -29,9 +29,9 @@ namespace MiniCities.Systems.City.Ability
             }
         }
 
-        private GameContext? _context;
+        private GameSessionContext _context;
 
-        public void SetContext(GameContext context) => _context = context;
+        public void SetContext(GameSessionContext context) => _context = context;
 
         public void QueueWhenPlaced(BuildingRuntime placed)
         {
@@ -65,7 +65,7 @@ namespace MiniCities.Systems.City.Ability
 
         private void QueueAbilities(
             List<Activation> activations,
-            Func<GameContext, IAbilityActivator, AbilityContext> contextBuilder)
+            Func<GameSessionContext, IAbilityActivator, AbilityContext> contextBuilder)
         {
             if (activations.Count == 0) return;
 
@@ -76,11 +76,9 @@ namespace MiniCities.Systems.City.Ability
                 .OrderBy(a => a.Activator.GetPriorityValue())
                 .ThenBy(a => a.Index);
 
-            var game = _context.Value;
-
             foreach (var activation in sortedActivations)
             {
-                var context = contextBuilder(game, activation.Activator);
+                var context = contextBuilder(_context, activation.Activator);
                 GameEventQueue.Enqueue(() => activation.Ability.Activate(context));
             }
         }

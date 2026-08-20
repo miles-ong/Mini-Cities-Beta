@@ -4,7 +4,6 @@ using MiniCities.Core.Grid;
 using MiniCities.Definitions.Block;
 using MiniCities.Definitions.Blueprint;
 using MiniCities.Runtime.Block;
-using UnityEngine;
 
 namespace MiniCities.Definitions.Ability
 {
@@ -16,113 +15,52 @@ namespace MiniCities.Definitions.Ability
     }
     
     [Serializable]
-    public sealed class BlueprintCategoryInRange : IAbilityCondition
+    public sealed class BlockInRange : IAbilityCondition
     {
+        // Always Drawn
         public int amount;
-        public BlueprintCategory category;
         public GridScope scope;
         public GridLevel level;
-        public bool queryTriggeringBuilding;
         public bool includeSelf;
+        public bool queryTriggeringBuilding;
+        
+        // Exclusive Options
+        public bool checkByCategory;
+        public BlueprintCategory targetCategory;
+        public bool checkByGroup;
+        public BlockGroup targetGroup;
+        public bool checkByBlock;
+        public BlockDefinition targetBlock;
 
-        public bool Evaluate(AbilityContext context) => context.Game.Map.GetBlocksInScope<BuildingRuntime>(
-            AbilityUtility.ParseBuilding(context, queryTriggeringBuilding).Location,
-            scope,
-            level,
-            includeSelf)
-            .Count(b => b.Blueprint.Category == category) >= amount;
+        public bool Evaluate(AbilityContext context)
+        {
+            var location = AbilityUtility.ParseBuilding(context, queryTriggeringBuilding).Location;
+            var blocks = context.Game.Map.GetBlocksInScope(location, scope, level, includeSelf);
 
+            return blocks.Count(Matches) >= amount;
+        }
+        
         public string Describe()
         {
-            var subject = amount == 1
-                ? $"a {category} building"
-                : $"{amount} {category} buildings";
+            string subject;
+
+            if (checkByCategory) subject = amount == 1 ? $"a {targetCategory} building" : $"{amount} {targetCategory} buildings";
+            else if (checkByGroup) subject = amount == 1 ? $"a {targetGroup} block" : $"{amount} {targetGroup} blocks";
+            else if (checkByBlock) subject = amount == 1 ? $"a {targetBlock.displayName} block" : $"{amount} {targetBlock.displayName} blocks";
+            else subject = amount == 1 ? "a block" : $"{amount} blocks";
             
             return $"{scope.ToDescriptionText()} {(queryTriggeringBuilding ? subject : "this building")}";
         }
 
-        public IAbilityCondition Clone() => new BlueprintCategoryInRange()
+        public IAbilityCondition Clone() => (BlockInRange)MemberwiseClone();
+
+        private bool Matches(BlockRuntime b)
         {
-            amount = amount,
-            category = category,
-            scope = scope,
-            level = level,
-            queryTriggeringBuilding =  queryTriggeringBuilding,
-            includeSelf = includeSelf,
-        };
-    }
+            if (checkByCategory) return b.Definition == targetBlock;
+            if (checkByGroup) return b.Definition.group == targetGroup;
+            if (checkByBlock) return b is BuildingRuntime building && building.Blueprint.Category == targetCategory;
 
-    [Serializable]
-    public sealed class BlockGroupInRange : IAbilityCondition
-    {
-        public int amount;
-        public BlockGroup group;
-        public GridScope scope;
-        public GridLevel level;
-        public bool queryTriggeringBuilding;
-        public bool includeSelf;
-
-        public bool Evaluate(AbilityContext context) => context.Game.Map.GetBlocksInScope(
-            AbilityUtility.ParseBuilding(context, queryTriggeringBuilding).Location,
-            scope,
-            level,
-            includeSelf)
-            .Count(b => b.Definition.group == group) >= amount;
-
-        public string Describe()
-        {
-            var subject = amount == 1
-                ? $"a {group} block"
-                : $"{amount} {group} blocks";
-
-            return $"{scope.ToDescriptionText()} {(queryTriggeringBuilding ? subject : "this building")}";
+            return true;
         }
-
-        public IAbilityCondition Clone() => new BlockGroupInRange()
-        {
-            amount = amount,
-            group = group,
-            scope = scope,
-            level = level,
-            queryTriggeringBuilding =  queryTriggeringBuilding,
-            includeSelf = includeSelf
-        };
-    }
-
-    [Serializable]
-    public sealed class BlockInRange : IAbilityCondition
-    {
-        public int amount;
-        public BlockDefinition block;
-        public GridScope scope;
-        public GridLevel level;
-        public bool queryTriggeringBuilding;
-        public bool includeSelf;
-
-        public bool Evaluate(AbilityContext ctx) => ctx.Game.Map.GetBlocksInScope(
-            AbilityUtility.ParseBuilding(ctx, queryTriggeringBuilding).Location,
-            scope,
-            level,
-            includeSelf)
-            .Count(b => b.Definition == block) >= amount;
-        
-        public string Describe()
-        {
-            var subject = amount == 1
-                ? $"a {block.displayName} block"
-                : $"{amount} {block.displayName} blocks";
-
-            return $"{scope.ToDescriptionText()} {(queryTriggeringBuilding ? subject : "this building")}";
-        }
-
-        public IAbilityCondition Clone() => new BlockInRange()
-        {
-            amount = amount,
-            block = block,
-            scope = scope,
-            level = level,
-            queryTriggeringBuilding =  queryTriggeringBuilding,
-            includeSelf = includeSelf
-        };
     }
 }

@@ -6,13 +6,13 @@ namespace MiniCities.Definitions.Ability
 {
     public readonly struct AbilityContext
     {
-        public readonly GameContext Game;
+        public readonly GameSessionContext Game;
         public readonly IAbilityActivator Activator;
         public readonly BuildingRuntime TriggeringBuilding;
         public readonly CityStat? TriggeringStat;
         public readonly float TriggeringStatValue;
         
-        public AbilityContext(GameContext game, IAbilityActivator activator)
+        public AbilityContext(GameSessionContext game, IAbilityActivator activator)
         {
             Game = game;
             Activator = activator;
@@ -22,7 +22,7 @@ namespace MiniCities.Definitions.Ability
         }
 
         private AbilityContext(
-            GameContext game,
+            GameSessionContext game,
             IAbilityActivator activator,
             BuildingRuntime triggeringBuilding,
             CityStat? triggeringStat,
@@ -36,13 +36,13 @@ namespace MiniCities.Definitions.Ability
         }
 
         public static AbilityContext TriggeredByBuilding(
-            GameContext game, 
+            GameSessionContext game, 
             IAbilityActivator activator, 
             BuildingRuntime triggeringBuilding) =>
             new(game, activator, triggeringBuilding, null, 0f);
 
         public static AbilityContext TriggeredByCityStat(
-            GameContext game, 
+            GameSessionContext game, 
             IAbilityActivator activator, 
             CityStat stat, 
             float value) =>

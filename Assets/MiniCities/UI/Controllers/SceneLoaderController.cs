@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
-namespace MiniCities.UI
+namespace MiniCities.UI.Controllers
 {
     [RequireComponent(typeof(PanelRenderer))]
-    public class SceneLoader : MonoBehaviour
+    public class SceneLoaderController : MonoBehaviour
     {
-        public static SceneLoader Instance { get; private set; }
+        public static SceneLoaderController Instance { get; private set; }
 
         [SerializeField] private float fadeDuration;
 

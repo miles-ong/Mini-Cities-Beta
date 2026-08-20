@@ -98,7 +98,7 @@ public class BlueprintFileEditor : MCEditor<BlueprintFileDefinition>
 
     private void SyncFile()
     {
-        var poolBlueprints = Target.poolDefinition.blueprints.Items.ToHashSet();
+        var poolBlueprints = Target.poolDefinition.blueprints.ToHashSet();
         
         var fileBlueprints = Target.blueprintCounts
             .Select(bc => bc.blueprint)

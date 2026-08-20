@@ -1,7 +1,4 @@
-﻿using MiniCities.Core.Math;
-using MiniCities.Definitions.Blueprint;
-using MiniCities.Definitions.Map;
-using MiniCities.Runtime.Blueprint;
+﻿using MiniCities.Runtime.Blueprint;
 using MiniCities.Systems.City;
 using MiniCities.Systems.Map;
 using MiniCities.UI.Blueprint;
@@ -12,31 +9,23 @@ namespace MiniCities.Systems.Game
 {
     public class GameManager : MonoBehaviour
     {
+        [Header("Context")]
+        [SerializeField] private GameSessionContext gameSessionContext;
+        
+        [Header("Managers")]
+        [SerializeField] private BlueprintHand blueprintHand;
         [SerializeField] private CityManager cityManager;
         [SerializeField] private MapManager mapManager;
-        [SerializeField] private MapDefinition testMap;
-        [SerializeField] private BlueprintHand blueprintHand;
+        
+        [Header("UI Controllers")]
         [SerializeField] private BlueprintHandUI blueprintHandUI;
-        
-        [SerializeField] private BlueprintFileDefinition testFile;
-
-        [SerializeField] private int seed;
-        
-        private SeededRandom _random;
-        
-        private GameContext _context;
         
         private void Start()
         {
-            _random = new SeededRandom(seed);
-            var deck = new BlueprintFileRuntime(testFile, _random);
+            gameSessionContext.Initialize(blueprintHand, cityManager, mapManager);
             
-            _context = new GameContext(_random, mapManager, cityManager, deck, blueprintHand);
-            
-            cityManager.SetContext(_context);
-            mapManager.LoadMap(testMap);
-            blueprintHand.LoadFile(deck);
-            deck.FillDrawPile();
+            mapManager.LoadMap(gameSessionContext.MapPool.GetRandomMap());
+            gameSessionContext.File.FillDrawPile();
         }
 
         private void Update()

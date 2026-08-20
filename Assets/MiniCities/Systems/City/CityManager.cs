@@ -35,26 +35,27 @@ namespace MiniCities.Systems.City
 
         private CityStats _baseStats;
         private CityStats _totalStats;
+        private CityStats _targetStats;
 
         private static int _placementIndex;
 
-        [CreateProperty]
-        public int Population => _totalStats.Population;
-        [CreateProperty]
-        public int Culture => _totalStats.Culture;
-        [CreateProperty]
-        public int Pollution => _totalStats.Pollution;
-        [CreateProperty]
-        public int Money =>  _totalStats.Money;
+        [CreateProperty] public int Population => _totalStats.Population;
+        [CreateProperty] public int Culture => _totalStats.Culture;
+        [CreateProperty] public int Pollution => _totalStats.Pollution;
+        [CreateProperty] public int Money =>  _totalStats.Money;
 
-        private void Start()
+        [CreateProperty] public int TargetPopulation => _targetStats.Population;
+        [CreateProperty] public int TargetCulture => _targetStats.Culture;
+        [CreateProperty] public int TargetPollution => _targetStats.Pollution;
+
+        private void Awake()
         {
             GameEventBus<BuildingPlacedEvent>.OnEvent += OnBuildingPlaced;
             GameEventBus<BuildingRemovedEvent>.OnEvent += OnBuildingRemoved;
             GameEventQueue.OnDispatch += RecalculateCity;
         }
 
-        public void SetContext(GameContext context) => _abilityDispatcher.SetContext(context);
+        public void PassContext(GameSessionContext context) => _abilityDispatcher.SetContext(context);
         
         public void ModifyBaseStat(CityStat stat, Operation operation, float amount) =>
             _baseStats.ModifyStat(stat, operation, amount);

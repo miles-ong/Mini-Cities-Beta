@@ -1,0 +1,16 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/MiniCities/Resources/UI/Styles/MainMenu.uss?fileID=7433441132597879392&amp;guid=471b5c7ea6519ce4f99109d266cdc6a4&amp;type=3#MainMenu"/>
+    <ui:VisualElement name="MainContainer" class="menuTransitioner" style="flex-grow: 1;">
+        <ui:Label text="Choose Map" name="TitleLabel" class="menuContainer" style="-unity-text-align: upper-center; font-size: 64px; -unity-font-style: bold-and-italic;"/>
+        <ui:VisualElement name="OptionsContainer" style="flex-grow: 1; align-items: stretch; align-self: stretch; flex-direction: row;">
+            <ui:VisualElement name="Map1Container" class="menuContainer" style="flex-grow: 1; flex-basis: 50%;">
+                <ui:Label text="Map 1" name="Map1Label" class="subheader"/>
+                <ui:Button text="Select" name="Map1Button" class="menuButton"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="Map2Container" class="menuContainer" style="flex-grow: 1; flex-basis: 50%;">
+                <ui:Label text="Map 2" name="Map2Label" class="subheader"/>
+                <ui:Button text="Select" name="Map2Button" class="menuButton"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

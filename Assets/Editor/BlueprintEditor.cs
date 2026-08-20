@@ -144,7 +144,7 @@ public class BlueprintEditor : Editor
             
             EditorGUILayout.BeginHorizontal();
             
-            EditorGUILayout.LabelField($"Ability {i + 1}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"Ability {i + 1}", EditorStylesUtility.Subheader);
 
             if (GUILayout.Button("Remove", GUILayout.Width(70))) removeIndex = i;
             

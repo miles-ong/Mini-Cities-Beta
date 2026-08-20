@@ -5,10 +5,10 @@ using MiniCities.Systems.Game;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace MiniCities.UI
+namespace MiniCities.UI.Controllers
 {
     [RequireComponent(typeof(PanelRenderer))]
-    public class MainMenuRenderer : MonoBehaviour
+    public class MainMenuController : MonoBehaviour
     {
         [SerializeField] private BlueprintFileRegistry blueprintFileRegistry;
         [SerializeField] private MapPoolDefinition mapPoolDefinition; // remove
@@ -17,7 +17,6 @@ namespace MiniCities.UI
         [SerializeField] private string gameSceneName = "Game";
         
         private PanelRenderer _panelRenderer;
-        private List<BlueprintFileDefinition> _blueprintFiles;
 
         private VisualElement _mainMenu;
         private VisualElement _playMenu;
@@ -26,6 +25,7 @@ namespace MiniCities.UI
         private Label _blueprintFileSelectorLabel;
         private IntegerField _seedField;
 
+        private List<BlueprintFileDefinition> _blueprintFiles;
         private int _selectedBlueprintFileIndex;
 
         private void Awake()
@@ -93,8 +93,8 @@ namespace MiniCities.UI
             var file = _blueprintFiles[_selectedBlueprintFileIndex];
             var seed = _seedField.value;
             
-            gameSessionContext.Set(mapPoolDefinition, blueprintPoolDefinition, file, seed);
-            SceneLoader.Instance.LoadScene(gameSceneName);
+            gameSessionContext.LoadDefinitions(seed, mapPoolDefinition, blueprintPoolDefinition, file);
+            SceneLoaderController.Instance.LoadScene(gameSceneName);
         }
 
         private void RefreshBlueprintFileSelectorLabel() =>
