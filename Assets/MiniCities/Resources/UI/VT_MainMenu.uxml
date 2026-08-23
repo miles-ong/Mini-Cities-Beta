@@ -1,5 +1,5 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/MiniCities/Resources/UI/Styles/MainMenu.uss?fileID=7433441132597879392&amp;guid=471b5c7ea6519ce4f99109d266cdc6a4&amp;type=3#MainMenu"/>
+    <ui:Style src="project://database/Assets/MiniCities/Resources/UI/Styles/MainMenu.uss?fileID=7433441132597879392&amp;guid=471b5c7ea6519ce4f99109d266cdc6a4&amp;type=3#MainMenu"/>
     <ui:VisualElement name="MainMenu" class="mainMenuDefault menuContainer">
         <ui:Label text="Mini Cities" name="TitleLabel" style="font-size: 96px; -unity-text-align: middle-center; -unity-text-outline-width: 2px; -unity-text-outline-color: rgb(255, 255, 255); -unity-font-style: bold; margin-bottom: 40px;"/>
         <ui:VisualElement name="MainMenuButtons" style="flex-grow: 1;">

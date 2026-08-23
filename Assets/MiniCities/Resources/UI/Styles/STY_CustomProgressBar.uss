@@ -1,0 +1,8 @@
+CustomProgressBar {
+}
+
+CustomProgressBar Label {
+    -unity-font-style: bold-and-italic;
+    font-size: 88px;
+    color: var(--testing-color);
+}

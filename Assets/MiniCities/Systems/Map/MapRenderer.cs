@@ -16,22 +16,7 @@ namespace MiniCities.Systems.Map
 
         public void RenderMap(MapRuntime map)
         {
-            Clear();
-            
-            for (var y = 0; y < map.Height; y++)
-            for (var z = 0; z < map.Length; z++)
-            for (var x = 0; x < map.Width; x++)
-            {
-                var coord = new Vector3Int(x, y, z);
-                RenderBlock(coord, map[coord]);
-            }
-        }
-        
-        public void RenderBlock(Vector3Int coord, [CanBeNull] BlockRuntime block)
-        {
-            if (block is null) return;
-            
-            _views[coord] = CreateBlockView(block, coord);
+            foreach (var block in map.Grid.Blocks) RenderBlock(block);
         }
 
         public void UpdateBlock(Vector3Int coord, [CanBeNull] BlockRuntime block)
@@ -42,7 +27,7 @@ namespace MiniCities.Systems.Map
                 _views.Remove(coord);
             }
 
-            RenderBlock(coord, block);
+            RenderBlock(block);
         }
 
         public void Clear()
@@ -51,18 +36,25 @@ namespace MiniCities.Systems.Map
             
             _views.Clear();
         }
+        
+        private void RenderBlock([CanBeNull] BlockRuntime block)
+        {
+            if (block is null) return;
+            
+            _views[block.Location] = CreateBlockView(block);
+        }
 
-        private BlockView CreateBlockView(BlockRuntime block, Vector3Int position)
+        private BlockView CreateBlockView(BlockRuntime block)
         {
             BlockView view;
             
             if (block.Definition.view != null)
             {
-                view = Instantiate(block.Definition.view, position, Quaternion.identity, transform);
+                view = Instantiate(block.Definition.view, block.Location, Quaternion.identity, transform);
             }
             else if (block is BuildingRuntime building)
             {
-                var nullView = Instantiate(nullBuildingView, position, Quaternion.identity, transform);
+                var nullView = Instantiate(nullBuildingView, block.Location, Quaternion.identity, transform);
                 nullView.Set(building.Blueprint);
                 view = nullView;
             }

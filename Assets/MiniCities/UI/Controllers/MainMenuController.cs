@@ -32,6 +32,7 @@ namespace MiniCities.UI.Controllers
         {
             _panelRenderer = GetComponent<PanelRenderer>();
             _panelRenderer.RegisterUIReloadCallback(OnUIReload);
+            
             _blueprintFiles = blueprintFileRegistry.blueprintFiles;
         }
         

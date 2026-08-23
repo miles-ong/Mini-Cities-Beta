@@ -26,6 +26,15 @@ namespace MiniCities.Runtime.Map
             Size = definition.size;
             TerrainFactor = definition.terrainFactor;
             Grid = new BlockRuntimeGrid(definition.Dimensions + Vector3Int.up); // building layer
+            
+            for (var y = 0; y < Height - 1; y++)
+            for (var z = 0; z < Length; z++)
+            for (var x = 0; x < Width; x++)
+            {
+                var coord = new Vector3Int(x, y, z);
+                var data = definition.grid[coord];
+                Grid[coord] = new BlockRuntime(data, coord);
+            }
         }
 
         public Vector3 GetWorldCenter()

@@ -11,13 +11,29 @@ namespace MiniCities.Core.Event
     
     #region Game Events
 
-    public readonly struct LevelSelectedEvent : IEvent
+    public readonly struct LevelStartedEvent : IEvent
     {
         public LevelContext Level { get; }
 
-        public LevelSelectedEvent(LevelContext level) => Level = level;
+        public LevelStartedEvent(LevelContext level) => Level = level;
     }
-    
+
+    public readonly struct LevelCompletedEvent : IEvent
+    {
+    }
+
+    public readonly struct LevelFailedEvent : IEvent
+    {
+    }
+
+    public readonly struct EnterShopEvent : IEvent
+    {
+    }
+
+    public readonly struct EnterLevelSelectorEvent : IEvent
+    {
+    }
+
     #endregion
     
     #region Blueprint Events

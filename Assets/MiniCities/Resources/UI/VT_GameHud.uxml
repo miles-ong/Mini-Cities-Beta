@@ -1,0 +1,78 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/MiniCities/Resources/UI/Styles/STY_General.uss?fileID=7433441132597879392&amp;guid=5589850ac836fdd4b957c2288f107fab&amp;type=3#STY_General"/>
+    <ui:VisualElement name="TopBar" style="flex-grow: 0.15; background-color: rgb(55, 55, 55); flex-direction: row; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; border-top-left-radius: 25px; border-top-right-radius: 25px; border-bottom-right-radius: 25px; border-bottom-left-radius: 25px; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px;">
+        <ui:VisualElement name="Policies" style="flex-grow: 1; background-color: rgb(38, 38, 38); margin-top: 10px; margin-right: 5px; margin-bottom: 10px; margin-left: 10px; width: 40%; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px;"/>
+        <ui:VisualElement name="Info" style="flex-grow: 1; background-color: rgb(38, 38, 38); margin-top: 10px; margin-right: 10px; margin-bottom: 10px; margin-left: 5px; width: 60%; flex-direction: row; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; padding-left: 5px; padding-right: 5px;">
+            <ui:VisualElement name="SwappablePlate" style="flex-grow: 1; width: 75%;">
+                <ui:VisualElement name="StatsPlate" class="displayPlate">
+                    <ui:VisualElement name="PopulationTab" class="defaultCityStatTab" style="background-color: rgb(44, 59, 82);">
+                        <ui:VisualElement name="PopulationDisplay" class="defaultCityStatTabDisplay">
+                            <ui:Image source="project://database/Assets/MiniCities/Resources/Sprites/spr_PopulationIcon.png?fileID=21300000&amp;guid=ca3509641c11adb4ea2b259094dcf5a5&amp;type=3#spr_PopulationIcon" name="PopulationIcon" style="width: 25%;"/>
+                            <ui:VisualElement name="PopulationInfo" style="flex-grow: 1; width: 75%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 10px; justify-content: space-around; align-self: center; align-items: flex-start;">
+                                <ui:Label name="PopulationTotal" text="100" class="defaultText" style="-unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-auto-size: best-fit 16px 48px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="Population" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
+                                <ui:Label text="/ 100" name="PopulationTarget" class="defaultText" style="font-size: 24px; -unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; color: rgb(161, 161, 161); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-auto-size: best-fit 12px 28px;">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="PopulationTarget" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="CultureTab" class="defaultCityStatTab" style="flex-grow: 1; width: 25%; background-color: rgb(68, 44, 82);">
+                        <ui:VisualElement name="CultureDisplay" class="defaultCityStatTabDisplay" style="flex-grow: 1; flex-direction: row;">
+                            <ui:Image source="project://database/Assets/MiniCities/Resources/Sprites/spr_CultureIcon.png?fileID=21300000&amp;guid=5d63a2efcf564944580b724abc1fac7d&amp;type=3#spr_CultureIcon" name="CultureIcon" style="width: 25%;"/>
+                            <ui:VisualElement name="CultureInfo" style="flex-grow: 1; width: 75%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 10px; justify-content: space-around; align-self: center; align-items: flex-start; flex-direction: column;">
+                                <ui:Label text="100" name="CultureTotal" class="defaultText" style="-unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-auto-size: best-fit 16px 48px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="Culture" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
+                                <ui:Label text="/ 100" name="CultureTarget" class="defaultText" style="font-size: 24px; -unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; color: rgb(161, 161, 161); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-auto-size: best-fit 12px 28px;">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="CultureTarget" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="PollutionTab" class="defaultCityStatTab" style="flex-grow: 1; width: 25%; background-color: rgb(82, 44, 45); margin-right: 0;">
+                        <ui:VisualElement name="PollutionDisplay" class="defaultCityStatTabDisplay" style="flex-grow: 1; flex-direction: row;">
+                            <ui:Image source="project://database/Assets/MiniCities/Resources/Sprites/spr_PollutionIcon.png?fileID=21300000&amp;guid=0f8e0e5c90c6eab4d9db798c7062fbd3&amp;type=3#spr_PollutionIcon" name="PollutionIcon" style="width: 25%;"/>
+                            <ui:VisualElement name="PollutionInfo" style="flex-grow: 1; width: 75%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 10px; justify-content: space-around; align-self: center; align-items: flex-start;">
+                                <ui:Label text="100" name="PollutionTotal" class="defaultText" style="-unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-auto-size: best-fit 16px 48px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="Pollution" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
+                                <ui:Label text="/ 100" name="PollutionTarget" class="defaultText" style="font-size: 24px; -unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; color: rgb(161, 161, 161); padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-auto-size: best-fit 12px 28px;">
+                                    <Bindings>
+                                        <ui:DataBinding property="text" data-source-path="PollutionTarget" binding-mode="ToTarget"/>
+                                    </Bindings>
+                                </ui:Label>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="TitlePlate" class="displayPlate" style="flex-grow: 1;">
+                    <ui:Label text="Shop" name="TitleLabel" class="defaultText" style="width: 100%; background-color: rgb(55, 55, 55); border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; margin-top: 0; margin-bottom: 0; margin-left: 0; margin-right: 10px; font-size: 72px;"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="MoneyTab" class="defaultCityStatTab" style="flex-grow: 1; width: 25%; background-color: rgb(82, 80, 44); margin-top: 10px; margin-bottom: 10px; margin-left: 5px; margin-right: 5px;">
+                <ui:VisualElement name="MoneyDisplay" class="defaultCityStatTabDisplay" style="flex-grow: 1; flex-direction: row;">
+                    <ui:Image source="project://database/Assets/MiniCities/Resources/Sprites/spr_MoneyIcon.png?fileID=21300000&amp;guid=99a196865d374374ebeb741b78d6e0b6&amp;type=3#spr_MoneyIcon" name="MoneyIcon" style="width: 25%;"/>
+                    <ui:VisualElement name="MoneyInfo" style="flex-grow: 1; width: 75%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 10px; justify-content: space-around; align-self: center; align-items: flex-start;">
+                        <ui:Label text="0" name="MoneyTotal" class="defaultText" style="-unity-text-align: middle-left; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; -unity-text-auto-size: best-fit 16px 48px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;">
+                            <Bindings>
+                                <ui:DataBinding property="text" data-source-path="Money" binding-mode="ToTarget"/>
+                            </Bindings>
+                        </ui:Label>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

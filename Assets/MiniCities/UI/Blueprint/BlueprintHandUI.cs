@@ -43,7 +43,7 @@ namespace MiniCities.UI.Blueprint
         private int _selectedIndex;
         private bool _handLowered;
 
-        private void Start()
+        private void Awake()
         {
             _spline = curve.Spline;
             _originalScale = blueprintUI.transform.localScale;
@@ -53,6 +53,14 @@ namespace MiniCities.UI.Blueprint
             GameEventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
             GameEventBus<CameraRotationStartedEvent>.OnEvent += OnCameraRotationStarted;
             GameEventBus<CameraRotationEndedEvent>.OnEvent += OnCameraRotationEnded;
+        }
+
+        private void OnDestroy()
+        {
+            GameEventBus<BlueprintDrawnEvent>.OnEvent -= OnBlueprintDrawn;
+            GameEventBus<BlueprintUsedEvent>.OnEvent -= OnBlueprintUsed;
+            GameEventBus<CameraRotationStartedEvent>.OnEvent -= OnCameraRotationStarted;
+            GameEventBus<CameraRotationEndedEvent>.OnEvent -= OnCameraRotationEnded;
         }
 
         private void Add(BlueprintRuntime blueprint)

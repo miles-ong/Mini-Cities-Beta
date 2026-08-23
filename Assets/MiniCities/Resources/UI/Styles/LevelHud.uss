@@ -1,0 +1,20 @@
+:root {
+}
+
+.containerPadding {
+    padding-top: 24px;
+    padding-right: 24px;
+    padding-bottom: 24px;
+    padding-left: 24px;
+}
+
+.textBase {
+    font-size: 32px;
+    -unity-text-auto-size: best-fit 16px 48px;
+    -unity-text-align: middle-left;
+    -unity-text-outline-color: rgb(255, 255, 255);
+    -unity-text-outline-width: 0;
+    -unity-font-style: bold-and-italic;
+    color: rgb(255, 255, 255);
+    text-shadow: 16px 16px 0 rgba(0, 0, 0, 0.235);
+}

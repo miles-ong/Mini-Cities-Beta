@@ -44,9 +44,12 @@ namespace MiniCities.Systems.City
         [CreateProperty] public int Pollution => _totalStats.Pollution;
         [CreateProperty] public int Money =>  _totalStats.Money;
 
-        [CreateProperty] public int TargetPopulation => _targetStats.Population;
-        [CreateProperty] public int TargetCulture => _targetStats.Culture;
-        [CreateProperty] public int TargetPollution => _targetStats.Pollution;
+        [CreateProperty] public int PopulationTarget => _targetStats.Population;
+        [CreateProperty] public int CultureTarget => _targetStats.Culture;
+        [CreateProperty] public int PollutionTarget => _targetStats.Pollution;
+
+        [CreateProperty] public float CultureFilledFraction => (float)Culture / CultureTarget;
+        [CreateProperty] public float CultureFilledPercent => CultureFilledFraction * 100f;
 
         private void Awake()
         {
@@ -55,7 +58,27 @@ namespace MiniCities.Systems.City
             GameEventQueue.OnDispatch += RecalculateCity;
         }
 
+        private void OnDestroy()
+        {
+            GameEventBus<BuildingPlacedEvent>.OnEvent -= OnBuildingPlaced;
+            GameEventBus<BuildingRemovedEvent>.OnEvent -= OnBuildingRemoved;
+            GameEventQueue.OnDispatch -= RecalculateCity;
+        }
+
         public void PassContext(GameSessionContext context) => _abilityDispatcher.SetContext(context);
+
+        public void Initialize(CityStats targetStats)
+        {
+            _activeBuildings.Clear();
+            _lastContribution.Clear();
+            _buildingBuffIndex.Clear();
+            _cityBuffIndex.Clear();
+            
+            _baseStats = new CityStats();
+            _totalStats = new CityStats();
+            _targetStats = targetStats;
+            _placementIndex = 0;
+        }
         
         public void ModifyBaseStat(CityStat stat, Operation operation, float amount) =>
             _baseStats.ModifyStat(stat, operation, amount);

@@ -27,7 +27,7 @@ namespace MiniCities.UI.Controllers
             root.Q<Button>("Level2Button").clicked += SelectLevel2;
         }
 
-        private void SelectLevel1() => GameEventBus<LevelSelectedEvent>.Fire(new LevelSelectedEvent(_level1Context));
-        private void SelectLevel2() => GameEventBus<LevelSelectedEvent>.Fire(new LevelSelectedEvent(_level2Context));
+        private void SelectLevel1() => GameEventBus<LevelStartedEvent>.Fire(new LevelStartedEvent(_level1Context));
+        private void SelectLevel2() => GameEventBus<LevelStartedEvent>.Fire(new LevelStartedEvent(_level2Context));
     }
 }

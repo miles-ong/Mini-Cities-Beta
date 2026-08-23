@@ -1,5 +1,8 @@
-﻿using MiniCities.Runtime.Blueprint;
+﻿using MiniCities.Core.Event;
+using MiniCities.Runtime.Blueprint;
+using MiniCities.Runtime.Map;
 using MiniCities.Systems.City;
+using MiniCities.Systems.City.Stat;
 using MiniCities.Systems.Map;
 using MiniCities.UI.Blueprint;
 using UnityEngine;
@@ -23,14 +26,53 @@ namespace MiniCities.Systems.Game
         private void Start()
         {
             gameSessionContext.Initialize(blueprintHand, cityManager, mapManager);
-            
-            mapManager.LoadMap(gameSessionContext.MapPool.GetRandomMap());
-            gameSessionContext.File.FillDrawPile();
+
+            GameEventBus<LevelStartedEvent>.OnEvent += OnLevelStarted;
+            GameEventBus<LevelCompletedEvent>.OnEvent += OnLevelCompleted;
+            GameEventBus<LevelFailedEvent>.OnEvent += OnLevelFailed;
+
+            var map = new MapRuntime(gameSessionContext.MapPool.GetRandomMap());
+
+            var targetStats = new CityStats()
+            {
+                Population = 500,
+                Culture = 100,
+                Pollution = 6
+            };
+
+            GameEventBus<LevelStartedEvent>.Fire(new LevelStartedEvent(new LevelContext(map, targetStats)));
         }
 
-        private void Update()
+        private void OnDestroy()
+        {
+            GameEventBus<LevelStartedEvent>.OnEvent -= OnLevelStarted;
+            GameEventBus<LevelCompletedEvent>.OnEvent -= OnLevelCompleted;
+            GameEventBus<LevelFailedEvent>.OnEvent -= OnLevelFailed;
+        }
+
+        private void Update() // remove eventually
         {
             if (Keyboard.current.spaceKey.wasReleasedThisFrame) blueprintHand.DrawBlueprint();
+        }
+
+        private void OnLevelStarted(LevelStartedEvent evt)
+        {
+            gameSessionContext.File.FillDrawPile();
+            
+            mapManager.LoadMap(evt.Level.Map);
+            cityManager.Initialize(evt.Level.TargetStats);
+            
+            gameSessionContext.Hand.DrawMultipleBlueprints(5);
+        }
+
+        private void OnLevelCompleted(LevelCompletedEvent evt)
+        {
+            
+        }
+
+        private void OnLevelFailed(LevelFailedEvent evt)
+        {
+            
         }
     }
 }

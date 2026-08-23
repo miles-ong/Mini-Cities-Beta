@@ -2,7 +2,6 @@
 using JetBrains.Annotations;
 using MiniCities.Core.Event;
 using MiniCities.Core.Grid;
-using MiniCities.Definitions.Map;
 using MiniCities.Runtime.Block;
 using MiniCities.Runtime.Map;
 using MiniCities.Systems.Cam;
@@ -23,23 +22,12 @@ namespace MiniCities.Systems.Map
             GameEventBus<BlueprintUsedEvent>.OnEvent += OnBlueprintUsed;
         }
 
-        public void LoadMap(MapDefinition definition)
+        public void LoadMap(MapRuntime map)
         {
             renderer.Clear();
-            _currentMap = new MapRuntime(definition);
-            cameraController.SetAnchor(_currentMap.GetWorldCenter());
-            
-            for (var y = 0; y < _currentMap.Height - 1; y++) 
-            for (var z = 0; z < _currentMap.Length; z++)
-            for (var x = 0; x < _currentMap.Width; x++)
-            {
-                var coord = new Vector3Int(x, y, z);
-                var data = definition.grid[coord];
-                var block = new BlockRuntime(data, coord);
-                
-                _currentMap[coord] = block;
-                renderer.RenderBlock(coord, block);
-            }
+            renderer.RenderMap(map);
+            cameraController.SetAnchor(map.GetWorldCenter());
+            _currentMap = map;
         }
         
         public void UnloadMap()

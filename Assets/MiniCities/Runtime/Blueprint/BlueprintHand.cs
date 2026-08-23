@@ -46,13 +46,13 @@ namespace MiniCities.Runtime.Blueprint
 
         private IEnumerator TryDrawMultipleBlueprints(int amount, Func<bool> drawFunction)
         {
-            while (amount > 0)
+            for (var i = 0; i < amount; i++)
             {
                 if (!drawFunction()) yield break;
+                
+                Debug.Log($"Draw: {i}");
 
-                amount--;
-
-                yield return new WaitForSeconds(drawSpeed);
+                if (i < amount - 1) yield return new WaitForSeconds(drawSpeed);
             }
         }
 
