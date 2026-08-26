@@ -11,8 +11,6 @@ namespace MiniCities.Systems.City.Buff
         private readonly Dictionary<IBuffSource, HashSet<BuildingBuff>> _sourceIndex = new();
         private readonly Dictionary<IBuffReceiver, HashSet<BuildingBuff>> _receiverIndex = new();
         private readonly Dictionary<Vector3Int, HashSet<BuildingBuff>> _locationIndex = new();
-
-        private static int _buffNumber = 1;
         
         public void Register(BuildingBuff buff)
         {

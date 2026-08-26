@@ -1,0 +1,37 @@
+:root {
+    --residential-background: rgb(0, 217, 123);
+    --commercial-background: rgb(0, 147, 255);
+    --industrial-background: rgb(243, 135, 0);
+    --civic-background: rgb(120, 136, 151);
+    --initiative-background: rgb(217, 56, 157);
+    --disaster-background: rgb(255, 77, 75);
+}
+
+.statContainer {
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+}
+
+.statText {
+    position: absolute;
+    font-size: 48px;
+    -unity-text-auto-size: best-fit 16px 48px;
+    width: 100%;
+    height: 100%;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+BlueprintElement {
+    width: 500px;
+    height: 750px;
+    position: absolute;
+    transform-origin: top;
+}

@@ -184,7 +184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &198132473
 Transform:
   m_ObjectHideFlags: 0
@@ -940,6 +940,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CityPanelRenderer
   cityManager: {fileID: 2145804627}
+  modernBlueprintTemplate: {fileID: 9197481963319205126, guid: d535a3c617d779042b3493f436185a70, type: 3}
+  blueprintHandSettings: {fileID: 11400000, guid: 26284b372d5e56441af4a6fe10bdc356, type: 2}
 --- !u!1 &1117598513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,7 +1364,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2051189369
 MonoBehaviour:
   m_ObjectHideFlags: 0

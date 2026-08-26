@@ -4,7 +4,6 @@ using MiniCities.Runtime.Map;
 using MiniCities.Systems.City;
 using MiniCities.Systems.City.Stat;
 using MiniCities.Systems.Map;
-using MiniCities.UI.Blueprint;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,9 +18,6 @@ namespace MiniCities.Systems.Game
         [SerializeField] private BlueprintHand blueprintHand;
         [SerializeField] private CityManager cityManager;
         [SerializeField] private MapManager mapManager;
-        
-        [Header("UI Controllers")]
-        [SerializeField] private BlueprintHandUI blueprintHandUI;
         
         private void Start()
         {
@@ -50,7 +46,7 @@ namespace MiniCities.Systems.Game
             GameEventBus<LevelFailedEvent>.OnEvent -= OnLevelFailed;
         }
 
-        private void Update() // remove eventually
+        private void Update()
         {
             if (Keyboard.current.spaceKey.wasReleasedThisFrame) blueprintHand.DrawBlueprint();
         }
@@ -67,7 +63,7 @@ namespace MiniCities.Systems.Game
 
         private void OnLevelCompleted(LevelCompletedEvent evt)
         {
-            
+            GameEventBus<EnterShopEvent>.Fire(new EnterShopEvent());
         }
 
         private void OnLevelFailed(LevelFailedEvent evt)

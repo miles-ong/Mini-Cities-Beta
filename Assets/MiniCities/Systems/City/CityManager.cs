@@ -104,6 +104,8 @@ namespace MiniCities.Systems.City
             _totalStats = _baseStats;
             
             foreach (var cb in _cityBuffIndex.Buffs) _totalStats.ModifyStat(cb.Stat, cb.Operation, cb.Amount);
+            
+            if (Population >= PopulationTarget) GameEventBus<LevelCompletedEvent>.Fire(new LevelCompletedEvent());
         }
         
         private void OnBuildingPlaced(BuildingPlacedEvent e)

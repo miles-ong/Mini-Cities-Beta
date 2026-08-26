@@ -1,0 +1,54 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/MiniCities/Resources/UI/Styles/STY_General.uss?fileID=7433441132597879392&amp;guid=5589850ac836fdd4b957c2288f107fab&amp;type=3#STY_General"/>
+    <Style src="project://database/Assets/MiniCities/Resources/UI/Styles/STY_Blueprint.uss?fileID=7433441132597879392&amp;guid=20ce5a68016598b45816bab42e2da0f7&amp;type=3#STY_Blueprint"/>
+    <ui:VisualElement name="Card" class="mcBorder residentialBackground" style="flex-grow: 1; position: absolute; background-color: rgb(190, 190, 190); padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; bottom: 0; width: 100%; height: 700px;">
+        <ui:VisualElement name="Image" style="flex-grow: 0.6;"/>
+        <ui:VisualElement name="Info" class="mcBorder" style="flex-grow: 0.4; border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; background-color: rgb(181, 181, 181); justify-content: space-between;">
+            <ui:VisualElement name="Stats" style="flex-grow: 1; flex-direction: row; position: absolute; top: -70px; left: 0; right: 0; bottom: auto; justify-content: space-around; padding-right: 10px; padding-left: 10px;">
+                <ui:VisualElement name="Population" class="statContainer">
+                    <ui:Image source="project://database/Assets/MiniCities/Resources/Sprites/spr_PopulationIcon.png?fileID=21300000&amp;guid=ca3509641c11adb4ea2b259094dcf5a5&amp;type=3#spr_PopulationIcon" name="PopulationIcon"/>
+                    <ui:Label name="PopulationValue" class="defaultText statText">
+                        <Bindings>
+                            <ui:DataBinding property="text" data-source-path="Population" binding-mode="ToTarget"/>
+                        </Bindings>
+                    </ui:Label>
+                    <Bindings>
+                        <ui:DataBinding property="style.display" data-source-path="DisplayPopulation" binding-mode="ToTarget"/>
+                    </Bindings>
+                </ui:VisualElement>
+                <ui:VisualElement name="Culture" class="statContainer">
+                    <ui:Image source="project://database/Assets/MiniCities/Resources/Sprites/spr_CultureIcon.png?fileID=21300000&amp;guid=5d63a2efcf564944580b724abc1fac7d&amp;type=3#spr_CultureIcon" name="CultureIcon"/>
+                    <ui:Label name="CultureValue" class="defaultText statText" style="position: absolute;">
+                        <Bindings>
+                            <ui:DataBinding property="text" data-source-path="Culture" binding-mode="ToTarget"/>
+                        </Bindings>
+                    </ui:Label>
+                    <Bindings>
+                        <ui:DataBinding property="style.display" data-source-path="DisplayCulture" binding-mode="ToTarget"/>
+                    </Bindings>
+                </ui:VisualElement>
+                <ui:VisualElement name="Pollution" class="statContainer">
+                    <ui:Image name="PollutionIcon" source="project://database/Assets/MiniCities/Resources/Sprites/spr_PollutionIcon.png?fileID=21300000&amp;guid=0f8e0e5c90c6eab4d9db798c7062fbd3&amp;type=3#spr_PollutionIcon"/>
+                    <ui:Label name="PollutionValue" class="defaultText statText" style="position: absolute;">
+                        <Bindings>
+                            <ui:DataBinding property="text" data-source-path="Pollution" binding-mode="ToTarget"/>
+                        </Bindings>
+                    </ui:Label>
+                    <Bindings>
+                        <ui:DataBinding property="style.display" data-source-path="DisplayPollution" binding-mode="ToTarget"/>
+                    </Bindings>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Label name="Description" class="defaultText" style="position: absolute; -unity-text-align: upper-center; -unity-text-auto-size: best-fit 16px 36px; white-space: normal; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center; bottom: 0; width: 100%; height: 75%;">
+                <Bindings>
+                    <ui:DataBinding property="text" data-source-path="Description" binding-mode="ToTarget"/>
+                </Bindings>
+            </ui:Label>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:Label name="Nameplate" class="mcBorder defaultText" style="width: 400px; height: 100px; background-color: rgb(181, 181, 181); -unity-text-auto-size: best-fit 16px 48px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; align-self: center;">
+        <Bindings>
+            <ui:DataBinding property="text" data-source-path="DisplayName" binding-mode="ToTarget"/>
+        </Bindings>
+    </ui:Label>
+</ui:UXML>

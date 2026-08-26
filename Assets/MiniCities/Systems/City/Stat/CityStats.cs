@@ -9,9 +9,6 @@ namespace MiniCities.Systems.City.Stat
         public int Culture;
         public int Pollution;
         public int Money;
-
-        public override string ToString() =>
-            $"Population: {Population} Culture: {Culture} Pollution: {Pollution} Money: {Money}";
     }
 
     public static class CityStatsExtensions
